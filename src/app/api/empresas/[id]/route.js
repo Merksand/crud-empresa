@@ -102,9 +102,3 @@ export async function DELETE(request, { params }) {
   }
 } 
 
-
-
-truncate table TbEmpresa  ;
-truncate table TbSucursal;
-truncate table TbEmpresaSucursal;
-truncate table TbInformacionEmpresa;
