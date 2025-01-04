@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { pool } from '../../../../lib/db';
+import { pool } from '@/lib/db';
 
 // PUT - Actualizar información
 export async function PUT(request, { params }) {

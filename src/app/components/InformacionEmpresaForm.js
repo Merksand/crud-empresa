@@ -3,15 +3,18 @@ import React, { useState, useEffect } from 'react';
 export default function InformacionEmpresaForm({ informacion, empresas, onSubmit, onClose }) {
   const [logoUrl, setLogoUrl] = useState(informacion?.Logo_IE || '');
   const [isLoading, setIsLoading] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     setLogoUrl(informacion?.Logo_IE || '');
+    setImageError(false); // Resetear el error cuando cambia la información
   }, [informacion]);
 
   const handleLogoChange = (e) => {
     const url = e.target.value;
     setLogoUrl(url);
-    setIsLoading(!!url); // Inicia el loading solo si hay URL
+    setIsLoading(!!url);
+    setImageError(false); // Resetear el error cuando cambia la URL
   };
 
   const handleSubmit = (e) => {
@@ -57,7 +60,7 @@ export default function InformacionEmpresaForm({ informacion, empresas, onSubmit
           required
           placeholder="URL o ruta del logo"
         />
-        {logoUrl && (
+        {logoUrl && !imageError && (
           <div className="mt-2 relative">
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 rounded-lg">
@@ -69,13 +72,22 @@ export default function InformacionEmpresaForm({ informacion, empresas, onSubmit
               alt="Logo preview"
               className="max-w-[200px] h-auto rounded-lg border dark:border-gray-600"
               onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = '/placeholder-image.png'; // Imagen de respaldo
+                e.target.onError = null; // Prevenir futuros intentos
+                setImageError(true);
                 setIsLoading(false);
+                showNotification('No se pudo cargar la imagen', 'error');
               }}
-              onLoad={() => setIsLoading(false)}
+              onLoad={() => {
+                setIsLoading(false);
+                setImageError(false);
+              }}
             />
           </div>
+        )}
+        {imageError && logoUrl && (
+          <p className="mt-2 text-red-500 text-sm">
+            No se pudo cargar la imagen. Por favor, verifica la URL.
+          </p>
         )}
       </div>
 

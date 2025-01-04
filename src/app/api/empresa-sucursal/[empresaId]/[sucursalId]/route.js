@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { pool } from '../../../lib/db';
+import { pool } from '@/lib/db';
 
 // PUT - Actualizar una relación
 export async function PUT(request, { params }) {
   const connection = await pool.getConnection();
   
   try {
-    await connection.beginTransaction();
+    await connection.beginTransaction();  
 
     const data = await request.json();
     const { 
@@ -59,7 +59,7 @@ export async function PUT(request, { params }) {
     return NextResponse.json({ 
       message: 'Relación actualizada correctamente',
       data: updated[0]
-    });
+    });2
 
   } catch (error) {
     await connection.rollback();
