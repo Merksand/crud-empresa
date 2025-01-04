@@ -37,7 +37,7 @@ export default function Empresas() {
 
   const handleDelete = async (empresa) => {
     try {
-      const response = await fetch(`/api/empresas/${empresa.ID_Empresa}`, {
+      const response = await fetch(`/api/empresas/${empresa.Id_Empresa}`, {
         method: 'DELETE',
       });
 
@@ -47,16 +47,11 @@ export default function Empresas() {
         throw new Error(data.message || 'Error al eliminar la empresa');
       }
 
-      await fetchEmpresas(); // Recargar la lista después de eliminar
-      showNotification('Empresa eliminada con éxito', 'success');
-      setDeleteModal({ show: false, empresa: null });
+      showNotification('Empresa eliminada correctamente');
+      fetchEmpresas();
     } catch (error) {
-      console.error('Error detallado:', error);
-      showNotification(
-        error.message || 'Error al intentar eliminar la empresa', 
-        'error'
-      );
-      setDeleteModal({ show: false, empresa: null });
+      console.error('Error al eliminar:', error);
+      showNotification(error.message, 'error');
     }
   };
 

@@ -40,11 +40,18 @@ export async function PUT(request, { params }) {
 // DELETE - Eliminar una empresa
 export async function DELETE(request, { params }) {
   try {
-    const id = params?.id;
+    const id = parseInt(params.id);
 
-    // Verificar si hay relaciones en empresa_sucursal
+    if (isNaN(id)) {
+      return NextResponse.json(
+        { message: 'ID de empresa inválido' },
+        { status: 400 }
+      );
+    }
+
+    // Verificar si hay relaciones en TbEmpresaSucursal
     const [relaciones] = await pool.query(
-      'SELECT COUNT(*) as count FROM empresa_sucursal WHERE id_empresa = ?',
+      'SELECT COUNT(*) as count FROM TbEmpresaSucursal WHERE Id_Empresa = ?',
       [id]
     );
 
@@ -55,9 +62,9 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    // Verificar si hay relaciones en informacion_empresa
+    // Verificar si hay relaciones en TbInformacionEmpresa
     const [infoEmpresas] = await pool.query(
-      'SELECT COUNT(*) as count FROM informacion_empresa WHERE id_empresa = ?',
+      'SELECT COUNT(*) as count FROM TbInformacionEmpresa WHERE Id_Empresa = ?',
       [id]
     );
 
@@ -70,7 +77,7 @@ export async function DELETE(request, { params }) {
 
     // Si no hay relaciones, intentar eliminar la empresa
     const [result] = await pool.query(
-      'DELETE FROM empresa WHERE id_empresa = ?',
+      'DELETE FROM TbEmpresa WHERE Id_Empresa = ?',
       [id]
     );
 
@@ -94,3 +101,10 @@ export async function DELETE(request, { params }) {
     );
   }
 } 
+
+
+
+truncate table TbEmpresa  ;
+truncate table TbSucursal;
+truncate table TbEmpresaSucursal;
+truncate table TbInformacionEmpresa;

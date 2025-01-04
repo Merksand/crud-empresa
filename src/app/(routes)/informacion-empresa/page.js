@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import Modal from '@/app/components/Modal';
 import InformacionEmpresaForm from '@/app/components/InformacionEmpresaForm';
@@ -27,12 +28,12 @@ export default function InformacionEmpresa() {
       setLoading(true);
       const [informacionesRes, empresasRes] = await Promise.all([
         fetch('/api/informacion-empresa'),
-        fetch('/api/empresas')
+        fetch('/api/empresas'),
       ]);
 
       const [informacionesData, empresasData] = await Promise.all([
         informacionesRes.json(),
-        empresasRes.json()
+        empresasRes.json(),
       ]);
 
       setInformaciones(informacionesData);
@@ -77,11 +78,11 @@ export default function InformacionEmpresa() {
         <h1 className="text-2xl font-bold">Gestión de Información de Empresa</h1>
         <div className="flex items-center gap-4">
           {notification.show && (
-            <div className={`px-4 py-2 rounded-lg ${
-              notification.type === 'error' 
-                ? 'bg-red-500 text-white' 
-                : 'bg-green-500 text-white'
-            }`}>
+            <div
+              className={`px-4 py-2 rounded-lg ${
+                notification.type === 'error' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
+              }`}
+            >
               {notification.message}
             </div>
           )}
@@ -89,8 +90,17 @@ export default function InformacionEmpresa() {
             onClick={() => setIsModalOpen(true)}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clipRule="evenodd"
+              />
             </svg>
             Nueva Información
           </button>
@@ -102,12 +112,24 @@ export default function InformacionEmpresa() {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Empresa</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Logo</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Régimen Impositivo</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Zona Horaria</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Empresa
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Logo
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Régimen Impositivo
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Zona Horaria
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Estado
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
@@ -128,20 +150,38 @@ export default function InformacionEmpresa() {
                 </tr>
               ) : (
                 informaciones.map((info) => {
-                  const empresa = empresas.find(e => e.Id_Empresa === info.Id_Empresa);
-                  
+                  const empresa = empresas.find((e) => e.Id_Empresa === info.Id_Empresa);
+
                   return (
-                    <tr key={info.Id_InformacionEmpresa} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <tr
+                      key={info.Id_InformacionEmpresa}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                    >
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{empresa?.Nombre_Emp}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{info.Logo_IE}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{info.Regimen_Impositivo_IE}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {info.Logo_IE ? (
+                          <img
+                            src={info.Logo_IE}
+                            alt="Logo"
+                            className="h-10 max-w-[100px] object-contain rounded-lg border dark:border-gray-600"
+                            onError={(e) => (e.target.src = '/placeholder-image.png')}
+                          />
+                        ) : (
+                          <span className="text-gray-500 italic">Sin logo</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {info.Regimen_Impositivo_IE}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{info.Zona_Horaria_IE}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          info.Estado_IE === 'Activo' 
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
-                            : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                        }`}>
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            info.Estado_IE === 'Activo'
+                              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                              : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                          }`}
+                        >
                           {info.Estado_IE}
                         </span>
                       </td>
@@ -175,7 +215,10 @@ export default function InformacionEmpresa() {
         isOpen={deleteModal.show}
         onClose={() => setDeleteModal({ show: false, informacion: null })}
         onConfirm={confirmDelete}
-        itemName={`la información de ${empresas.find(e => e.Id_Empresa === deleteModal.informacion?.Id_Empresa)?.Nombre_Emp || 'empresa desconocida'}`}
+        itemName={`la información de ${
+          empresas.find((e) => e.Id_Empresa === deleteModal.informacion?.Id_Empresa)?.Nombre_Emp ||
+          'empresa desconocida'
+        }`}
       />
 
       <Modal
@@ -193,11 +236,14 @@ export default function InformacionEmpresa() {
             try {
               let response;
               if (informacionEditar) {
-                response = await fetch(`/api/informacion-empresa/${informacionEditar.Id_Empresa}`, {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(data),
-                });
+                response = await fetch(
+                  `/api/informacion-empresa/${informacionEditar.Id_Empresa}`,
+                  {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                  }
+                );
               } else {
                 response = await fetch('/api/informacion-empresa', {
                   method: 'POST',
@@ -209,11 +255,13 @@ export default function InformacionEmpresa() {
               const responseData = await response.json();
 
               if (!response.ok) {
-                throw new Error(responseData.error || 'Error al guardar la información');
+                throw new Error(
+                  responseData.error || 'Error al guardar la información'
+                );
               }
 
               showNotification(
-                informacionEditar 
+                informacionEditar
                   ? 'Información actualizada correctamente'
                   : 'Información creada correctamente'
               );
