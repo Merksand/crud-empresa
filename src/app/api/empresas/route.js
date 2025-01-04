@@ -1,29 +1,42 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import { pool } from '../../../lib/db';
 
 // GET - Obtener todas las empresas
 export async function GET() {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbEmpresa');
-    return NextResponse.json(rows);
+    const [rows] = await pool.query('SELECT * FROM tbempresa');
+    
+    // Asegurarnos de que siempre devolvemos un array
+    const empresas = Array.isArray(rows) ? rows : [];
+    
+    return NextResponse.json(empresas);
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('Error al obtener empresas:', error);
+    return NextResponse.json(
+      { message: 'Error al obtener las empresas' },
+      { status: 500 }
+    );
   }
 }
 
-// POST - Crear nueva empresa
+// POST - Crear una nueva empresa
 export async function POST(request) {
   try {
     const data = await request.json();
-    const { Nombre_Emp, Sede_Emp, Fecha_Fundacion_Emp, Tipo_Emp, Idioma_Emp, Estado_Emp } = data;
     
     const [result] = await pool.query(
-      'INSERT INTO TbEmpresa (Nombre_Emp, Sede_Emp, Fecha_Fundacion_Emp, Tipo_Emp, Idioma_Emp, Estado_Emp) VALUES (?, ?, ?, ?, ?, ?)',
-      [Nombre_Emp, Sede_Emp, Fecha_Fundacion_Emp, Tipo_Emp, Idioma_Emp, Estado_Emp]
+      'INSERT INTO tbempresa (nombre_empresa, direccion_empresa, telefono_empresa, correo_empresa, estado_empresa) VALUES (?, ?, ?, ?, ?)',
+      [data.nombre, data.direccion, data.telefono, data.correo, data.estado]
     );
-    
-    return NextResponse.json({ id: result.insertId }, { status: 201 });
+
+    return NextResponse.json(
+      { message: 'Empresa creada correctamente', id: result.insertId },
+      { status: 201 }
+    );
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Error al crear la empresa' },
+      { status: 500 }
+    );
   }
 } 

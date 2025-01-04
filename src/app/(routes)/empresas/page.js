@@ -36,27 +36,32 @@ export default function Empresas() {
   };
 
   const handleDelete = async (empresa) => {
-    setDeleteModal({ show: true, empresa });
-  };
-
-  const confirmDelete = async () => {
     try {
-      const response = await fetch(`/api/empresas/${deleteModal.empresa.Id_Empresa}`, {
+      const response = await fetch(`/api/empresas/${empresa.ID_Empresa}`, {
         method: 'DELETE',
       });
 
-      if (response.ok) {
-        showNotification('Empresa eliminada correctamente');
-        fetchEmpresas();
-      } else {
-        throw new Error('Error al eliminar');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Error al eliminar la empresa');
       }
+
+      await fetchEmpresas(); // Recargar la lista después de eliminar
+      showNotification('Empresa eliminada con éxito', 'success');
+      setDeleteModal({ show: false, empresa: null });
     } catch (error) {
-      console.error('Error:', error);
-      showNotification('Error al eliminar la empresa', 'error');
-    } finally {
+      console.error('Error detallado:', error);
+      showNotification(
+        error.message || 'Error al intentar eliminar la empresa', 
+        'error'
+      );
       setDeleteModal({ show: false, empresa: null });
     }
+  };
+
+  const confirmDelete = (empresa) => {
+    setDeleteModal({ show: true, empresa });
   };
 
   return (

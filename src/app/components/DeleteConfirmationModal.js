@@ -6,7 +6,7 @@ export default function DeleteConfirmationModal({ isOpen, onClose, onConfirm, it
       <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Confirmar Eliminación</h3>
         <p className="text-gray-600 dark:text-gray-300 mb-6">
-          ¿Estás seguro de que deseas eliminar <b>{itemName}?</b> Esta acción no se puede deshacer.
+          ¿Estás seguro de que deseas eliminar <b>{itemName}</b> Esta acción no se puede deshacer.
         </p>
         <div className="flex justify-end gap-3">
           <button

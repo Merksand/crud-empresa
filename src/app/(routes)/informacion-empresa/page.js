@@ -175,7 +175,7 @@ export default function InformacionEmpresa() {
         isOpen={deleteModal.show}
         onClose={() => setDeleteModal({ show: false, informacion: null })}
         onConfirm={confirmDelete}
-        itemName="la información de empresa"
+        itemName={`la información de ${empresas.find(e => e.Id_Empresa === deleteModal.informacion?.Id_Empresa)?.Nombre_Emp || 'empresa desconocida'}`}
       />
 
       <Modal
@@ -233,4 +233,4 @@ export default function InformacionEmpresa() {
       </Modal>
     </div>
   );
-} 
+}

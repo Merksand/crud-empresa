@@ -1,13 +1,28 @@
+import React, { useState, useEffect } from 'react';
+
 export default function InformacionEmpresaForm({ informacion, empresas, onSubmit, onClose }) {
+  const [logoUrl, setLogoUrl] = useState(informacion?.Logo_IE || '');
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setLogoUrl(informacion?.Logo_IE || '');
+  }, [informacion]);
+
+  const handleLogoChange = (e) => {
+    const url = e.target.value;
+    setLogoUrl(url);
+    setIsLoading(!!url); // Inicia el loading solo si hay URL
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = {
       Id_Empresa: parseInt(formData.get('empresa')),
-      Logo_IE: formData.get('logo'),
+      Logo_IE: logoUrl,
       Regimen_Impositivo_IE: formData.get('regimen'),
       Zona_Horaria_IE: formData.get('zonaHoraria'),
-      Estado_IE: formData.get('estado')
+      Estado_IE: formData.get('estado'),
     };
     onSubmit(data);
   };
@@ -36,11 +51,32 @@ export default function InformacionEmpresaForm({ informacion, empresas, onSubmit
         <input
           type="text"
           name="logo"
-          defaultValue={informacion?.Logo_IE}
+          value={logoUrl}
+          onChange={handleLogoChange}
           className="w-full p-2 border rounded-lg dark:bg-gray-700"
           required
           placeholder="URL o ruta del logo"
         />
+        {logoUrl && (
+          <div className="mt-2 relative">
+            {isLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 rounded-lg">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+              </div>
+            )}
+            <img
+              src={logoUrl}
+              alt="Logo preview"
+              className="max-w-[200px] h-auto rounded-lg border dark:border-gray-600"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/placeholder-image.png'; // Imagen de respaldo
+                setIsLoading(false);
+              }}
+              onLoad={() => setIsLoading(false)}
+            />
+          </div>
+        )}
       </div>
 
       <div>
@@ -97,4 +133,4 @@ export default function InformacionEmpresaForm({ informacion, empresas, onSubmit
       </div>
     </form>
   );
-} 
+}
