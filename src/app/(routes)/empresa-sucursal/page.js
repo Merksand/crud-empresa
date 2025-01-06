@@ -132,8 +132,8 @@ export default function EmpresaSucursal() {
                 </tr>
               ) : (
                 relaciones.map((relacion) => {
-                  const empresa = empresas.find(e => e.Id_Empresa === relacion.Id_Empresa);
-                  const sucursal = sucursales.find(s => s.Id_Sucursal === relacion.Id_Sucursal);
+                  const empresa = empresas.find(e => e.Id_Empresa === relacion.Id_Empresa_ES);
+                  const sucursal = sucursales.find(s => s.Id_Sucursal === relacion.Id_Sucursal_ES);
                   
                   return (
                     <tr key={`${relacion.Id_Empresa}-${relacion.Id_Sucursal}`} className="hover:bg-gray-50 dark:hover:bg-gray-700">

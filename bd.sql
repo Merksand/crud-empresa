@@ -1,3 +1,4 @@
+drop database empresa;
 CREATE DATABASE empresa;
 use empresa;
 
@@ -50,7 +51,7 @@ CREATE TABLE TbInformacionEmpresa (
 CREATE TABLE TbEstructura (
     Id_Estructura                   INT PRIMARY KEY AUTO_INCREMENT,
     Id_Empresa                      INT,
-    Fecha_Creacion_Est              INT,
+    Fecha_Creacion_Est              DATE, -- Cambio INT por DATE
     Resolucion_Est                  VARCHAR(50),
     Estado_Est                      VARCHAR(10),
     FOREIGN KEY (Id_Empresa)        REFERENCES TbEmpresa(Id_Empresa)
@@ -77,8 +78,8 @@ CREATE TABLE TbDependencia (
     FOREIGN KEY ( Id_Area_Hijo_Dep)      REFERENCES TbArea(Id_Area)
 
 );
--- Hasta aqui mi parte
 
+-- Hasta aqui mi parte
 
 CREATE TABLE TbCargo (
     Id_Cargo                             INT PRIMARY KEY AUTO_INCREMENT,

@@ -15,8 +15,8 @@ export async function POST(request) {
   try {
     const data = await request.json();
     const { 
-      Id_Empresa, 
-      Id_Sucursal, 
+      Id_Empresa_ES, 
+      Id_Sucursal_ES, 
       Fecha_Apertura_ES, 
       Fecha_Cierre_ES, 
       Estado_ES 
@@ -24,8 +24,8 @@ export async function POST(request) {
     
     // Verificar si la relación ya existe
     const [existingRows] = await pool.query(
-      'SELECT * FROM TbEmpresaSucursal WHERE Id_Empresa = ? AND Id_Sucursal = ?',
-      [Id_Empresa, Id_Sucursal]
+      'SELECT * FROM TbEmpresaSucursal WHERE Id_Empresa_ES = ? AND Id_Sucursal_ES = ?',
+      [Id_Empresa_ES, Id_Sucursal_ES]
     );
 
     if (existingRows.length > 0) {
@@ -36,8 +36,8 @@ export async function POST(request) {
     }
 
     const [result] = await pool.query(
-      'INSERT INTO TbEmpresaSucursal (Id_Empresa, Id_Sucursal, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES) VALUES (?, ?, ?, ?, ?)',
-      [Id_Empresa, Id_Sucursal, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES || 'Activo']
+      'INSERT INTO TbEmpresaSucursal (Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES) VALUES (?, ?, ?, ?, ?)',
+      [Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES || 'Activo']
     );
     
     if (result.affectedRows === 0) {
@@ -46,7 +46,7 @@ export async function POST(request) {
 
     return NextResponse.json({ 
       message: 'Relación creada correctamente',
-      data: { Id_Empresa, Id_Sucursal, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES }
+      data: { Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES }
     }, { status: 201 });
   } catch (error) {
     console.error('Error en POST empresa-sucursal:', error);

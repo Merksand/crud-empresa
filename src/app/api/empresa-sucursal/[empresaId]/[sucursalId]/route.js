@@ -10,8 +10,8 @@ export async function PUT(request, { params }) {
 
     const data = await request.json();
     const { 
-      Id_Empresa, 
-      Id_Sucursal, 
+      Id_Empresa_ES, 
+      Id_Sucursal_ES, 
       Fecha_Apertura_ES, 
       Fecha_Cierre_ES, 
       Estado_ES 
@@ -19,10 +19,10 @@ export async function PUT(request, { params }) {
     const { empresaId, sucursalId } = params;
 
     // Verificar si ya existe una relación con los nuevos IDs
-    if (Id_Empresa !== parseInt(empresaId) || Id_Sucursal !== parseInt(sucursalId)) {
+    if (Id_Empresa_ES !== parseInt(empresaId) || Id_Sucursal_ES !== parseInt(sucursalId)) {
       const [existing] = await connection.query(
-        'SELECT * FROM TbEmpresaSucursal WHERE Id_Empresa = ? AND Id_Sucursal = ?',
-        [Id_Empresa, Id_Sucursal]
+        'SELECT * FROM TbEmpresaSucursal WHERE Id_Empresa_ES = ? AND Id_Sucursal_ES = ?',
+        [Id_Empresa_ES, Id_Sucursal_ES]
       );
 
       if (existing.length > 0) {
@@ -36,30 +36,30 @@ export async function PUT(request, { params }) {
 
     // Eliminar la relación anterior
     await connection.query(
-      'DELETE FROM TbEmpresaSucursal WHERE Id_Empresa = ? AND Id_Sucursal = ?',
+      'DELETE FROM TbEmpresaSucursal WHERE Id_Empresa_ES = ? AND Id_Sucursal_ES = ?',
       [empresaId, sucursalId]
     );
 
     // Insertar la nueva relación
     const [result] = await connection.query(
       `INSERT INTO TbEmpresaSucursal 
-       (Id_Empresa, Id_Sucursal, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES) 
+       (Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES) 
        VALUES (?, ?, ?, ?, ?)`,
-      [Id_Empresa, Id_Sucursal, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES]
+      [Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES]
     );
 
     await connection.commit();
 
     // Obtener los datos actualizados
     const [updated] = await connection.query(
-      'SELECT * FROM TbEmpresaSucursal WHERE Id_Empresa = ? AND Id_Sucursal = ?',
-      [Id_Empresa, Id_Sucursal]
+      'SELECT * FROM TbEmpresaSucursal WHERE Id_Empresa_ES = ? AND Id_Sucursal_ES = ?',
+      [Id_Empresa_ES, Id_Sucursal_ES]
     );
 
     return NextResponse.json({ 
       message: 'Relación actualizada correctamente',
       data: updated[0]
-    });2
+    });
 
   } catch (error) {
     await connection.rollback();
@@ -79,7 +79,7 @@ export async function DELETE(request, { params }) {
     const { empresaId, sucursalId } = params;
 
     const [result] = await pool.query(
-      'DELETE FROM TbEmpresaSucursal WHERE Id_Empresa = ? AND Id_Sucursal = ?',
+      'DELETE FROM TbEmpresaSucursal WHERE Id_Empresa_ES = ? AND Id_Sucursal_ES = ?',
       [empresaId, sucursalId]
     );
 
@@ -102,7 +102,7 @@ export async function GET(request, { params }) {
     const { empresaId, sucursalId } = params;
 
     const [rows] = await pool.query(
-      'SELECT * FROM TbEmpresaSucursal WHERE Id_Empresa = ? AND Id_Sucursal = ?',
+      'SELECT * FROM TbEmpresaSucursal WHERE Id_Empresa_ES = ? AND Id_Sucursal_ES = ?', 
       [empresaId, sucursalId]
     );
 
