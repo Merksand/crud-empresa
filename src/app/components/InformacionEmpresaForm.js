@@ -4,21 +4,42 @@ export default function InformacionEmpresaForm({ informacion, empresas, onSubmit
   const [logoUrl, setLogoUrl] = useState(informacion?.Logo_IE || '');
   const [isLoading, setIsLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isImageValid, setIsImageValid] = useState(!!informacion?.Logo_IE);
 
   useEffect(() => {
     setLogoUrl(informacion?.Logo_IE || '');
-    setImageError(false); // Resetear el error cuando cambia la información
+    setImageError(false);
+    setIsImageValid(!!informacion?.Logo_IE);
   }, [informacion]);
 
   const handleLogoChange = (e) => {
     const url = e.target.value;
     setLogoUrl(url);
     setIsLoading(!!url);
-    setImageError(false); // Resetear el error cuando cambia la URL
+    setImageError(false);
+    setIsImageValid(false);
+
+    if (url) {
+      const img = new Image();
+      img.onload = () => {
+        setIsLoading(false);
+        setIsImageValid(true);
+      };
+      img.onerror = () => {
+        setIsLoading(false);
+        setImageError(true);
+        setIsImageValid(false);
+      };
+      img.src = url;
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!isImageValid) {
+      setImageError(true);
+      return;
+    }
     const formData = new FormData(e.target);
     const data = {
       Id_Empresa: parseInt(formData.get('empresa')),
@@ -56,10 +77,17 @@ export default function InformacionEmpresaForm({ informacion, empresas, onSubmit
           name="logo"
           value={logoUrl}
           onChange={handleLogoChange}
-          className="w-full p-2 border rounded-lg dark:bg-gray-700"
+          className={`w-full p-2 border rounded-lg dark:bg-gray-700 ${
+            imageError ? 'border-red-500' : ''
+          }`}
           required
           placeholder="URL o ruta del logo"
         />
+        {imageError && (
+          <p className="text-red-500 text-sm mt-1">
+            La URL proporcionada no es una imagen válida
+          </p>
+        )}
         {logoUrl && !imageError && (
           <div className="mt-2 relative">
             {isLoading && (
@@ -70,24 +98,10 @@ export default function InformacionEmpresaForm({ informacion, empresas, onSubmit
             <img
               src={logoUrl}
               alt="Logo preview"
-              className="max-w-[200px] h-auto rounded-lg border dark:border-gray-600"
-              onError={(e) => {
-                e.target.onError = null; // Prevenir futuros intentos
-                setImageError(true);
-                setIsLoading(false);
-                showNotification('No se pudo cargar la imagen', 'error');
-              }}
-              onLoad={() => {
-                setIsLoading(false);
-                setImageError(false);
-              }}
+              className="max-h-32 rounded-lg"
+              onError={() => setImageError(true)}
             />
           </div>
-        )}
-        {imageError && logoUrl && (
-          <p className="mt-2 text-red-500 text-sm">
-            No se pudo cargar la imagen. Por favor, verifica la URL.
-          </p>
         )}
       </div>
 
@@ -138,7 +152,12 @@ export default function InformacionEmpresaForm({ informacion, empresas, onSubmit
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          disabled={!isImageValid || imageError}
+          className={`px-4 py-2 rounded-lg ${
+            !isImageValid || imageError
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-blue-500 hover:bg-blue-600 text-white'
+          }`}
         >
           {informacion ? 'Actualizar' : 'Crear'}
         </button>

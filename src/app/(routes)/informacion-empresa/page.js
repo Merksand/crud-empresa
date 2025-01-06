@@ -164,7 +164,7 @@ export default function InformacionEmpresa() {
                             src={info.Logo_IE}
                             alt="Logo"
                             className="h-10 max-w-[100px] object-contain rounded-lg border dark:border-gray-600"
-                            onError={(e) => (e.target.src = '/placeholder-image.png')}
+                            onError={(e) => (e.target.src = '/.png')}
                           />
                         ) : (
                           <span className="text-gray-500 italic">Sin logo</span>
