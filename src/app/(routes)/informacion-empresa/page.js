@@ -79,9 +79,8 @@ export default function InformacionEmpresa() {
         <div className="flex items-center gap-4">
           {notification.show && (
             <div
-              className={`px-4 py-2 rounded-lg ${
-                notification.type === 'error' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
-              }`}
+              className={`px-4 py-2 rounded-lg ${notification.type === 'error' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
+                }`}
             >
               {notification.message}
             </div>
@@ -176,11 +175,10 @@ export default function InformacionEmpresa() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{info.Zona_Horaria_IE}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            info.Estado_IE === 'Activo'
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${info.Estado_IE === 'Activo'
                               ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                               : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                          }`}
+                            }`}
                         >
                           {info.Estado_IE}
                         </span>
@@ -215,10 +213,9 @@ export default function InformacionEmpresa() {
         isOpen={deleteModal.show}
         onClose={() => setDeleteModal({ show: false, informacion: null })}
         onConfirm={confirmDelete}
-        itemName={`la información de ${
-          empresas.find((e) => e.Id_Empresa === deleteModal.informacion?.Id_Empresa)?.Nombre_Emp ||
+        itemName={`la información de ${empresas.find((e) => e.Id_Empresa === deleteModal.informacion?.Id_Empresa)?.Nombre_Emp ||
           'empresa desconocida'
-        }`}
+          }`}
       />
 
       <Modal
