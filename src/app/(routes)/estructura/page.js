@@ -182,8 +182,8 @@ function EstructuraPage() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button
                     onClick={() => {
-                      setEstructuraEditar(estructura); // Establece la estructura que se va a editar
-                      setIsModalOpen(true); // Abre el modal de edición
+                      setEstructuraEditar(estructura);  
+                      setIsModalOpen(true);  
                     }}
                     className="text-indigo-600 hover:text-indigo-900 mr-4"
                   >

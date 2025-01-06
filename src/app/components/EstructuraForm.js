@@ -12,13 +12,14 @@ export default function EstructuraForm({ estructura, onSubmit, onClose }) {
   useEffect(() => {
     if (estructura) {
       setFormData({
-        nombre: estructura.nombre_are,
-        fechaCreacion: estructura.fecha_creacion_are?.split('T')[0],
-        resolucion: estructura.resolucion_are,
-        estado: estructura.estado_are || 'Activo',
+        nombre: estructura?.nombre_are || '',
+        fechaCreacion: estructura?.fecha_creacion_are?.split('T')[0] || '',
+        resolucion: estructura?.resolucion_are || '',
+        estado: estructura?.estado_are || 'Activo',
       });
     }
   }, [estructura]);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -165,19 +165,19 @@ export default function Area() {
                       <td className="px-6 py-4 text-sm">
                         {area.estado_area ? "Activo" : "Inactivo"}
                       </td>
-                      <td className="px-6 py-4 text-right text-sm">
+                      <td className="px-6 float-right py-4 whitespace-nowrap text-sm font-medium">
                         <button
                           onClick={() => {
                             setAreaEditar(area);
                             setIsModalOpen(true);
                           }}
-                          className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-lg mr-2"
+                          className="text-indigo-600 hover:text-indigo-900 mr-4"
                         >
                           Editar
                         </button>
                         <button
                           onClick={() => handleDelete(area)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg"
+                          className=" text-red-600 hover:text-red-900"
                         >
                           Eliminar
                         </button>
