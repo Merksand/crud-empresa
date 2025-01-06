@@ -35,7 +35,7 @@ export default function Area() {
       const response = await fetch("/api/area");
       const data = await response.json();
 
-      console.log(data);
+      // console.log(data);
 
       if (!response.ok) {
         throw new Error(data.error || "Error al cargar las áreas");
@@ -149,7 +149,7 @@ export default function Area() {
                 </tr>
               ) : (
                 areas.map((area) => {
-                  console.log(area)
+                  // console.log(area)
                   return (
                     <tr key={area.Id_Area} className="hover:bg-slate-500">
                       <td className="px-6 py-4 text-sm">
