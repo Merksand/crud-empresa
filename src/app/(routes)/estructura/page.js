@@ -1,6 +1,6 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Modal from "@/app/components/Modal";
 import EstructuraForm from "@/app/components/EstructuraForm";
 import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
@@ -63,11 +63,21 @@ function EstructuraPage() {
   };
 
   const handleDelete = async (estructura) => {
+    if (!estructura || !estructura.Id_Estructura) {
+      console.error("Estructura inválida:", estructura);
+      showNotification("Estructura inválida o ID no definido", "error");
+      return;
+    }
     setDeleteModal({ show: true, estructura });
   };
 
   const confirmDelete = async () => {
     try {
+      if (!deleteModal.estructura || !deleteModal.estructura.Id_Estructura) {
+        showNotification("Estructura inválida o ID no definido", "error");
+        return;
+      }
+
       const response = await fetch(
         `/api/estructura/${deleteModal.estructura.Id_Estructura}`,
         {
@@ -150,54 +160,60 @@ function EstructuraPage() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
-            {estructuras.map((estructura) => (
-              <tr key={estructura.Id_Estructura} className="hover:bg-slate-500">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {estructura.Id_Estructura}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {getEmpresaNombre(estructura.Id_Empresa)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {estructura.Fecha_Creacion_Est
-                    ? new Date(
-                        estructura.Fecha_Creacion_Est
-                      ).toLocaleDateString()
-                    : "-"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {estructura.Resolucion_Est}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      estructura.Estado_Est === "Activo"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {estructura.Estado_Est}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button
-                    onClick={() => {
-                      setEstructuraEditar(estructura);  
-                      setIsModalOpen(true);  
-                    }}
-                    className="text-indigo-600 hover:text-indigo-900 mr-4"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleDelete(estructura)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {estructuras.map((estructura) => {
+              console.log(estructura.Id_Estructura);
+              return (
+                <tr
+                  key={estructura.Id_Estructura}
+                  className="hover:bg-slate-500"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {estructura.Id_Estructura}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {getEmpresaNombre(estructura.Id_Empresa)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {estructura.Fecha_Creacion_Est
+                      ? new Date(
+                          estructura.Fecha_Creacion_Est
+                        ).toLocaleDateString()
+                      : "-"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {estructura.Resolucion_Est}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        estructura.Estado_Est === "Activo"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {estructura.Estado_Est}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button
+                      onClick={() => {
+                        setEstructuraEditar(estructura);
+                        setIsModalOpen(true);
+                      }}
+                      className="text-indigo-600 hover:text-indigo-900 mr-4"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleDelete(estructura)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -222,6 +238,7 @@ function EstructuraPage() {
         <EstructuraForm
           estructura={estructuraEditar}
           onSubmit={async (data) => {
+            console.log("Datos enviados:", data);
             try {
               let response;
               if (estructuraEditar) {
@@ -242,6 +259,7 @@ function EstructuraPage() {
               }
 
               const responseData = await response.json();
+              console.log("Respuesta del servidor:", responseData);
 
               if (!response.ok) {
                 throw new Error(
@@ -256,7 +274,18 @@ function EstructuraPage() {
               );
               setIsModalOpen(false);
               setEstructuraEditar(null);
-              setEstructuras([...estructuras, responseData]);
+
+              if (estructuraEditar) {
+                setEstructuras(
+                  estructuras.map((estruc) =>
+                    estruc.Id_Estructura === estructuraEditar.Id_Estructura
+                      ? { ...estruc, ...responseData }
+                      : estruc
+                  )
+                );
+              } else {
+                setEstructuras([...estructuras, responseData]);
+              }
             } catch (error) {
               showNotification(
                 error.message || "Error al guardar la estructura",

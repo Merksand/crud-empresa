@@ -54,22 +54,23 @@ export async function PUT(request, { params }) {
 
 // DELETE - Eliminar un área
 export async function DELETE(request, { params }) {
-  console.log("DELETE - ID recibido:", params);
-  // try {
-  //   const [result] = await pool.query(
-  //     'DELETE FROM TbArea WHERE Id_Area = ?',
-  //     [params.id]
-  //   );
+  try {
+  console.log("DELETE - ID recibido:", params.id);
 
-  //   if (result.affectedRows === 0) {
-  //     return NextResponse.json(
-  //       { error: 'Área no encontrada' }, 
-  //       { status: 404 }
-  //     );
-  //   }
+    const [result] = await pool.query(
+      'DELETE FROM TbArea WHERE Id_Area = ?',
+      [params.id]
+    );
 
-  //   return NextResponse.json({ message: 'Área eliminada correctamente' });
-  // } catch (error) {
-  //   return NextResponse.json({ error: error.message }, { status: 500 });
-  // }
+    if (result.affectedRows === 0) {
+      return NextResponse.json(
+        { error: 'Área no encontrada' }, 
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: 'Área eliminada correctamente' });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 } 

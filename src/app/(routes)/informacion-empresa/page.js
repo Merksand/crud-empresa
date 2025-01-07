@@ -165,7 +165,7 @@ export default function InformacionEmpresa() {
                             className="h-10 max-w-[100px] object-contain rounded-lg border dark:border-gray-600"
                             onError={(e) => (e.target.src = '/.png')}
                           />
-                        ) : (
+                        ) : ( 
                           <span className="text-gray-500 italic">Sin logo</span>
                         )}
                       </td>

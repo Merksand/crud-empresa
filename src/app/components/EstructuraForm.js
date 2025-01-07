@@ -1,25 +1,51 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export default function EstructuraForm({ estructura, onSubmit, onClose }) {
   const [formData, setFormData] = useState({
-    nombre: '',
-    fechaCreacion: '',
-    resolucion: '',
-    estado: 'Activo',
+    Id_Empresa: "",
+    Fecha_Creacion_Est: "",
+    Resolucion_Est: "",
+    Estado_Est: "Activo",
   });
 
-  // Si hay una estructura, inicializamos el formulario con los valores actuales
+  const [empresas, setEmpresas] = useState([]);  
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadEmpresas = async () => {
+      try {
+        const response = await fetch("/api/empresas");  
+        if (!response.ok) throw new Error("Error al cargar empresas");
+        const data = await response.json();
+        setEmpresas(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadEmpresas();
+  }, []);
+
   useEffect(() => {
     if (estructura) {
       setFormData({
-        nombre: estructura?.nombre_are || '',
-        fechaCreacion: estructura?.fecha_creacion_are?.split('T')[0] || '',
-        resolucion: estructura?.resolucion_are || '',
-        estado: estructura?.estado_are || 'Activo',
+        Id_Empresa: estructura?.Id_Empresa || "",  
+        Fecha_Creacion_Est: estructura?.Fecha_Creacion_Est?.split("T")[0] || "",
+        Resolucion_Est: estructura?.Resolucion_Est || "",
+        Estado_Est: estructura?.Estado_Est || "Activo",
+      });
+    } else {
+      setFormData({
+        Id_Empresa: "",
+        Fecha_Creacion_Est: "",
+        Resolucion_Est: "",
+        Estado_Est: "Activo",
       });
     }
   }, [estructura]);
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,26 +60,42 @@ export default function EstructuraForm({ estructura, onSubmit, onClose }) {
     onSubmit(formData);
   };
 
+  if (loading) {
+    return <p>Cargando empresas...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">Error: {error}</p>;
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium mb-1">Nombre</label>
-        <input
-          type="text"
-          name="nombre"
-          value={formData.nombre}
+        <label className="block text-sm font-medium mb-1">Empresa</label>
+        <select
+          name="Id_Empresa"
+          value={formData.Id_Empresa}
           onChange={handleChange}
           className="w-full p-2 border rounded-lg dark:bg-gray-700"
           required
-        />
+        >
+          <option value="">Seleccione una empresa</option>
+          {empresas.map((empresa) => (
+            <option key={empresa.Id_Empresa} value={empresa.Id_Empresa}>
+              {empresa.Nombre_Emp}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Fecha de Creación</label>
+        <label className="block text-sm font-medium mb-1">
+          Fecha de Creación
+        </label>
         <input
           type="date"
-          name="fechaCreacion"
-          value={formData.fechaCreacion}
+          name="Fecha_Creacion_Est"
+          value={formData.Fecha_Creacion_Est || ""}
           onChange={handleChange}
           className="w-full p-2 border rounded-lg dark:bg-gray-700"
           required
@@ -64,8 +106,8 @@ export default function EstructuraForm({ estructura, onSubmit, onClose }) {
         <label className="block text-sm font-medium mb-1">Resolución</label>
         <input
           type="text"
-          name="resolucion"
-          value={formData.resolucion}
+          name="Resolucion_Est"
+          value={formData.Resolucion_Est || ""}
           onChange={handleChange}
           className="w-full p-2 border rounded-lg dark:bg-gray-700"
           required
@@ -75,8 +117,8 @@ export default function EstructuraForm({ estructura, onSubmit, onClose }) {
       <div>
         <label className="block text-sm font-medium mb-1">Estado</label>
         <select
-          name="estado"
-          value={formData.estado}
+          name="Estado_Est"
+          value={formData.Estado_Est || ""}
           onChange={handleChange}
           className="w-full p-2 border rounded-lg dark:bg-gray-700"
           required
@@ -98,7 +140,7 @@ export default function EstructuraForm({ estructura, onSubmit, onClose }) {
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
         >
-          {estructura ? 'Actualizar' : 'Crear'}
+          {estructura ? "Actualizar" : "Crear"}
         </button>
       </div>
     </form>
