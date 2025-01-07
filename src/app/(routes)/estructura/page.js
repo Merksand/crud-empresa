@@ -54,16 +54,8 @@ function EstructuraPage() {
     return empresa ? empresa.Nombre_Emp : "No encontrada";
   };
 
-  // const showNotification = (message, type = "success") => {
-  //   setNotification({ show: true, message, type });
-  //   setTimeout(
-  //     () => setNotification({ show: false, message: "", type: "" }),
-  //     3000
-  //   );
-  // };
 
   const showNotification = (message, type = "success") => {
-    console.log("Notificación activada:", { message, type });
     setNotification({ show: true, message, type });
     setTimeout(
       () => setNotification({ show: false, message: "", type: "" }),
@@ -136,11 +128,10 @@ function EstructuraPage() {
     <>
       {notification.show && (
         <div
-          className={`fixed top-12 right-60 px-4 py-2 rounded shadow-lg z-50 ${
-            notification.type === "success"
-              ? "bg-green-500 text-white"
-              : "bg-red-500 text-white"
-          }`}
+          className={`fixed top-12 right-60 px-4 py-2 rounded shadow-lg z-50 ${notification.type === "success"
+            ? "bg-green-500 text-white"
+            : "bg-red-500 text-white"
+            }`}
         >
           {notification.message}
         </div>
@@ -182,7 +173,7 @@ function EstructuraPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
               {estructuras.map((estructura) => {
-                console.log(estructura.Id_Estructura);
+                console.log(estructura);
                 return (
                   <tr
                     key={estructura.Id_Estructura}
@@ -197,8 +188,8 @@ function EstructuraPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {estructura.Fecha_Creacion_Est
                         ? new Date(
-                            estructura.Fecha_Creacion_Est
-                          ).toLocaleDateString()
+                          estructura.Fecha_Creacion_Est
+                        ).toLocaleDateString()
                         : "-"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -206,11 +197,10 @@ function EstructuraPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          estructura.Estado_Est === "Activo"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${estructura.Estado_Est === "Activo"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                          }`}
                       >
                         {estructura.Estado_Est}
                       </span>
@@ -243,9 +233,8 @@ function EstructuraPage() {
           isOpen={deleteModal.show}
           onClose={() => setDeleteModal({ show: false, estructura: null })}
           onConfirm={confirmDelete}
-          itemName={`la estructura ${
-            deleteModal.estructura?.Id_Estructura || "desconocida"
-          }`}
+          itemName={`la estructura ${deleteModal.estructura?.Id_Estructura || "desconocida"
+            }`}
         />
 
         <Modal

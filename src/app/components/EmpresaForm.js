@@ -54,11 +54,13 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
                 <label className="block text-sm font-medium mb-1">Tipo</label>
                 <select
                     name="tipo"
-                    defaultValue={empresa?.Tipo_Emp || ''}
+                    defaultValue={empresa?.Tipo_Emp || ""}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
                 >
-                    <option value="" disabled>Seleccione un tipo</option>
+                    <option value="" disabled>
+                        Seleccione un tipo
+                    </option>
                     <option value="S.A.">S.A.</option>
                     <option value="S.L.">S.L.</option>
                     <option value="Autónomo">Autónomo</option>
@@ -80,7 +82,7 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
                 <label className="block text-sm font-medium mb-1">Estado</label>
                 <select
                     name="estado"
-                    defaultValue={empresa?.Estado_Emp || 'Activo'}
+                    defaultValue={empresa?.Estado_Emp || "Activo"}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
                 >
