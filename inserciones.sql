@@ -43,3 +43,9 @@ VALUES
 
 
 
+INSERT INTO TbCargo (Nombre_Car, Nivel_Car, Sueldo_Car, Sueldo_USD_Car, Resolucion_Car, Estado_Dep)
+VALUES 
+('Gerente General', 1, 15000.00, 2150.00, 'Resolución-001', 'activo'),
+('Supervisor', 2, 8000.00, 1145.00, 'Resolución-002', 'activo');
+
+

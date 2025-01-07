@@ -61,6 +61,15 @@ export default function Sidebar() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6h12m0 0l-4 4m4-4l-4-4" />
         </svg>
       )
+    },
+    {
+      title: 'Cargo',
+      path: '/cargo',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+        </svg>
+      )
     }
   ];
 
