@@ -33,22 +33,22 @@ export default function Area() {
   const fetchData = async () => {
     try {
       setLoading(true);
-  
+
       // Realiza llamadas paralelas a las APIs
       const [areasRes, detallesRes] = await Promise.all([
         fetch("/api/area"), // API básica para obtener las áreas
         fetch("/api/area/detalles"), // API con detalles
       ]);
-  
+
       // Validar las respuestas
       if (!areasRes.ok || !detallesRes.ok) {
         throw new Error("Error al obtener los datos de áreas");
       }
-  
+
       // Convertir las respuestas a JSON
       const areasData = await areasRes.json();
       const detallesData = await detallesRes.json();
-  
+
       // Procesar datos combinando detalles con áreas básicas
       const processedData = areasData.map((area) => {
         const detalle = detallesData.find(
@@ -56,21 +56,22 @@ export default function Area() {
         );
         return {
           ...area,
+          Id_Estructura: detalle?.Id_Estructura,
           Nombre_Emp: detalle?.Nombre_Emp || "No encontrada",
           Resolucion_Est: detalle?.Resolucion_Est || "Sin resolución",
         };
       });
-  
+
       // Actualiza el estado
       setAreas(processedData);
     } catch (error) {
-      console.error("Error al cargar las áreas:", error);
+      console.error("Error al cargar las áreas  :", error);
       showNotification("Error al cargar las áreas", "error");
     } finally {
       setLoading(false);
     }
   };
-  
+
 
   const getDetallesArea = (area) => {
     return {
@@ -78,7 +79,7 @@ export default function Area() {
       resolucion: area.Resolucion_Est || "Sin resolución",
     };
   };
-  
+
 
   const handleDelete = async (area) => {
     setDeleteModal({ show: true, area });
@@ -180,22 +181,31 @@ export default function Area() {
                   return (
                     <tr key={area.Id_Area} className="hover:bg-slate-500">
                       <td className="px-6 py-4 text-sm">
-                        {area.Nombre_Emp} - {area.Resolucion_Est}
+                        {area.Resolucion_Est}
                       </td>
                       <td className="px-6 py-4 text-sm">
                         {area.Fecha_Creacion_Ar
                           ? new Date(
                             area.Fecha_Creacion_Ar
                           ).toLocaleDateString()
-                          : "-"}
+                          : "-"}  
                       </td>
-                      
+
                       <td className="px-6 py-4 text-sm">{area.Nombre_Are}</td>
                       <td className="px-6 py-4 text-sm">
                         {area.Resolucion_Are}
                       </td>
                       <td className="px-6 py-4 text-sm">
-                        {area.estado_area ? "Activo" : "Inactivo"}
+
+
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${area.Estado_Are === "Activo"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                            }`}
+                        >
+                          {area.Estado_Are}
+                        </span>
                       </td>
                       <td className="px-6 float-right py-4 whitespace-nowrap text-sm font-medium">
                         <button
@@ -242,12 +252,12 @@ export default function Area() {
           area={areaEditar}
           onSubmit={async (data) => {
             try {
-              console.log("Area de editar: ", areaEditar);
-              console.log("Data: ", data);
+              console.log("Area data de editar: ", data);
               let response;
               if (areaEditar) {
+                // console.log("area editar id: ", areaEditar.Id_Area);
                 response = await fetch(
-                  `/api/area/${areaEditar.id_estructura_area}`,
+                  `/api/area/${areaEditar.Id_Area}`,
                   {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },

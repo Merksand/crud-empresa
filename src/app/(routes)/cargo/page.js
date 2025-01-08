@@ -64,11 +64,10 @@ export default function cargo() {
   return (
     <div className="p-6">
       {notification.show && (
-        <div className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${
-          notification.type === 'error' 
-            ? 'bg-red-500 text-white' 
-            : 'bg-green-500 text-white'
-        }`}>
+        <div className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${notification.type === 'error'
+          ? 'bg-red-500 text-white'
+          : 'bg-green-500 text-white'
+          }`}>
           {notification.message}
         </div>
       )}
@@ -117,41 +116,42 @@ export default function cargo() {
                   </td>
                 </tr>
               ) : (
-                cargo.map((cargo) => (
-                  <tr key={cargo.Id_Cargo} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Nombre_Car}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Nivel_Car}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Sueldo_Car}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Sueldo_USD_Car}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Resolucion_Car}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        cargo.Estado_Dep === 'activo' 
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
-                          : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                      }`}>
-                        {cargo.Estado_Dep}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        onClick={() => {
-                          setCargoEditar(cargo);
-                          setIsModalOpen(true);
-                        }}
-                        className="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 mr-4"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => handleDelete(cargo)}
-                        className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
-                      >
-                        Eliminar
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                cargo.map((cargo) => {
+                  return (
+                    <tr key={cargo.Id_Cargo} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Nombre_Car}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Nivel_Car}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Sueldo_Car}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Sueldo_USD_Car}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Resolucion_Car}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${cargo.Estado_Dep === 'Activo'
+                          ? 'bg-green-600'
+                          : 'bg-red-600'
+                          }`}>
+                          {cargo.Estado_Dep}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={() => {
+                            setCargoEditar(cargo);
+                            setIsModalOpen(true);
+                          }}
+                          className="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 mr-4"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => handleDelete(cargo)}
+                          className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
+                        >
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })
               )}
             </tbody>
           </table>

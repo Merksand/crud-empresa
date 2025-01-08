@@ -1,29 +1,49 @@
-export default function AreaForm({ area, onSubmit, onClose }) {
+export default function AreaForm({ area, onSubmit, onClose, estructuras }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-    
+
         const fechaCreacion = formData.get("fechaCreacion");
         const fechaFormateada = fechaCreacion ? new Date(fechaCreacion).toISOString().split("T")[0] : null;
-    
         const data = {
             Nombre_Are: formData.get("nombre"),
             Resolucion_Are: formData.get("resolucion"),
-            Fecha_Creacion_Are: fechaFormateada, // Formato adecuado para la base de datos
+            Fecha_Creacion_Ar: fechaFormateada,
             Estado_Are: formData.get("estado"),
+            Id_Estructura_Ar: formData.get("estructura"), // Captura la estructura seleccionada
         };
-    
-        if (!data.Fecha_Creacion_Are) {
+
+        console.log("data de areaForm ", data);
+
+        if (!data.Fecha_Creacion_Ar) {
             console.error("Error: Fecha de creación no válida.");
             return;
         }
-    
+
         onSubmit(data);
     };
-    
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
+            {/* <div>
+                <label className="block text-sm font-medium mb-1">Estructura</label>
+                <select
+                    name="Id_Estructura_Ar"
+                    defaultValue={area?.Id_Estructura_Ar || ""}
+                    className="w-full p-2 border rounded-lg dark:bg-gray-700"
+                    required
+                >
+                    <option value="">Seleccione una estructura</option>
+                    {estructuras.map((estructura) => (
+                        <option key={estructura.Id_Estructura} value={estructura.Id_Estructura}>
+                            {estructura.Resolucion_Est} - {estructura.Nombre_Empresa}
+                        </option>
+                    ))}
+                </select>
+            </div> */}
+
+            
+
             <div>
                 <label className="block text-sm font-medium mb-1">Nombre</label>
                 <input
@@ -51,7 +71,7 @@ export default function AreaForm({ area, onSubmit, onClose }) {
                 <input
                     type="date"
                     name="fechaCreacion"
-                    defaultValue={area?.Fecha_Creacion_Are?.split("T")[0]}
+                    defaultValue={area?.Fecha_Creacion_Ar?.split("T")[0]}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
                 />

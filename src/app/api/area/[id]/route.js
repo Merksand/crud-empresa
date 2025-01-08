@@ -28,7 +28,7 @@ export async function PUT(request, { params }) {
     const data = await request.json();
     const { 
       Id_Estructura_Ar,
-      Fecha_Creacion_Ar,
+      Fecha_Creacion_Ar,  
       Nombre_Are,
       Resolucion_Are,
       Estado_Are
