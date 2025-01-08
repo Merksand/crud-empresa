@@ -70,7 +70,16 @@ export default function Sidebar() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
         </svg>
       )
-    }
+    },
+    {
+      title: 'Empleados',
+      path: '/empleados',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2H5zM16 11a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      )
+    },
   ];
 
   return (
