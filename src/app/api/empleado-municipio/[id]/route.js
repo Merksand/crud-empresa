@@ -86,15 +86,13 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE - Eliminar empleado
+
+
+
+
 export async function DELETE(request, { params }) {
   try {
-    const { empleadoId } = params;
-
-    const [result] = await pool.query(
-      'DELETE FROM TbEmpleado WHERE Id_Empleado = ?',
-      [empleadoId]
-    );
+    const [result] = await pool.query('DELETE FROM TbEmpleado WHERE Id_Empleado = ?', [params.id]);
 
     if (result.affectedRows === 0) {
       return NextResponse.json(
@@ -105,36 +103,24 @@ export async function DELETE(request, { params }) {
 
     return NextResponse.json({ message: 'Empleado eliminado correctamente' });
   } catch (error) {
-    console.error('Error en eliminación:', error);
     return NextResponse.json(
-      { error: error.message || 'Error al eliminar el empleado' },
+      { error: 'Error al eliminar el empleado: ' + error.message },
       { status: 500 }
     );
   }
 }
 
-// GET - Obtener información específica del empleado
 export async function GET(request, { params }) {
   try {
-    const { empleadoId } = params;
-
-    const [rows] = await pool.query(
-      'SELECT * FROM TbEmpleado WHERE Id_Empleado = ?',
-      [empleadoId]
-    );
+    const [rows] = await pool.query('SELECT * FROM TbEmpleado WHERE Id_Empleado = ?', [params.id]);
 
     if (rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Empleado no encontrado' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Empleado no encontrado' }, { status: 404 });
     }
 
     return NextResponse.json(rows[0]);
   } catch (error) {
-    return NextResponse.json(
-      { error: error.message || 'Error al obtener el empleado' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
