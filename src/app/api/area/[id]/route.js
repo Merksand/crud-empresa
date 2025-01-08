@@ -28,7 +28,7 @@ export async function PUT(request, { params }) {
     const data = await request.json();
     const { 
       Id_Estructura_Ar,
-      Fecha_Creacion_Ar,
+      Fecha_Creacion_Ar,  
       Nombre_Are,
       Resolucion_Are,
       Estado_Are
@@ -55,6 +55,8 @@ export async function PUT(request, { params }) {
 // DELETE - Eliminar un área
 export async function DELETE(request, { params }) {
   try {
+  console.log("DELETE - ID recibido:", params.id);
+
     const [result] = await pool.query(
       'DELETE FROM TbArea WHERE Id_Area = ?',
       [params.id]

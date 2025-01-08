@@ -7,6 +7,7 @@ import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
 
 export default function Area() {
   const [areas, setAreas] = useState([]);
+  const [estructura, setEstructura] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [areaEditar, setAreaEditar] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,23 +33,51 @@ export default function Area() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/area");
-      const data = await response.json();
 
-      console.log(data);
+      // Realiza las llamadas paralelas a las APIs
+      const [areasRes, estructurasRes] = await Promise.all([
+        fetch("/api/area"), // Endpoint para obtener las áreas básicas
+        fetch("/api/estructura"), // Endpoint para obtener las estructuras
+      ]);
 
-      if (!response.ok) {
-        throw new Error(data.error || "Error al cargar las áreas");
+      // Verificar si las respuestas son válidas
+      if (!areasRes.ok || !estructurasRes.ok) {
+        throw new Error("Error al obtener los datos de áreas y estructuras");
       }
 
-      setAreas(data);
+      // Convertir las respuestas en JSON
+      const areasData = await areasRes.json();
+      const estructurasData = await estructurasRes.json();
+
+      // Combinar las áreas con las estructuras
+      const processedData = areasData.map((area) => {
+        const estructura = estructurasData.find(
+          (est) => est.Id_Estructura === area.Id_Estructura_Ar
+        );
+        return {
+          ...area, // Datos básicos del área
+          Resolucion_Est: estructura?.Resolucion_Est || "Sin resolución", // Resolución
+        };
+      });
+
+      setEstructura(estructurasData);
+      // setEstructura(43);
+
+      console.log("Estructura Data: ", estructurasData);
+      console.log("Estructura Data id: ", estructurasData.Id_estructura);
+   
+      setAreas(processedData);
     } catch (error) {
-      console.error("Error al cargar las áreas:", error);
-      showNotification("Error al cargar las áreas", "error");
+      console.error("Error al cargar las áreas y estructuras:", error);
+      showNotification("Error al cargar las áreas y estructuras", "error");
     } finally {
       setLoading(false);
     }
   };
+  console.log("Estructura afuera del fetch: ", estructura);
+
+
+
 
   const handleDelete = async (area) => {
     setDeleteModal({ show: true, area });
@@ -56,12 +85,9 @@ export default function Area() {
 
   const confirmDelete = async () => {
     try {
-      const response = await fetch(
-        `/api/area/${deleteModal.area.id_estructura_area}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`/api/area/${deleteModal.area.Id_Area}`, {
+        method: "DELETE",
+      });
 
       const data = await response.json();
 
@@ -109,7 +135,7 @@ export default function Area() {
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ID
+                  Estructura
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Fecha de Creación
@@ -153,17 +179,31 @@ export default function Area() {
                   return (
                     <tr key={area.Id_Area} className="hover:bg-slate-500">
                       <td className="px-6 py-4 text-sm">
-                        {area.Id_Estructura_Ar}
+                        {area.Resolucion_Est}
                       </td>
                       <td className="px-6 py-4 text-sm">
-                      {area.Fecha_Creacion_Ar ? new Date(area.Fecha_Creacion_Ar).toLocaleDateString() : '-'}
+                        {area.Fecha_Creacion_Ar
+                          ? new Date(
+                            area.Fecha_Creacion_Ar
+                          ).toLocaleDateString()
+                          : "-"}
                       </td>
+
                       <td className="px-6 py-4 text-sm">{area.Nombre_Are}</td>
                       <td className="px-6 py-4 text-sm">
                         {area.Resolucion_Are}
                       </td>
                       <td className="px-6 py-4 text-sm">
-                        {area.estado_area ? "Activo" : "Inactivo"}
+
+
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${area.Estado_Are === "Activo"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                            }`}
+                        >
+                          {area.Estado_Are}
+                        </span>
                       </td>
                       <td className="px-6 float-right py-4 whitespace-nowrap text-sm font-medium">
                         <button
@@ -204,22 +244,21 @@ export default function Area() {
           setIsModalOpen(false);
           setAreaEditar(null);
         }}
-        title={areaEditar ? "console.log(Editar Área)" : "Nueva Área"}
+        title={areaEditar ? "Editar Área" : "Nueva Área"}
       >
         <AreaForm
           area={areaEditar}
+          estructuras={estructura} // Pasa las estructuras como prop
           onSubmit={async (data) => {
             try {
+              console.log("Área data de editar: ", data);
               let response;
               if (areaEditar) {
-                response = await fetch(
-                  `/api/area/${areaEditar.id_estructura_area}`,
-                  {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                  }
-                );
+                response = await fetch(`/api/area/${areaEditar.Id_Area}`, {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(data),
+                });
               } else {
                 response = await fetch("/api/area", {
                   method: "POST",
@@ -243,7 +282,7 @@ export default function Area() {
               );
               setIsModalOpen(false);
               setAreaEditar(null);
-              fetchData();
+              fetchData(); // Actualiza la lista después de guardar
             } catch (error) {
               console.error("Error:", error);
               showNotification(
@@ -257,6 +296,7 @@ export default function Area() {
             setAreaEditar(null);
           }}
         />
+
       </Modal>
     </div>
   );
