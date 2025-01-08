@@ -34,51 +34,49 @@ export default function Area() {
     try {
       setLoading(true);
 
-      // Realiza llamadas paralelas a las APIs
-      const [areasRes, detallesRes] = await Promise.all([
-        fetch("/api/area"), // API básica para obtener las áreas
-        fetch("/api/area/detalles"), // API con detalles
+      // Realiza las llamadas paralelas a las APIs
+      const [areasRes, estructurasRes] = await Promise.all([
+        fetch("/api/area"), // Endpoint para obtener las áreas básicas
+        fetch("/api/estructura"), // Endpoint para obtener las estructuras
       ]);
 
-      // Validar las respuestas
-      if (!areasRes.ok || !detallesRes.ok) {
-        throw new Error("Error al obtener los datos de áreas");
+      // Verificar si las respuestas son válidas
+      if (!areasRes.ok || !estructurasRes.ok) {
+        throw new Error("Error al obtener los datos de áreas y estructuras");
       }
 
-      // Convertir las respuestas a JSON
+      // Convertir las respuestas en JSON
       const areasData = await areasRes.json();
-      const detallesData = await detallesRes.json();
+      const estructurasData = await estructurasRes.json();
 
-      // Procesar datos combinando detalles con áreas básicas
+      // Combinar las áreas con las estructuras
       const processedData = areasData.map((area) => {
-        const detalle = detallesData.find(
-          (det) => det.Id_Area === area.Id_Area
+        const estructura = estructurasData.find(
+          (est) => est.Id_Estructura === area.Id_Estructura_Ar
         );
         return {
-          ...area,
-          Id_Estructura: detalle?.Id_Estructura,
-          Nombre_Emp: detalle?.Nombre_Emp || "No encontrada",
-          Resolucion_Est: detalle?.Resolucion_Est || "Sin resolución",
+          ...area, // Datos básicos del área
+          Resolucion_Est: estructura?.Resolucion_Est || "Sin resolución", // Resolución
         };
       });
 
-      // Actualiza el estado
+      setEstructura(estructurasData);
+      // setEstructura(43);
+
+      console.log("Estructura Data: ", estructurasData);
+      console.log("Estructura Data id: ", estructurasData.Id_estructura);
+   
       setAreas(processedData);
     } catch (error) {
-      console.error("Error al cargar las áreas  :", error);
-      showNotification("Error al cargar las áreas", "error");
+      console.error("Error al cargar las áreas y estructuras:", error);
+      showNotification("Error al cargar las áreas y estructuras", "error");
     } finally {
       setLoading(false);
     }
   };
+  console.log("Estructura afuera del fetch: ", estructura);
 
 
-  const getDetallesArea = (area) => {
-    return {
-      empresa: area.Nombre_Emp || "No encontrada",
-      resolucion: area.Resolucion_Est || "Sin resolución",
-    };
-  };
 
 
   const handleDelete = async (area) => {
@@ -177,7 +175,7 @@ export default function Area() {
                 </tr>
               ) : (
                 areas.map((area) => {
-                  // console.log(area)
+                  console.log(area)
                   return (
                     <tr key={area.Id_Area} className="hover:bg-slate-500">
                       <td className="px-6 py-4 text-sm">
@@ -188,7 +186,7 @@ export default function Area() {
                           ? new Date(
                             area.Fecha_Creacion_Ar
                           ).toLocaleDateString()
-                          : "-"}  
+                          : "-"}
                       </td>
 
                       <td className="px-6 py-4 text-sm">{area.Nombre_Are}</td>
@@ -250,20 +248,17 @@ export default function Area() {
       >
         <AreaForm
           area={areaEditar}
+          estructuras={estructura} // Pasa las estructuras como prop
           onSubmit={async (data) => {
             try {
-              console.log("Area data de editar: ", data);
+              console.log("Área data de editar: ", data);
               let response;
               if (areaEditar) {
-                // console.log("area editar id: ", areaEditar.Id_Area);
-                response = await fetch(
-                  `/api/area/${areaEditar.Id_Area}`,
-                  {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                  }
-                );
+                response = await fetch(`/api/area/${areaEditar.Id_Area}`, {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(data),
+                });
               } else {
                 response = await fetch("/api/area", {
                   method: "POST",
@@ -287,7 +282,7 @@ export default function Area() {
               );
               setIsModalOpen(false);
               setAreaEditar(null);
-              fetchData();
+              fetchData(); // Actualiza la lista después de guardar
             } catch (error) {
               console.error("Error:", error);
               showNotification(
@@ -301,6 +296,7 @@ export default function Area() {
             setAreaEditar(null);
           }}
         />
+
       </Modal>
     </div>
   );

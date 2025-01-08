@@ -1,10 +1,15 @@
-export default function AreaForm({ area, onSubmit, onClose, estructuras }) {
+export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) {
+    console.log("Estructuras recibidas: ", estructuras); // Agrega este console.log para verificar los datos
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
 
         const fechaCreacion = formData.get("fechaCreacion");
-        const fechaFormateada = fechaCreacion ? new Date(fechaCreacion).toISOString().split("T")[0] : null;
+        const fechaFormateada = fechaCreacion
+            ? new Date(fechaCreacion).toISOString().split("T")[0]
+            : null;
+
         const data = {
             Nombre_Are: formData.get("nombre"),
             Resolucion_Are: formData.get("resolucion"),
@@ -25,25 +30,27 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras }) {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            {/* <div>
+            {/* Campo para seleccionar la estructura */}
+            <div>
                 <label className="block text-sm font-medium mb-1">Estructura</label>
                 <select
-                    name="Id_Estructura_Ar"
+                    name="estructura"
                     defaultValue={area?.Id_Estructura_Ar || ""}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
                 >
-                    <option value="">Seleccione una estructura</option>
+                    <option value="" disabled>
+                        Seleccione una estructura
+                    </option>
                     {estructuras.map((estructura) => (
                         <option key={estructura.Id_Estructura} value={estructura.Id_Estructura}>
-                            {estructura.Resolucion_Est} - {estructura.Nombre_Empresa}
+                            {estructura.Resolucion_Est || `Estructura ${estructura.Id_Estructura}`}
                         </option>
                     ))}
                 </select>
-            </div> */}
+            </div>
 
-            
-
+            {/* Campo para el nombre */}
             <div>
                 <label className="block text-sm font-medium mb-1">Nombre</label>
                 <input
@@ -55,6 +62,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras }) {
                 />
             </div>
 
+            {/* Campo para la resolución */}
             <div>
                 <label className="block text-sm font-medium mb-1">Resolución</label>
                 <input
@@ -66,6 +74,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras }) {
                 />
             </div>
 
+            {/* Campo para la fecha de creación */}
             <div>
                 <label className="block text-sm font-medium mb-1">Fecha de Creación</label>
                 <input
@@ -77,11 +86,12 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras }) {
                 />
             </div>
 
+            {/* Campo para el estado */}
             <div>
                 <label className="block text-sm font-medium mb-1">Estado</label>
                 <select
                     name="estado"
-                    defaultValue={area?.Estado_Are || 'Activo'}
+                    defaultValue={area?.Estado_Are || "Activo"}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
                 >
@@ -90,6 +100,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras }) {
                 </select>
             </div>
 
+            {/* Botones para enviar o cancelar */}
             <div className="flex justify-end gap-2 mt-6">
                 <button
                     type="button"

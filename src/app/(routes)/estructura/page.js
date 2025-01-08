@@ -173,7 +173,7 @@ function EstructuraPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
               {estructuras.map((estructura) => {
-                console.log(estructura);
+                // console.log(estructura);
                 return (
                   <tr
                     key={estructura.Id_Estructura}
@@ -247,8 +247,10 @@ function EstructuraPage() {
         >
           <EstructuraForm
             estructura={estructuraEditar}
+          
             onSubmit={async (data) => {
-              console.log("Datos enviados:", data);
+              console.log("Datos enviados Data estructura:", data);
+              console.log("Estructura a editar:", estructuraEditar);
               try {
                 let response;
 

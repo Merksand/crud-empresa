@@ -18,6 +18,7 @@ export default function EstructuraForm({ estructura, onSubmit, onClose }) {
         const response = await fetch("/api/empresas");  
         if (!response.ok) throw new Error("Error al cargar empresas");
         const data = await response.json();
+        console.log("estructura form data", data);
         setEmpresas(data);
       } catch (err) {
         setError(err.message);
