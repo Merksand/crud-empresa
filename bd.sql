@@ -93,7 +93,7 @@ CREATE TABLE TbCargo (
 
 CREATE TABLE TbEmpleado (
     Id_Empleado         INT PRIMARY KEY AUTO_INCREMENT,
-    Id_Municipio_Per    INT,
+    Id_Municipio_Emp    INT,
     CI_Emp              VARCHAR(50),
     Nombre_Emp          VARCHAR(50),
     Paterno_Emp         VARCHAR(50),
@@ -116,4 +116,30 @@ CREATE TABLE TbEmpleadoCargo (
     FOREIGN KEY (Id_Cargo_EC) REFERENCES TbCargo(Id_Cargo),
     FOREIGN KEY (Id_Empleado_EC) REFERENCES TbEmpleado(Id_Empleado)
 
+);
+
+
+------------------
+
+CREATE TABLE TbDepartamento (
+    Id_Departamento INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre_Dep VARCHAR(50),
+    Altura_Dep INT,
+    Estado_Dep VARCHAR(10)
+);
+
+CREATE TABLE TbProvincia (
+    Id_Provincia INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Departamento_Pro INT,
+    Nombre_Pro VARCHAR(50),
+    Estado_Pro VARCHAR(10),
+    FOREIGN KEY (Id_Departamento_Pro) REFERENCES TbDepartamento(Id_Departamento)
+);
+
+CREATE TABLE TbMunicipio (
+    Id_Municipio INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Provincia_Mun INT,
+    Nombre_Mun VARCHAR(50),
+    Estado_Mun VARCHAR(10),
+    FOREIGN KEY (Id_Provincia_Mun) REFERENCES TbProvincia(Id_Provincia)
 );

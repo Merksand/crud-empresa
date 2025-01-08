@@ -49,3 +49,32 @@ VALUES
 ('Supervisor', 2, 8000.00, 1145.00, 'Resolución-002', 'activo');
 
 
+
+-- Insertar datos en TbDepartamento
+INSERT INTO TbDepartamento (Nombre_Dep, Altura_Dep, Estado_Dep) 
+VALUES 
+('Santa Cruz', 416, 'Activo'),
+('La Paz', 3640, 'Activo'),
+('Cochabamba', 2558, 'Activo');
+
+-- Insertar datos en TbProvincia
+INSERT INTO TbProvincia (Id_Departamento_Pro, Nombre_Pro, Estado_Pro) 
+VALUES 
+(1, 'Andrés Ibáñez', 'Activo'),
+(2, 'Murillo', 'Activo'),
+(3, 'Cercado', 'Activo');
+
+-- Insertar datos en TbMunicipio
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) 
+VALUES 
+(1, 'Santa Cruz de la Sierra', 'Activo'),
+(2, 'La Paz', 'Activo'),
+(3, 'Cochabamba', 'Activo');
+
+-- Insertar datos en TbEmpleado
+INSERT INTO TbEmpleado (Id_Municipio_Emp, CI_Emp, Nombre_Emp, Paterno_Emp, Materno_Emp, Sexo_Emp, Direccion_Emp, Estado_Civil_Emp, FDN_Emp, Estado_Emp)
+VALUES
+(1, '78945612', 'Luis', 'Martínez', 'Suárez', 'Masculino', 'Calle Independencia', 'Casado', '1988-03-25', 'Activo'),
+(2, '65412398', 'María', 'Gómez', 'Loayza', 'Femenino', 'Av. Prado', 'Soltera', '1995-11-30', 'Activo'),
+(3, '32198745', 'Jorge', 'Quiroga', 'Cruz', 'Masculino', 'Calle Aroma', 'Divorciado', '1980-07-12', 'Activo');
+
