@@ -27,7 +27,7 @@ export default function Empleado() {
     try {
       setLoading(true);
       const [empleadosRes, municipiosRes] = await Promise.all([
-        fetch('/api/empleado'),
+        fetch('/api/empleado-municipio'),
         fetch('/api/municipio'),
       ]);
 
@@ -52,7 +52,7 @@ export default function Empleado() {
 
   const confirmDelete = async () => {
     try {
-      const response = await fetch(`/api/empleado/${deleteModal.empleado.Id_Empleado}`, {
+      const response = await fetch(`/api/empleado-municipio/${deleteModal.empleado.Id_Empleado}`, {
         method: 'DELETE',
       });
 
@@ -222,13 +222,13 @@ export default function Empleado() {
             try {
               let response;
               if (empleadoEditar) {
-                response = await fetch(`/api/empleado/${empleadoEditar.Id_Empleado}`, {
+                response = await fetch(`/api/empleado-municipio/${empleadoEditar.Id_Empleado}`, {
                   method: 'PUT',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify(data),
                 });
               } else {
-                response = await fetch('/api/empleado', {
+                response = await fetch('/api/empleado-municipio', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify(data),
