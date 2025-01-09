@@ -43,11 +43,13 @@ export default function EmpresaSucursalForm({ relacion, empresas, sucursales, on
           required
         >
           <option value="" disabled>Seleccione una sucursal</option>
-          {sucursales?.map((sucursal) => (
-            <option key={sucursal.Id_Sucursal} value={sucursal.Id_Sucursal}>
-              {sucursal.Nombre_Suc}
-            </option>
-          ))}
+          {sucursales?.map((sucursal) => {
+            return (
+              <option key={sucursal.Id_Sucursal} value={sucursal.Id_Sucursal}>
+                {sucursal.Nombre_Suc}
+              </option>
+            );
+          })}
         </select>
       </div>
 

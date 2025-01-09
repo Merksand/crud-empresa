@@ -1,12 +1,40 @@
 import { NextResponse } from 'next/server';
 import { pool } from '@/lib/db';
-// GET - Obtener todas las relaciones
+// GET - Obtener todas las relaciones de TbEmpresaSucursal
 export async function GET() {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbEmpresaSucursal');
+    // Realizar la consulta para obtener todas las relaciones
+    const [rows] = await pool.query(`
+      SELECT 
+        es.Id_Empresa_Sucursal,
+        es.Id_Empresa_ES,
+        es.Id_Sucursal_ES,
+        es.Fecha_Apertura_ES,
+        es.Fecha_Cierre_ES,
+        es.Estado_ES,
+        e.Nombre_Emp AS Nombre_Empresa,
+        s.Nombre_Suc AS Nombre_Sucursal
+      FROM TbEmpresaSucursal es
+      LEFT JOIN TbEmpresa e ON es.Id_Empresa_ES = e.Id_Empresa
+      LEFT JOIN TbSucursal s ON es.Id_Sucursal_ES = s.Id_Sucursal
+    `);
+
+    // Si no hay datos, devolver un mensaje claro
+    if (rows.length === 0) {
+      return NextResponse.json(
+        { message: 'No se encontraron relaciones en TbEmpresaSucursal' },
+        { status: 404 }
+      );
+    }
+
+    // Devolver los datos obtenidos
     return NextResponse.json(rows);
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('Error en GET /api/empresaSucursal:', error);
+    return NextResponse.json(
+      { error: error.message || 'Error al obtener las relaciones' },
+      { status: 500 }
+    );
   }
 }
 
