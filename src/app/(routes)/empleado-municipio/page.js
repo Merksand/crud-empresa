@@ -116,10 +116,10 @@ export default function Empleado() {
                   Municipio
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  CI
+                  Nombre
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Nombre
+                  CI
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Dirección
@@ -160,8 +160,8 @@ export default function Empleado() {
                       className="hover:bg-gray-50 dark:hover:bg-gray-700"
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{municipio?.Nombre_Mun}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{empleado.CI_Emp}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{empleado.Nombre_Emp}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{empleado.CI_Emp}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{empleado.Direccion_Emp}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <span
