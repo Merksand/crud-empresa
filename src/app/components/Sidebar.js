@@ -1,11 +1,36 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const pathname = usePathname();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      setDarkMode(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setDarkMode(false);
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+
+    if (newMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
 
   const menuItems = [
     {
@@ -93,12 +118,13 @@ export default function Sidebar() {
 
   return (
     <>
+
       {/* Botón de toggle */}
+
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed top-4 z-50 transition-all duration-300 ${
-          isOpen ? 'left-60' : 'left-4'
-        } lg:hover:bg-gray-100 dark:lg:hover:bg-gray-700 p-2 rounded-lg`}
+        className={`fixed top-4 z-50 transition-all duration-300 ${isOpen ? 'left-60' : 'left-4'
+          } lg:hover:bg-gray-100 dark:lg:hover:bg-gray-700 p-2 rounded-lg `}
       >
         {isOpen ? (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,27 +139,64 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out ${
-          isOpen ? 'w-64' : 'w-16'
-        } z-40`}
+        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-16'
+          } z-40 `}
       >
-        <nav className="h-full flex flex-col">
+
+        <nav className={`flex flex-col h-full ${darkMode == true ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
           <div className="p-4 border-b border-gray-200 dark:border-gray-700">
             <h1 className={`text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent transition-opacity ${!isOpen && 'opacity-0'}`}>
               Gestión Empresarial
+              <button
+                onClick={toggleDarkMode}
+                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700"
+                aria-label="Toggle dark mode"
+              >
+                {darkMode ? (
+                  <svg
+                    className="w-6 h-6 text-gray-800 dark:text-gray-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M20.354 15.354A9 9 0 118.646 3.646 7 7 0 0020.354 15.354z"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-6 h-6 text-gray-800 dark:text-gray-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 3v1m0 16v1m8-8h1m-16 0H3m15.364-6.364l.707-.707m-12.728 0l-.707-.707m12.728 12.728l.707.707m-12.728 0l-.707.707M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                )}
+              </button>
+
             </h1>
+
           </div>
-          
+
+
           <ul className="flex-1 py-4 space-y-1 overflow-y-auto">
             {menuItems.map((item, index) => (
               <li key={index} className="px-2">
                 <Link
                   href={item.path}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                    pathname === item.path
-                      ? 'bg-blue-500 text-white'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === item.path
+                    ? 'bg-blue-500 text-white'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
                 >
                   <div className="min-w-[24px]">
                     {item.icon}

@@ -19,7 +19,7 @@ body {
   color: var(--foreground);
   background: var(--background);
 }
-
+/* 
 .sidebar {
   width: var(--sidebar-width);
   height: 100vh;
@@ -32,4 +32,4 @@ body {
 .main-content {
   margin-left: var(--sidebar-width);
   padding: 2rem;
-}
+} */

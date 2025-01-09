@@ -202,7 +202,9 @@ export default function EmpresaSucursal() {
           onSubmit={async (data) => {
             try {
               let response;
+              console.log("data: ", data);
               if (relacionEditar) {
+                console.log("Relacion editar: ", relacionEditar);
                 const formattedData = {
                   ...data,
                   Fecha_Apertura_ES: data.Fecha_Apertura_ES,
@@ -223,6 +225,7 @@ export default function EmpresaSucursal() {
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify(data),
                 });
+                console.log("response: ", response);
               }
 
               const responseData = await response.json();
