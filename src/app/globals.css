@@ -19,8 +19,8 @@ body {
   color: var(--foreground);
   background: var(--background);
 }
-/* 
-.sidebar {
+
+/* .sidebar {
   width: var(--sidebar-width);
   height: 100vh;
   position: fixed;

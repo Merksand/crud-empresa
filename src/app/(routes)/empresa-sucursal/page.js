@@ -29,42 +29,49 @@ export default function EmpresaSucursal() {
       const [relacionesRes, empresasRes, sucursalesRes] = await Promise.all([
         fetch('/api/empresa-sucursal'),
         fetch('/api/empresas'),
-        fetch('/api/sucursales')
+        fetch('/api/sucursales'),
       ]);
-
-      const [relacionesData, empresasData, sucursalesData] = await Promise.all([
-        relacionesRes.json(),
-        empresasRes.json(),
-        sucursalesRes.json()
-      ]);
-
+  
+      const relacionesData = await relacionesRes.json();
+      const empresasData = await empresasRes.json();
+      const sucursalesData = await sucursalesRes.json();
+  
       setRelaciones(relacionesData);
       setEmpresas(empresasData);
       setSucursales(sucursalesData);
     } catch (error) {
-      console.error('Error al cargar datos:', error);
+      console.error('Error al cargar los datos:', error);
       showNotification('Error al cargar los datos', 'error');
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleDelete = async (relacion) => {
+    console.log("RELACION A ELIMINAR: ", relacion);
+
     setDeleteModal({ show: true, relacion });
   };
 
   const confirmDelete = async () => {
     try {
-      const response = await fetch(`/api/empresa-sucursal/${deleteModal.relacion.Id_Empresa}/${deleteModal.relacion.Id_Sucursal}`, {
-        method: 'DELETE',
-      });
-
+      
+      console.log("Relación seleccionada para eliminar:", deleteModal.relacion);
+      
+      const response = await fetch(
+        `/api/empresa-sucursal/${deleteModal.relacion.Id_Empresa_Sucursal}`,
+        {
+          method: 'DELETE',
+        }
+      );
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
         throw new Error(data.error || 'Error al eliminar la relación');
       }
-
+  
       showNotification('Relación eliminada correctamente');
       fetchData();
     } catch (error) {
@@ -74,7 +81,8 @@ export default function EmpresaSucursal() {
       setDeleteModal({ show: false, relacion: null });
     }
   };
-
+  
+  
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
