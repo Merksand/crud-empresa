@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 export default function DependenciaForm({ dependencia, areas, onSubmit, onClose }) {
+  const [error, setError] = useState(""); // Estado para manejar el mensaje de error
   const [formData, setFormData] = useState({
     Id_Area_Padre_Dep: "",
     Id_Area_Hijo_Dep: "",
@@ -31,26 +32,33 @@ export default function DependenciaForm({ dependencia, areas, onSubmit, onClose 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const newValue = name.includes("Id_Area") ? Number(value) : value;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validar que el área padre e hija no sean iguales
     if (formData.Id_Area_Padre_Dep === formData.Id_Area_Hijo_Dep) {
-      alert("El área padre y el área hija no pueden ser la misma.");
+      setError("El área padre y el área hija no pueden ser la misma.");
       return;
     }
 
+    setError(""); // Limpia el error si todo está bien
     onSubmit(formData);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
+        <div className="bg-red-500 text-white p-2 rounded">
+          {error}
+        </div>
+      )}
+
       {/* Campo para seleccionar el área padre */}
       <div>
         <label className="block text-sm font-medium mb-1">Área Padre</label>

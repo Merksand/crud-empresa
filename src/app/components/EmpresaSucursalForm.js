@@ -1,4 +1,7 @@
 export default function EmpresaSucursalForm({ relacion, empresas, sucursales, onSubmit, onClose }) {
+  console.log("RELACION: ",relacion)
+  console.log("EMPRESAS: ",empresas)
+  console.log("SUCURSALES: ",sucursales)
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);

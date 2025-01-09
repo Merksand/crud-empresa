@@ -136,7 +136,7 @@ export default function EmpresaSucursal() {
                   const sucursal = sucursales.find(s => s.Id_Sucursal === relacion.Id_Sucursal_ES);
                   
                   return (
-                    <tr key={`${relacion.Id_Empresa}-${relacion.Id_Sucursal}`} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <tr key={`${relacion.Id_Empresa}-${relacion.Id_Sucursal}`} className="hover:bg-gray-50 dark:hover:bg-gray-600">
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{empresa?.Nombre_Emp}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{sucursal?.Nombre_Suc}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
