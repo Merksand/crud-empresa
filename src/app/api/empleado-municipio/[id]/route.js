@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 import { pool } from '@/lib/db';
 
-// PUT - Actualizar empleado
+// PUT - Actualizar un empleado
 export async function PUT(request, { params }) {
   try {
+    // Leer datos enviados en la solicitud
     const data = await request.json();
     const {
       Id_Municipio_Emp,
@@ -15,23 +16,10 @@ export async function PUT(request, { params }) {
       Direccion_Emp,
       Estado_Civil_Emp,
       FDN_Emp,
-      Estado_Emp,
+      Estado_Emp
     } = data;
-    const { empleadoId } = params;
 
-    // Verificar si existe el empleado
-    const [existing] = await pool.query(
-      'SELECT * FROM TbEmpleado WHERE Id_Empleado = ?',
-      [empleadoId]
-    );
-
-    if (existing.length === 0) {
-      return NextResponse.json(
-        { error: 'Empleado no encontrado' },
-        { status: 404 }
-      );
-    }
-
+    // Realizar la consulta de actualización
     const [result] = await pool.query(
       `UPDATE TbEmpleado 
        SET Id_Municipio_Emp = ?, 
@@ -43,7 +31,7 @@ export async function PUT(request, { params }) {
            Direccion_Emp = ?, 
            Estado_Civil_Emp = ?, 
            FDN_Emp = ?, 
-           Estado_Emp = ?
+           Estado_Emp = ? 
        WHERE Id_Empleado = ?`,
       [
         Id_Municipio_Emp,
@@ -56,38 +44,25 @@ export async function PUT(request, { params }) {
         Estado_Civil_Emp,
         FDN_Emp,
         Estado_Emp,
-        empleadoId,
+        params.id
       ]
     );
 
+    // Verificar si se actualizó algún registro
     if (result.affectedRows === 0) {
       return NextResponse.json(
-        { error: 'No se pudo actualizar el empleado' },
-        { status: 400 }
+        { error: 'Empleado no encontrado' },
+        { status: 404 }
       );
     }
 
-    // Obtener los datos actualizados
-    const [updated] = await pool.query(
-      'SELECT * FROM TbEmpleado WHERE Id_Empleado = ?',
-      [empleadoId]
-    );
-
-    return NextResponse.json({
-      message: 'Empleado actualizado correctamente',
-      data: updated[0],
-    });
+    // Respuesta exitosa
+    return NextResponse.json({ message: 'Empleado actualizado correctamente' });
   } catch (error) {
-    console.error('Error en actualización:', error);
-    return NextResponse.json(
-      { error: error.message || 'Error al actualizar el empleado' },
-      { status: 500 }
-    );
+    // Manejar errores
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-
-
-
 
 
 export async function DELETE(request, { params }) {
