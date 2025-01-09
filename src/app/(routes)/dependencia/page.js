@@ -80,7 +80,7 @@ export default function Dependencia() {
 
       if (!response.ok) {
         throw new Error(data.error || "Error al eliminar la dependencia");
-      }
+      } 
 
       showNotification("Dependencia eliminada correctamente");
       fetchData();
@@ -147,7 +147,7 @@ export default function Dependencia() {
                 </tr>
               ) : (
                 dependencias.map((dep) => (
-                  <tr key={dep.Id_Dependencia} className="hover:bg-gray-100">
+                  <tr key={dep.Id_Dependencia} className="hover:bg-gray-100 dark:hover:bg-gray-600">
                     <td className="px-6 py-4">{dep.Nombre_Padre}</td>
                     <td className="px-6 py-4">{dep.Nombre_Hijo}</td>
                     <td className="px-6 py-4">

@@ -113,15 +113,9 @@ export async function DELETE(request, { params }) {
 export async function GET(request, { params }) {
   try {
     const [rows] = await pool.query('SELECT * FROM TbEmpleado WHERE Id_Empleado = ?', [params.id]);
-<<<<<<< HEAD
 
     if (rows.length === 0) {
       return NextResponse.json({ error: 'Empleado no encontrado' }, { status: 404 });
-=======
-    
-    if (rows.length === 0) {
-      return NextResponse.json({ error: 'Emp no encontrado' }, { status: 404 });
->>>>>>> c6d6b767444ede0da27bdd31b767c9e83119bc23
     }
     
     return NextResponse.json(rows[0]);

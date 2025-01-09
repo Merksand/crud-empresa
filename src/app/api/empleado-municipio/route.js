@@ -27,7 +27,7 @@ export async function POST(request) {
       FDN_Emp,
       Estado_Emp,
     } = data;
-/////VERIFICAR
+    /////VERIFICAR
 
     // Verificar si ya existe un empleado con el mismo CI
     const [existingRows] = await pool.query(
