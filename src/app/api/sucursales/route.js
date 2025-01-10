@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { pool } from '@/lib/db';
 
-// GET - Obtener todas las sucursales
-// GET - Obtener todas las sucursales con el nombre del municipio
 export async function GET() {
   try {
     const [rows] = await pool.query(`
@@ -11,17 +9,21 @@ export async function GET() {
         suc.Id_Municipio_Suc,
         mun.Nombre_Mun AS Nombre_Municipio,
         suc.Id_Geolocalizacion_Suc,
+        geo.Latitud_Geo,
+        geo.Longitud_Geo,
         suc.Nombre_Parametro_Suc,
         suc.Nombre_Suc,
         suc.Estado_Suc
       FROM TbSucursal suc
       LEFT JOIN TbMunicipio mun ON suc.Id_Municipio_Suc = mun.Id_Municipio
+      LEFT JOIN TbGeolocalizacion geo ON suc.Id_Geolocalizacion_Suc = geo.Id_Geolocalizacion
     `);
     return NextResponse.json(rows);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
 
 
 // POST - Crear nueva sucursal

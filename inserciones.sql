@@ -233,9 +233,9 @@ VALUES
 -- Insertar datos en TbSucursal
 INSERT INTO TbSucursal (Id_Municipio_Suc, Id_Geolocalizacion_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc)
 VALUES
-(1, 1001, 'ParamSucursal1', 'Sucursal Central', 'Activo'),
-(2, 1002, 'ParamSucursal2', 'Sucursal Norte', 'Activo'),
-(8, 1003, 'ParamSucursal3', 'Sucursal Sur', 'Inactivo');
+(1, 1, 'ParamSucursal1', 'Sucursal Central', 'Activo'),
+(2, 3, 'ParamSucursal2', 'Sucursal Norte', 'Activo'),
+(8, 4, 'ParamSucursal3', 'Sucursal Sur', 'Inactivo');
 
 -- Insertar datos en TbEmpresa
 INSERT INTO TbEmpresa (Id_InformacionEmpresa_Emp, Nombre_Emp, Sede_Emp, Fecha_Fundacion_Emp, Tipo_Emp, Idioma_Emp, Estado_Emp)
@@ -284,7 +284,7 @@ VALUES
     ('Subgerente', 2, 12000.00, 1720.00, 'Resolución SG-02', 'Activo'),
     ('Analista Senior', 3, 9000.00, 1290.00, 'Resolución AS-03', 'Activo'),
     ('Analista Junior', 4, 5000.00, 715.00, 'Resolución AJ-04', 'Inactivo'),
-    ('Asistente Administrativo', 5, 3000.00, 430.00, 'Resolución AA-05', 'Suspendido');
+    ('Asistente Administrativo', 5, 3000.00, 430.00, 'Resolución AA-05', 'Activo');
     
     
 

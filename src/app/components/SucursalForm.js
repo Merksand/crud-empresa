@@ -1,4 +1,4 @@
-export default function SucursalForm({ sucursal, municipios,  onSubmit, onClose }) {
+export default function SucursalForm({ sucursal, municipios, geolocalizaciones, onSubmit, onClose }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -45,14 +45,22 @@ export default function SucursalForm({ sucursal, municipios,  onSubmit, onClose 
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-1">ID Geolocalización</label>
-                <input
-                    type="number"
+                <label className="block text-sm font-medium mb-1">Geolocalización</label>
+                <select
                     name="geolocalizacion"
-                    defaultValue={sucursal?.Id_Geolocalizacion_Suc}
+                    defaultValue={sucursal?.Id_Geolocalizacion_Suc || ""}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
-                />
+                >
+                    <option value="" disabled>
+                        Seleccione una geolocalización
+                    </option>
+                    {geolocalizaciones.map((geo) => (
+                        <option key={geo.Id_Geolocalizacion} value={geo.Id_Geolocalizacion}>
+                            Lat: {geo.Latitud_Geo}, Lon: {geo.Longitud_Geo}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div>

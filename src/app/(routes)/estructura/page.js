@@ -198,8 +198,8 @@ function EstructuraPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${estructura.Estado_Est === "Activo"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-red-100 text-red-800"
+                          ? "bg-green-700 text-green-300"
+                          : "bg-red-800   text-red-300"
                           }`}
                       >
                         {estructura.Estado_Est}

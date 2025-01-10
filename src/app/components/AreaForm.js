@@ -1,5 +1,4 @@
 export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) {
-    console.log("Estructuras recibidas: ", estructuras); // Agrega este console.log para verificar los datos
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -15,7 +14,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
             Resolucion_Are: formData.get("resolucion"),
             Fecha_Creacion_Ar: fechaFormateada,
             Estado_Are: formData.get("estado"),
-            Id_Estructura_Ar: formData.get("estructura"), // Captura la estructura seleccionada
+            Id_Estructura_Ar: formData.get("estructura"),  
         };
 
         console.log("data de areaForm ", data);
@@ -30,7 +29,6 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Campo para seleccionar la estructura */}
             <div>
                 <label className="block text-sm font-medium mb-1">Estructura</label>
                 <select
@@ -50,7 +48,6 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 </select>
             </div>
 
-            {/* Campo para el nombre */}
             <div>
                 <label className="block text-sm font-medium mb-1">Nombre</label>
                 <input
@@ -62,7 +59,6 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 />
             </div>
 
-            {/* Campo para la resolución */}
             <div>
                 <label className="block text-sm font-medium mb-1">Resolución</label>
                 <input
@@ -74,7 +70,6 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 />
             </div>
 
-            {/* Campo para la fecha de creación */}
             <div>
                 <label className="block text-sm font-medium mb-1">Fecha de Creación</label>
                 <input
@@ -86,7 +81,6 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 />
             </div>
 
-            {/* Campo para el estado */}
             <div>
                 <label className="block text-sm font-medium mb-1">Estado</label>
                 <select
@@ -100,7 +94,6 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 </select>
             </div>
 
-            {/* Botones para enviar o cancelar */}
             <div className="flex justify-end gap-2 mt-6">
                 <button
                     type="button"
