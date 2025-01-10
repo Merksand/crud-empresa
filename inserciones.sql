@@ -210,16 +210,32 @@ INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
 (27, 'Puerto Gonzalo Moreno', 'Activo'),
 (27, 'San Lorenzo', 'Activo');
 
+INSERT INTO TbPersona (Id_Municipio_Per, CI_Per, Nombre_Per, Paterno_Per, Materno_Per, Sexo_Per, Direccion_Per, Estado_Civil_Per, FDN_Per, Estado_Per)
+VALUES
+(1, '12345678', 'Juan', 'Perez', 'Gonzalez', 'Masculino', 'Calle 1, Zona Centro', 'Soltero', '1985-07-15', 'Activo'),
+(2, '87654321', 'Maria', 'Lopez', 'Martinez', 'Femenino', 'Av. Siempre Viva 742', 'Casada', '1990-04-20', 'Activo'),
+(3, '45678912', 'Carlos', 'Sanchez', 'Rodriguez', 'Masculino', 'Calle 10, Zona Norte', 'Divorciado', '1982-12-10', 'Activo'),
+(4, '98765432', 'Ana', 'Garcia', 'Fernandez', 'Femenino', 'Av. Los Pinos 101', 'Viuda', '1975-11-05', 'Activo'),
+(1, '23456789', 'Luis', 'Morales', 'Vargas', 'Masculino', 'Calle 3, Zona Sur', 'Casado', '1995-08-25', 'Inactivo');
 
+
+
+INSERT INTO TbGeolocalizacion (Id_Persona_Geo, Latitud_Geo, Longitud_Geo, Estado_Geo)
+VALUES
+(1, '-17.783327', '-63.182140', 'Activo'),
+(2, '-17.779528', '-63.190568', 'Activo'),
+(3, '-17.785763', '-63.184992', 'Activo'),
+(4, '-17.770325', '-63.172874', 'Activo'),
+(5, '-17.776321', '-63.196574', 'Inactivo');
 
 
 
 -- Insertar datos en TbSucursal
 INSERT INTO TbSucursal (Id_Municipio_Suc, Id_Geolocalizacion_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc)
 VALUES
-(101, 1001, 'ParamSucursal1', 'Sucursal Central', 'Activo'),
-(102, 1002, 'ParamSucursal2', 'Sucursal Norte', 'Activo'),
-(103, 1003, 'ParamSucursal3', 'Sucursal Sur', 'Inactivo');
+(1, 1001, 'ParamSucursal1', 'Sucursal Central', 'Activo'),
+(2, 1002, 'ParamSucursal2', 'Sucursal Norte', 'Activo'),
+(8, 1003, 'ParamSucursal3', 'Sucursal Sur', 'Inactivo');
 
 -- Insertar datos en TbEmpresa
 INSERT INTO TbEmpresa (Id_InformacionEmpresa_Emp, Nombre_Emp, Sede_Emp, Fecha_Fundacion_Emp, Tipo_Emp, Idioma_Emp, Estado_Emp)

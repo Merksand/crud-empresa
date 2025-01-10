@@ -26,6 +26,31 @@ CREATE TABLE TbMunicipio (
 );
 
 
+CREATE TABLE TbPersona (
+    Id_Persona INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Municipio_Per INT,
+    CI_Per VARCHAR(50),
+    Nombre_Per VARCHAR(50),
+    Paterno_Per VARCHAR(50),
+    Materno_Per VARCHAR(50),
+    Sexo_Per VARCHAR(20),
+    Direccion_Per VARCHAR(50),
+    Estado_Civil_Per VARCHAR(20),
+    FDN_Per DATE,
+    Estado_Per VARCHAR(10),
+    FOREIGN KEY (Id_Municipio_Per) REFERENCES TbMunicipio(Id_Municipio)
+);
+
+CREATE TABLE TbGeolocalizacion (
+    Id_Geolocalizacion INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Persona_Geo INT,
+    Latitud_Geo VARCHAR(50),
+    Longitud_Geo VARCHAR(50),
+    Estado_Geo VARCHAR(10),
+    FOREIGN KEY (Id_Persona_Geo) REFERENCES TbPersona(Id_Persona)
+);
+
+
 /*equipo Corleone*/
 CREATE TABLE TbSucursal (
     Id_Sucursal              INT PRIMARY KEY AUTO_INCREMENT,
@@ -98,8 +123,6 @@ CREATE TABLE TbDependencia (
     FOREIGN KEY ( Id_Area_Padre_Dep)     REFERENCES TbArea(Id_Area),
     FOREIGN KEY ( Id_Area_Hijo_Dep)      REFERENCES TbArea(Id_Area)
 );
-
--------------------------------------
 
 CREATE TABLE TbCargo (
     Id_Cargo                             INT PRIMARY KEY AUTO_INCREMENT,

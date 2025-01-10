@@ -45,41 +45,38 @@ export async function PUT(request, { params }) {
 
 // DELETE - Eliminar una sucursal
 export async function DELETE(request, { params }) {
-  const connection = await pool.getConnection();
-  
   try {
-    await connection.beginTransaction();
+    const { id } = params; // ID de la sucursal a eliminar
 
-    // Primero eliminamos las referencias en la tabla de relación
-    await connection.query(
-      'DELETE FROM TbEmpresaSucursal WHERE Id_Sucursal = ?',
-      [params.id]
+    // Validar que el ID sea un número válido
+    const sucursalId = parseInt(id);
+    if (isNaN(sucursalId)) {
+      return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
+    }
+
+    // Verificar si la sucursal está relacionada en otras tablas
+    const [relaciones] = await pool.query(
+      'SELECT COUNT(*) as count FROM TbEmpresaSucursal WHERE Id_Sucursal_ES = ?',
+      [sucursalId]
     );
 
-    // Luego eliminamos la sucursal
-    const [result] = await connection.query(
-      'DELETE FROM TbSucursal WHERE Id_Sucursal = ?',
-      [params.id]
-    );
-
-    if (result.affectedRows === 0) {
-      await connection.rollback();
+    if (relaciones[0].count > 0) {
       return NextResponse.json(
-        { error: 'Sucursal no encontrada' },
-        { status: 404 }
+        { error: 'No se puede eliminar la sucursal porque tiene relaciones asociadas.' },
+        { status: 400 }
       );
     }
 
-    await connection.commit();
-    return NextResponse.json({ message: 'Sucursal eliminada correctamente' });
+    // Intentar eliminar la sucursal
+    const [result] = await pool.query('DELETE FROM TbSucursal WHERE Id_Sucursal = ?', [sucursalId]);
 
+    if (result.affectedRows === 0) {
+      return NextResponse.json({ error: 'Sucursal no encontrada' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: 'Sucursal eliminada correctamente' }, { status: 200 });
   } catch (error) {
-    await connection.rollback();
-    return NextResponse.json(
-      { error: 'Error al eliminar la sucursal: ' + error.message },
-      { status: 500 }
-    );
-  } finally {
-    connection.release();
+    console.error('Error al eliminar la sucursal:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
-} 
+}

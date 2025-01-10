@@ -1,4 +1,4 @@
-export default function SucursalForm({ sucursal, onSubmit, onClose }) {
+export default function SucursalForm({ sucursal, municipios,  onSubmit, onClose }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -26,22 +26,26 @@ export default function SucursalForm({ sucursal, onSubmit, onClose }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-1">
-                    ID Municipio
-                </label>
-                <input
-                    type="number"
+                <label className="block text-sm font-medium mb-1">Municipio</label>
+                <select
                     name="municipio"
-                    defaultValue={sucursal?.Id_Municipio_Suc}
+                    defaultValue={sucursal?.Id_Municipio_Suc || ""}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
-                />
+                >
+                    <option value="" disabled>
+                        Seleccione un municipio
+                    </option>
+                    {municipios.map((municipio) => (
+                        <option key={municipio.Id_Municipio} value={municipio.Id_Municipio}>
+                            {municipio.Nombre_Mun}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-1">
-                    ID Geolocalización
-                </label>
+                <label className="block text-sm font-medium mb-1">ID Geolocalización</label>
                 <input
                     type="number"
                     name="geolocalizacion"
@@ -52,9 +56,7 @@ export default function SucursalForm({ sucursal, onSubmit, onClose }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-1">
-                    Nombre Parámetro
-                </label>
+                <label className="block text-sm font-medium mb-1">Nombre Parámetro</label>
                 <input
                     type="text"
                     name="parametro"

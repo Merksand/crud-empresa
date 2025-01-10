@@ -4,7 +4,7 @@ import { pool } from '../../../lib/db';
 // GET - Obtener todos los municipios
 export async function GET() {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbMunicipio');
+    const [rows] = await pool.query('SELECT * FROM TbMunicipio order by Nombre_Mun');
     return NextResponse.json(rows);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
