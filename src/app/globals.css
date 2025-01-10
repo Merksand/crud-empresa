@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Variables de tema */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -15,10 +16,25 @@
   }
 }
 
+/* Tema oscuro */
+body.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+/* Tema claro */
+body.light {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* Aplicación de estilos globales */
 body {
   color: var(--foreground);
-  background: var(--background);
+  background-color: var(--background);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 
 /* .sidebar {
   width: var(--sidebar-width);
@@ -33,3 +49,4 @@ body {
   margin-left: var(--sidebar-width);
   padding: 2rem;
 } */
+

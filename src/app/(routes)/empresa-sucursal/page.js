@@ -31,11 +31,11 @@ export default function EmpresaSucursal() {
         fetch('/api/empresas'),
         fetch('/api/sucursales'),
       ]);
-  
+
       const relacionesData = await relacionesRes.json();
       const empresasData = await empresasRes.json();
       const sucursalesData = await sucursalesRes.json();
-  
+
       setRelaciones(relacionesData);
       setEmpresas(empresasData);
       setSucursales(sucursalesData);
@@ -46,7 +46,6 @@ export default function EmpresaSucursal() {
       setLoading(false);
     }
   };
-  
 
   const handleDelete = async (relacion) => {
     console.log("RELACION A ELIMINAR: ", relacion);
@@ -56,22 +55,21 @@ export default function EmpresaSucursal() {
 
   const confirmDelete = async () => {
     try {
-      
+
       console.log("Relación seleccionada para eliminar:", deleteModal.relacion);
-      
+
       const response = await fetch(
-        `/api/empresa-sucursal/${deleteModal.relacion.Id_Empresa_Sucursal}`,
+        `/api/empresa-sucursal/${deleteModal.relacion.Id_Empresa_ES}/${deleteModal.relacion.Id_Sucursal_ES}`,
         {
           method: 'DELETE',
         }
       );
-  
-      const data = await response.json();
-  
+
+
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(data.error || 'Error al eliminar la relación');
       }
-  
       showNotification('Relación eliminada correctamente');
       fetchData();
     } catch (error) {
@@ -81,19 +79,17 @@ export default function EmpresaSucursal() {
       setDeleteModal({ show: false, relacion: null });
     }
   };
-  
-  
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Gestión de Empresa-Sucursal</h1>
         <div className="flex items-center gap-4">
           {notification.show && (
-            <div className={`px-4 py-2 rounded-lg ${
-              notification.type === 'error' 
-                ? 'bg-red-500 text-white' 
-                : 'bg-green-500 text-white'
-            }`}>
+            <div className={`px-4 py-2 rounded-lg ${notification.type === 'error'
+              ? 'bg-red-500 text-white'
+              : 'bg-green-500 text-white'
+              }`}>
               {notification.message}
             </div>
           )}
@@ -140,25 +136,39 @@ export default function EmpresaSucursal() {
                 </tr>
               ) : (
                 relaciones.map((relacion) => {
+                  // Validar que las claves para las relaciones sean únicas
+                  const empresaId = relacion.Id_Empresa_ES || "sin-id";
+                  const sucursalId = relacion.Id_Sucursal_ES || "sin-id";
+
+                  // Buscar empresa y sucursal correspondientes
                   const empresa = empresas.find(e => e.Id_Empresa === relacion.Id_Empresa_ES);
                   const sucursal = sucursales.find(s => s.Id_Sucursal === relacion.Id_Sucursal_ES);
-                  
+
                   return (
-                    <tr key={`${relacion.Id_Empresa}-${relacion.Id_Sucursal}`} className="hover:bg-gray-50 dark:hover:bg-gray-600">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{empresa?.Nombre_Emp}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{sucursal?.Nombre_Suc}</td>
+                    <tr key={`${empresaId}-${sucursalId}`} className="hover:bg-gray-50 dark:hover:bg-gray-600">
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        {new Date(relacion.Fecha_Apertura_ES).toLocaleDateString()}
+                        {empresa?.Nombre_Emp || "Empresa desconocida"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        {relacion.Fecha_Cierre_ES ? new Date(relacion.Fecha_Cierre_ES).toLocaleDateString() : '-'}
+                        {sucursal?.Nombre_Suc || "Sucursal desconocida"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          relacion.Estado_ES === 'Activo' 
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
-                            : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                        }`}>
+                        {relacion.Fecha_Apertura_ES
+                          ? new Date(relacion.Fecha_Apertura_ES).toLocaleDateString()
+                          : "-"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {relacion.Fecha_Cierre_ES
+                          ? new Date(relacion.Fecha_Cierre_ES).toLocaleDateString()
+                          : "-"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${relacion.Estado_ES === "Activo"
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                              : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                            }`}
+                        >
                           {relacion.Estado_ES}
                         </span>
                       </td>
@@ -210,55 +220,58 @@ export default function EmpresaSucursal() {
           onSubmit={async (data) => {
             try {
               let response;
-              console.log("data: ", data);
+              console.log("Datos enviados: ", data);
+          
               if (relacionEditar) {
-                console.log("Relacion editar: ", relacionEditar);
+                // console.log("Relación a editar: ", relacionEditar);
+          
+                // Validar que los datos existan
+                if (!relacionEditar.Id_Empresa || !relacionEditar.Id_Sucursal) {
+                  throw new Error("Faltan valores para identificar la relación a editar.");
+                }
+          
                 const formattedData = {
                   ...data,
                   Fecha_Apertura_ES: data.Fecha_Apertura_ES,
-                  Fecha_Cierre_ES: data.Fecha_Cierre_ES || null
+                  Fecha_Cierre_ES: data.Fecha_Cierre_ES || null,
                 };
-
+          
                 response = await fetch(
                   `/api/empresa-sucursal/${relacionEditar.Id_Empresa}/${relacionEditar.Id_Sucursal}`,
                   {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(formattedData),
                   }
                 );
               } else {
-                response = await fetch('/api/empresa-sucursal', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
+                response = await fetch("/api/empresa-sucursal", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(data),
                 });
-                console.log("response: ", response);
               }
-
+          
               const responseData = await response.json();
-
+          
               if (!response.ok) {
-                throw new Error(responseData.error || 'Error al guardar la relación');
+                throw new Error(responseData.error || "Error al guardar la relación");
               }
-
+          
               showNotification(
-                relacionEditar 
-                  ? 'Relación actualizada correctamente'
-                  : 'Relación creada correctamente'
+                relacionEditar
+                  ? "Relación actualizada correctamente"
+                  : "Relación creada correctamente"
               );
               setIsModalOpen(false);
               setRelacionEditar(null);
               await fetchData();
             } catch (error) {
-              console.error('Error:', error);
-              showNotification(error.message || 'Error al guardar la relación', 'error');
+              console.error("Error: ", error);
+              showNotification(error.message || "Error al guardar la relación", "error");
             }
           }}
-          onClose={() => {
-            setIsModalOpen(false);
-            setRelacionEditar(null);
-          }}
+          
         />
       </Modal>
     </div>
