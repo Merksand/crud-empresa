@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { pool } from '@/lib/db';
 
-// GET - Obtener una relación específica
 export async function GET(request, { params }) {
   try {
     const { empresaId, sucursalId } = params;
@@ -25,18 +24,21 @@ export async function GET(request, { params }) {
   }
 }
 
-// PUT - Actualizar una relación específica
 export async function PUT(request, { params }) {
   try {
     const { empresaId, sucursalId } = params;
     const data = await request.json();
     const { Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES } = data;
 
+    if (!Fecha_Apertura_ES || !Estado_ES) {
+      return NextResponse.json({ error: 'Datos incompletos o inválidos' }, { status: 400 });
+    }
+
     const [result] = await pool.query(
       `UPDATE TbEmpresaSucursal
        SET Fecha_Apertura_ES = ?, Fecha_Cierre_ES = ?, Estado_ES = ?
        WHERE Id_Empresa_ES = ? AND Id_Sucursal_ES = ?`,
-      [Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES, empresaId, sucursalId]
+      [Fecha_Apertura_ES, Fecha_Cierre_ES || null, Estado_ES, empresaId, sucursalId]
     );
 
     if (result.affectedRows === 0) {
@@ -49,7 +51,7 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE - Eliminar una relación específica
+
 export async function DELETE(request, { params }) {
   try {
     const { empresaId, sucursalId } = params;

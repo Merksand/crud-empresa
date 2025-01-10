@@ -31,7 +31,6 @@ export default function Dependencia() {
     try {
       setLoading(true);
 
-      // Llamadas paralelas a las APIs
       const [dependenciasRes, areasRes] = await Promise.all([
         fetch("/api/dependencia"),
         fetch("/api/area"),
@@ -44,7 +43,6 @@ export default function Dependencia() {
       const dependenciasData = await dependenciasRes.json();
       const areasData = await areasRes.json();
 
-      // Combinar dependencias con áreas para mostrar nombres
       const processedData = dependenciasData.map((dep) => {
         const areaPadre = areasData.find((area) => area.Id_Area === dep.Id_Area_Padre_Dep);
         const areaHijo = areasData.find((area) => area.Id_Area === dep.Id_Area_Hijo_Dep);
@@ -209,7 +207,7 @@ export default function Dependencia() {
       >
         <DependenciaForm
           dependencia={dependenciaEditar}
-          areas={areas} // Pasa las áreas como prop
+          areas={areas} 
           onSubmit={async (data) => {
             try {
               let response;

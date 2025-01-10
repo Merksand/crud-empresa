@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function EmpresaSucursalForm({ relacion, empresas, sucursales, onSubmit, onClose }) {
+export default function EmpresaSucursalForm({ relacion, empresas, sucursales, relaciones, onSubmit, onClose }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (e) => {
@@ -15,28 +15,36 @@ export default function EmpresaSucursalForm({ relacion, empresas, sucursales, on
       Estado_ES: formData.get("estado"),
     };
 
-    // Validar que empresa y sucursal sean diferentes
-    if (data.Id_Empresa_ES === data.Id_Sucursal_ES) {
-      setErrorMessage("La empresa y la sucursal no pueden ser las mismas.");
+    // Validar que empresa y sucursal no sean iguales
+    // if (data.Id_Empresa_ES === data.Id_Sucursal_ES) {
+    //   setErrorMessage("La empresa y la sucursal seleccionadas no pueden ser iguales.");
+    //   return;
+    // }
+
+    const existeRelacion = relaciones.some(
+      (relacion) =>
+        relacion.Id_Empresa_ES === data.Id_Empresa_ES &&
+        relacion.Id_Sucursal_ES === data.Id_Sucursal_ES
+    );
+
+    if (existeRelacion) {
+      setErrorMessage("No puedes seleccionar la misma empresa y sucursal. Verifica tu selección.");
       return;
     }
 
-    // Limpiar mensaje de error si no hay problemas
     setErrorMessage("");
     onSubmit(data);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Mensaje de error */}
       {errorMessage && (
         <div className="bg-red-500 text-white p-2 rounded mb-4">
           {errorMessage}
         </div>
       )}
 
-      {/* Selección de empresa */}
-      <div>
+      {!relacion && <div>
         <label className="block text-sm font-medium mb-1">Empresa</label>
         <select
           name="empresa"
@@ -53,10 +61,9 @@ export default function EmpresaSucursalForm({ relacion, empresas, sucursales, on
             </option>
           ))}
         </select>
-      </div>
+      </div>}
 
-      {/* Selección de sucursal */}
-      <div>
+      {!relacion && <div>
         <label className="block text-sm font-medium mb-1">Sucursal</label>
         <select
           name="sucursal"
@@ -73,9 +80,8 @@ export default function EmpresaSucursalForm({ relacion, empresas, sucursales, on
             </option>
           ))}
         </select>
-      </div>
+      </div>}
 
-      {/* Fecha de Apertura */}
       <div>
         <label className="block text-sm font-medium mb-1">Fecha de Apertura</label>
         <input
@@ -87,7 +93,6 @@ export default function EmpresaSucursalForm({ relacion, empresas, sucursales, on
         />
       </div>
 
-      {/* Fecha de Cierre */}
       <div>
         <label className="block text-sm font-medium mb-1">Fecha de Cierre</label>
         <input
@@ -98,7 +103,6 @@ export default function EmpresaSucursalForm({ relacion, empresas, sucursales, on
         />
       </div>
 
-      {/* Estado */}
       <div>
         <label className="block text-sm font-medium mb-1">Estado</label>
         <select
@@ -112,7 +116,6 @@ export default function EmpresaSucursalForm({ relacion, empresas, sucursales, on
         </select>
       </div>
 
-      {/* Botones */}
       <div className="flex justify-end gap-2 mt-6">
         <button
           type="button"

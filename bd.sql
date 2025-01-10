@@ -2,7 +2,28 @@ drop database empresa;
 CREATE DATABASE empresa;
 use empresa;
 
+CREATE TABLE TbDepartamento (
+    Id_Departamento INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre_Dep VARCHAR(50),
+    Altura_Dep INT,
+    Estado_Dep VARCHAR(10)
+);
 
+CREATE TABLE TbProvincia (
+    Id_Provincia INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Departamento_Pro INT,
+    Nombre_Pro VARCHAR(50),
+    Estado_Pro VARCHAR(10),
+    FOREIGN KEY (Id_Departamento_Pro) REFERENCES TbDepartamento(Id_Departamento)
+);
+
+CREATE TABLE TbMunicipio (
+    Id_Municipio INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Provincia_Mun INT,
+    Nombre_Mun VARCHAR(50),
+    Estado_Mun VARCHAR(10),
+    FOREIGN KEY (Id_Provincia_Mun) REFERENCES TbProvincia(Id_Provincia)
+);
 
 
 /*equipo Corleone*/
@@ -71,15 +92,14 @@ CREATE TABLE TbDependencia (
     Id_Dependencia                       INT PRIMARY KEY AUTO_INCREMENT,
     Id_Area_Padre_Dep                    INT,
     Id_Area_Hijo_Dep                     INT,
-    Fecha_Asignacion_Dep                 INT,  
+    Fecha_Asignacion_Dep                 DATE, -- CAMBIO  
     Resolucion_Are_Dep                   VARCHAR(50),
     Estado_Dep                           VARCHAR(10),
     FOREIGN KEY ( Id_Area_Padre_Dep)     REFERENCES TbArea(Id_Area),
     FOREIGN KEY ( Id_Area_Hijo_Dep)      REFERENCES TbArea(Id_Area)
-
 );
 
--- Hasta aqui mi parte
+-------------------------------------
 
 CREATE TABLE TbCargo (
     Id_Cargo                             INT PRIMARY KEY AUTO_INCREMENT,
@@ -103,7 +123,7 @@ CREATE TABLE TbEmpleado (
     Estado_Civil_Emp    VARCHAR(20),
     FDN_Emp             DATE,
     Estado_Emp          VARCHAR(10),
-    FOREIGN KEY (Id_Municipio_Per) REFERENCES TbMunicipio(Id_Municipio)
+    FOREIGN KEY (Id_Municipio_Emp) REFERENCES TbMunicipio(Id_Municipio)
 );
 
 CREATE TABLE TbEmpleadoCargo (
@@ -119,27 +139,13 @@ CREATE TABLE TbEmpleadoCargo (
 );
 
 
-------------------
+/*SET FOREIGN_KEY_CHECKS = 0;
 
-CREATE TABLE TbDepartamento (
-    Id_Departamento INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre_Dep VARCHAR(50),
-    Altura_Dep INT,
-    Estado_Dep VARCHAR(10)
-);
 
-CREATE TABLE TbProvincia (
-    Id_Provincia INT PRIMARY KEY AUTO_INCREMENT,
-    Id_Departamento_Pro INT,
-    Nombre_Pro VARCHAR(50),
-    Estado_Pro VARCHAR(10),
-    FOREIGN KEY (Id_Departamento_Pro) REFERENCES TbDepartamento(Id_Departamento)
-);
+truncate table TbEmpresa;
+truncate table TbSucursal;
+truncate table TbEmpresaSucursal;
+truncate table TbInformacionEmpresa;
 
-CREATE TABLE TbMunicipio (
-    Id_Municipio INT PRIMARY KEY AUTO_INCREMENT,
-    Id_Provincia_Mun INT,
-    Nombre_Mun VARCHAR(50),
-    Estado_Mun VARCHAR(10),
-    FOREIGN KEY (Id_Provincia_Mun) REFERENCES TbProvincia(Id_Provincia)
-);
+SET FOREIGN_KEY_CHECKS = 1;
+*/

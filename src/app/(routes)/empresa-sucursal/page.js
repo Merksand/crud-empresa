@@ -136,11 +136,9 @@ export default function EmpresaSucursal() {
                 </tr>
               ) : (
                 relaciones.map((relacion) => {
-                  // Validar que las claves para las relaciones sean únicas
                   const empresaId = relacion.Id_Empresa_ES || "sin-id";
                   const sucursalId = relacion.Id_Sucursal_ES || "sin-id";
 
-                  // Buscar empresa y sucursal correspondientes
                   const empresa = empresas.find(e => e.Id_Empresa === relacion.Id_Empresa_ES);
                   const sucursal = sucursales.find(s => s.Id_Sucursal === relacion.Id_Sucursal_ES);
 
@@ -165,8 +163,8 @@ export default function EmpresaSucursal() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <span
                           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${relacion.Estado_ES === "Activo"
-                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                              : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                            : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
                             }`}
                         >
                           {relacion.Estado_ES}
@@ -217,33 +215,38 @@ export default function EmpresaSucursal() {
           relacion={relacionEditar}
           empresas={empresas}
           sucursales={sucursales}
+          relaciones={relaciones}
           onSubmit={async (data) => {
             try {
               let response;
               console.log("Datos enviados: ", data);
-          
+
               if (relacionEditar) {
                 // console.log("Relación a editar: ", relacionEditar);
-          
+
                 // Validar que los datos existan
-                if (!relacionEditar.Id_Empresa || !relacionEditar.Id_Sucursal) {
+                console.log("Antes del throw new error: ", relacionEditar)
+                if (!relacionEditar.Id_Empresa_ES || !relacionEditar.Id_Sucursal_ES) {
                   throw new Error("Faltan valores para identificar la relación a editar.");
                 }
-          
+
+
                 const formattedData = {
-                  ...data,
                   Fecha_Apertura_ES: data.Fecha_Apertura_ES,
                   Fecha_Cierre_ES: data.Fecha_Cierre_ES || null,
+                  Estado_ES: data.Estado_ES,
                 };
-          
+
+
                 response = await fetch(
-                  `/api/empresa-sucursal/${relacionEditar.Id_Empresa}/${relacionEditar.Id_Sucursal}`,
+                  `/api/empresa-sucursal/${relacionEditar.Id_Empresa_ES}/${relacionEditar.Id_Sucursal_ES}`,
                   {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formattedData),
+                    body: JSON.stringify(data),
                   }
                 );
+
               } else {
                 response = await fetch("/api/empresa-sucursal", {
                   method: "POST",
@@ -251,13 +254,14 @@ export default function EmpresaSucursal() {
                   body: JSON.stringify(data),
                 });
               }
-          
+
               const responseData = await response.json();
-          
+
               if (!response.ok) {
-                throw new Error(responseData.error || "Error al guardar la relación");
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Error al guardar la relación");
               }
-          
+
               showNotification(
                 relacionEditar
                   ? "Relación actualizada correctamente"
@@ -271,7 +275,7 @@ export default function EmpresaSucursal() {
               showNotification(error.message || "Error al guardar la relación", "error");
             }
           }}
-          
+
         />
       </Modal>
     </div>
