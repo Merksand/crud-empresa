@@ -65,25 +65,7 @@ export async function PUT(request, { params }) {
 }
 
 
-export async function DELETE(request, { params }) {
-  try {
-    const [result] = await pool.query('DELETE FROM TbEmpleado WHERE Id_Empleado = ?', [params.id]);
 
-    if (result.affectedRows === 0) {
-      return NextResponse.json(
-        { error: 'Empleado no encontrado' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ message: 'Empleado eliminado correctamente' });
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'Error al eliminar el empleado: ' + error.message },
-      { status: 500 }
-    );
-  }
-}
 
 export async function GET(request, { params }) {
   try {
@@ -99,3 +81,51 @@ export async function GET(request, { params }) {
   }
 }
 
+
+
+
+
+
+export async function DELETE(request, { params }) {
+  try {
+    const id = parseInt(params.id);
+
+    if (isNaN(id)) {
+      return NextResponse.json(
+        { error: 'ID inválido' },
+        { status: 400 }
+      );
+    }
+
+    // Verificar si el empleado tiene relaciones en TbEmpleadoCargo
+    const [relaciones] = await pool.query(
+      'SELECT COUNT(*) AS count FROM TbEmpleadoCargo WHERE Id_Empleado_EC = ?',
+      [id]
+    );
+
+    if (relaciones[0].count > 0) {
+      return NextResponse.json(
+        { error: 'No se puede eliminar el empleado porque tiene relaciones en cargos.' },
+        { status: 400 }
+      );
+    }
+
+    // Intentar eliminar el empleado
+    const [result] = await pool.query('DELETE FROM TbEmpleado WHERE Id_Empleado = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      return NextResponse.json(
+        { error: 'Empleado no encontrado' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: 'Empleado eliminado correctamente' });
+  } catch (error) {
+    console.error('Error en DELETE /api/empleados/[id]:', error);
+    return NextResponse.json(
+      { error: 'Error al eliminar el empleado: ' + error.message },
+      { status: 500 }
+    );
+  }
+}
