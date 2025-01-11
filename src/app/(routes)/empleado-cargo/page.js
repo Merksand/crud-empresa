@@ -136,10 +136,10 @@ export default function EmpleadoCargo() {
                   return (
                     <tr key={`${relacion.Id_Empleado_EC}-${relacion.Id_Cargo_EC}`} className="hover:bg-gray-50 dark:hover:bg-gray-600">
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        {empleado?.Nombre_Empleado || "Empleado desconocido"}
+                        {empleado?.Nombre_Emp || "Empleado desconocido"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        {cargo?.Nombre_Cargo || "Cargo desconocido"}
+                        {cargo?.Nombre_Car || "Cargo desconocido"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         {relacion.Fecha_Inicio_EC
