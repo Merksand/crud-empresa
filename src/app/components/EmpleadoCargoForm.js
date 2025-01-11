@@ -52,7 +52,7 @@ export default function EmpleadoCargoForm({ relacion, empleados, cargos, relacio
             </option>
             {empleados?.map((empleado) => (
               <option key={empleado.Id_Empleado} value={empleado.Id_Empleado}>
-                {empleado.Nombre_Empleado}
+                {empleado.Nombre_Emp}
               </option>
             ))}
           </select>
@@ -73,7 +73,7 @@ export default function EmpleadoCargoForm({ relacion, empleados, cargos, relacio
             </option>
             {cargos?.map((cargo) => (
               <option key={cargo.Id_Cargo} value={cargo.Id_Cargo}>
-                {cargo.Nombre_Cargo}
+                {cargo.Nombre_Car}
               </option>
             ))}
           </select>
