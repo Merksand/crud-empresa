@@ -18,23 +18,17 @@ export default function EmpleadoForm({ empleado, municipios, onSubmit, onClose }
       FDN_Emp: formData.get('fdn'),
       Estado_Emp: formData.get('estado'),
     };
+
     onSubmit(data);
   };
-
+  
+  console.log(empleado)
   return (
-    <div className="max-w-lg mx-auto p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      {/* Contenedor principal con ancho máximo (max-w-lg), centrado horizontal (mx-auto),
-          padding (p-4), fondo blanco para claro y gris oscuro para oscuro (dark:bg-gray-800),
-          bordes redondeados (rounded-lg) y sombra (shadow-md). */}
-      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
-        {empleado ? 'Actualizar Empleado' : 'Registrar Empleado'}
-      </h2>
-      {/* Título dinámico según si se actualiza o crea un empleado. */}
+    <div className="p-4 mx-aut bg-white dark:bg-gray-800 rounded-lg">
+  
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Espaciado uniforme entre los campos (space-y-4). */}
 
-        {/* Municipio */}
         <div>
           <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
             Municipio
@@ -180,7 +174,7 @@ export default function EmpleadoForm({ empleado, municipios, onSubmit, onClose }
             <input
               type="date"
               name="fdn"
-              defaultValue={empleado?.FDN_Emp || ''}
+              defaultValue={empleado?.FDN_Emp.split('T')[0] || 'Puto'}
               className="w-full p-2 border rounded-lg dark:bg-gray-700"
               required
             />

@@ -13,7 +13,7 @@ export async function GET(request, { params }) {
         d.Resolucion_Are_Dep,
         d.Estado_Dep,
         ap.Nombre_Are AS Nombre_Padre,
-        ah.Nombre_Are AS Nombre_Hijo
+        ah.Nombre_Are AS Nombre_Hijo;
        FROM TbDependencia d
        LEFT JOIN TbArea ap ON d.Id_Area_Padre_Dep = ap.Id_Area
        LEFT JOIN TbArea ah ON d.Id_Area_Hijo_Dep = ah.Id_Area

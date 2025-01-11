@@ -108,13 +108,6 @@ function EstructuraPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="text-center py-20">
-        <span className="text-lg font-medium">Cargando...</span>
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -172,8 +165,26 @@ function EstructuraPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
+              {loading ? (
+                <tr>
+                  <td colSpan="6" className="px-6 py-4 text-center">
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                      <span className="ml-2">Cargando...</span>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                estructuras.length === 0 && (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
+                      No hay estructuras registradas
+                    </td>
+                  </tr>
+                )
+              )}
               {estructuras.map((estructura) => {
-                // console.log(estructura);
+
                 return (
                   <tr
                     key={estructura.Id_Estructura}
@@ -247,14 +258,14 @@ function EstructuraPage() {
         >
           <EstructuraForm
             estructura={estructuraEditar}
-          
+
             onSubmit={async (data) => {
               console.log("Datos enviados Data estructura:", data);
               console.log("Estructura a editar:", estructuraEditar);
               try {
                 let response;
 
-                // Realizar PUT o POST según corresponda
+
                 if (estructuraEditar) {
                   response = await fetch(
                     `/api/estructura/${estructuraEditar.Id_Estructura}`,
@@ -281,19 +292,17 @@ function EstructuraPage() {
                   );
                 }
 
-                // Mostrar notificación adecuada
                 showNotification(
                   estructuraEditar
                     ? "Estructura actualizada correctamente"
                     : "Estructura creada correctamente"
                 );
 
-                // Actualizar el estado y cerrar el modal
                 setIsModalOpen(false);
                 setEstructuraEditar(null);
 
                 if (estructuraEditar) {
-                  // Actualizar la estructura en el estado
+
                   const fetchUpdatedData = await fetch(
                     `/api/estructura/${estructuraEditar.Id_Estructura}`
                   );
@@ -307,7 +316,7 @@ function EstructuraPage() {
                     )
                   );
                 } else {
-                  // Obtener los datos recién creados para mantener consistencia
+
                   setEstructuras((prevEstructuras) => [
                     ...prevEstructuras,
                     responseData,

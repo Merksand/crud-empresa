@@ -275,6 +275,10 @@ export default function EmpresaSucursal() {
               showNotification(error.message || "Error al guardar la relación", "error");
             }
           }}
+          onClose={() => {
+            setIsModalOpen(false);
+            setRelacionEditar(null);
+          }}
 
         />
       </Modal>
