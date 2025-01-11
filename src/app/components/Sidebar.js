@@ -114,6 +114,20 @@ export default function Sidebar() {
         </svg>
       )
     },
+    {
+      title: 'Empleado-Cargo',
+      path: '/empleado-cargo',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M17 20h5v-1a3 3 0 00-5.356-1.857M9 20H4v-1a3 3 0 015.356-1.857M16 3.13a4 4 0 110 7.747M7 3.13a4 4 0 110 7.747"
+          />
+        </svg>
+      )
+    }    
   ];
 
   return (
