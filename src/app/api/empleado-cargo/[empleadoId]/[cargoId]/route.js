@@ -6,7 +6,7 @@ export async function GET(request, { params }) {
     const { empleadoId, cargoId } = params;
 
     const [rows] = await pool.query(
-      `SELECT *
+      `SELECT ec.*, e.Nombre_Emp, c.Nombre_Car
        FROM TbEmpleadoCargo ec
        JOIN TbEmpleado e ON ec.Id_Empleado_EC = e.Id_Empleado
        JOIN TbCargo c ON ec.Id_Cargo_EC = c.Id_Cargo

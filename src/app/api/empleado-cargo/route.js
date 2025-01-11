@@ -9,12 +9,12 @@ export async function GET() {
       JOIN TbEmpleado e ON ec.Id_Empleado_EC = e.Id_Empleado
       JOIN TbCargo c ON ec.Id_Cargo_EC = c.Id_Cargo
     `);
-
     return NextResponse.json(rows);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
 
 //POST - Crear una nueva relacion
 
