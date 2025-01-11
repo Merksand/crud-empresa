@@ -299,7 +299,7 @@ VALUES
 (3, '32198745', 'Jorge', 'Quiroga', 'Cruz', 'Masculino', 'Calle Aroma', 'Divorciado', '1980-07-12', 'Activo');
 
 
----Insertar datos empleadoCargo
+--Insertar datos empleadoCargo
 INSERT INTO TbEmpleadoCargo (Id_Cargo_EC, Id_Empleado_EC, Fecha_Inicio_EC, Fecha_Fin_EC, Estado_EC)
 VALUES 
     (1, 1, '2025-01-01', '2025-12-31', 'Activo'),

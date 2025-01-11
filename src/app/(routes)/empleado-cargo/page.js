@@ -246,7 +246,7 @@ export default function EmpleadoCargo() {
               showNotification(error.message || "Error al guardar la relación", "error");
             }
           }}
-          onCancel={() => {
+          onClose={() => {
             setIsModalOpen(false);
             setRelacionEditar(null);
           }}
