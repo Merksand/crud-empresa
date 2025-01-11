@@ -44,40 +44,46 @@ export default function Empresas() {
       setLoading(false);
     }
   };
-
-  const handleDelete = async (empresa) => {
-    try {
-      const response = await fetch(`/api/empresas/${empresa.Id_Empresa}`, {
-        method: "DELETE",
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Error al eliminar la empresa");
-      }
-
-      showNotification("Empresa eliminada correctamente");
-      fetchEmpresas();
-    } catch (error) {
-      console.error("Error al eliminar:", error);
-      showNotification(error.message, "error");
-    }
-  };
-
   const confirmDelete = (empresa) => {
     setDeleteModal({ show: true, empresa });
   };
+  
+  const handleDelete = async () => {
+    try {
+      if (!deleteModal.empresa) {
+        throw new Error("No se seleccionó ninguna empresa para eliminar.");
+      }
+  
+      const response = await fetch(`/api/empresas/${deleteModal.empresa.Id_Empresa}`, {
+        method: "DELETE",
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || "Error al eliminar la empresa");
+      }
+  
+      showNotification("Empresa eliminada correctamente");
+      fetchEmpresas();
+    } catch (error) {
+      // console.error("Error al eliminar:", error);
+      showNotification(error.message, "error");
+    } finally {
+      setDeleteModal({ show: false, empresa: null });
+    }
+  };
+  
+
 
   return (
     <div className="p-6">
       {notification.show && (
         <div
-          className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${
-            notification.type === "error"
+          className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${notification.type === "error"
               ? "bg-red-500 text-white"
               : "bg-green-500 text-white"
-          }`}
+            }`}
         >
           {notification.message}
         </div>
@@ -171,11 +177,10 @@ export default function Empresas() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          empresa.Estado_Emp === "Activo"
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${empresa.Estado_Emp === "Activo"
                             ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
                             : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
-                        }`}
+                          }`}
                       >
                         {empresa.Estado_Emp}
                       </span>
@@ -191,7 +196,7 @@ export default function Empresas() {
                         Editar
                       </button>
                       <button
-                        onClick={() => handleDelete(empresa)}
+                        onClick={() => confirmDelete(empresa)}
                         className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
                       >
                         Eliminar
@@ -206,11 +211,12 @@ export default function Empresas() {
       </div>
 
       <DeleteConfirmationModal
-        isOpen={deleteModal.show}
-        onClose={() => setDeleteModal({ show: false, empresa: null })}
-        onConfirm={confirmDelete}
-        itemName={`la empresa "${deleteModal.empresa?.Nombre_Emp}"`}
-      />
+  isOpen={deleteModal.show}
+  onClose={() => setDeleteModal({ show: false, empresa: null })}
+  onConfirm={handleDelete}
+  itemName={`la empresa "${deleteModal.empresa?.Nombre_Emp}"`}
+/>
+
 
       <Modal
         isOpen={isModalOpen}
@@ -243,7 +249,7 @@ export default function Empresas() {
               setEmpresaEditar(null);
               fetchEmpresas();
             } catch (error) {
-              console.error("Error:", error);
+              // console.error("Error:", error);
               showNotification("Error al guardar la empresa", "error");
             }
           }}

@@ -38,6 +38,71 @@ export async function PUT(request, { params }) {
 }
 
 // DELETE - Eliminar una empresa
+// export async function DELETE(request, { params }) {
+//   try {
+//     const id = parseInt(params.id);
+
+//     if (isNaN(id)) {
+//       return NextResponse.json(
+//         { message: 'ID de empresa inválido' },
+//         { status: 400 }
+//       );
+//     }
+
+//     // Verificar si hay relaciones en TbEmpresaSucursal
+//     const [relaciones] = await pool.query(
+//       'SELECT COUNT(*) as count FROM TbEmpresaSucursal WHERE Id_Empresa_ES = ?',
+//       [id]
+//     );
+
+//     if (relaciones[0].count > 0) {
+//       return NextResponse.json(
+//         { message: 'No se puede eliminar la empresa porque tiene sucursales asociadas' },
+//         { status: 400 }
+//       );
+//     }
+
+//     // Verificar si hay relaciones en TbInformacionEmpresa
+//     const [infoEmpresas] = await pool.query(
+//       'SELECT COUNT(*) as count FROM TbInformacionEmpresa WHERE Id_Emp = ?',
+//       [id]
+//     );
+
+//     if (infoEmpresas[0].count > 0) {
+//       return NextResponse.json(
+//         { message: 'No se puede eliminar la empresa porque tiene información asociada' },
+//         { status: 400 }
+//       );
+//     }
+
+//     // Si no hay relaciones, intentar eliminar la empresa
+//     const [result] = await pool.query(
+//       'DELETE FROM TbEmpresa WHERE Id_Emp = ?',
+//       [id]
+//     );
+
+//     if (result.affectedRows === 0) {
+//       return NextResponse.json(
+//         { message: 'Empresa no encontrada' },
+//         { status: 404 }
+//       );
+//     }
+
+//     return NextResponse.json(
+//       { message: 'Empresa eliminada correctamente' },
+//       { status: 200 }
+//     );
+
+//   } catch (error) {
+//     console.error('Error en DELETE /api/empresas/[id]:', error);
+//     return NextResponse.json(
+//       { message: 'Error al eliminar la empresa: ' + error.message },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+
 export async function DELETE(request, { params }) {
   try {
     const id = parseInt(params.id);
@@ -49,33 +114,46 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    // Verificar si hay relaciones en TbEmpresaSucursal
-    const [relaciones] = await pool.query(
-      'SELECT COUNT(*) as count FROM TbEmpresaSucursal WHERE Id_Empresa = ?',
+    // Verificar relaciones en TbEmpresaSucursal
+    const [relacionesSucursal] = await pool.query(
+      'SELECT COUNT(*) as count FROM TbEmpresaSucursal WHERE Id_Empresa_ES = ?',
       [id]
     );
 
-    if (relaciones[0].count > 0) {
+    if (relacionesSucursal[0].count > 0) {
       return NextResponse.json(
-        { message: 'No se puede eliminar la empresa porque tiene sucursales asociadas' },
+        { message: 'No se puede eliminar la empresa porque tiene sucursales asociadas.' },
         { status: 400 }
       );
     }
 
-    // Verificar si hay relaciones en TbInformacionEmpresa
-    const [infoEmpresas] = await pool.query(
+    // Verificar relaciones en TbEstructura
+    const [relacionesEstructura] = await pool.query(
+      'SELECT COUNT(*) as count FROM TbEstructura WHERE Id_Empresa = ?',
+      [id]
+    );
+
+    if (relacionesEstructura[0].count > 0) {
+      return NextResponse.json(
+        { message: 'No se puede eliminar la empresa porque tiene estructuras asociadas.' },
+        { status: 400 }
+      );
+    }
+
+    // Verificar relaciones en TbInformacionEmpresa
+    const [relacionesInformacion] = await pool.query(
       'SELECT COUNT(*) as count FROM TbInformacionEmpresa WHERE Id_Empresa = ?',
       [id]
     );
 
-    if (infoEmpresas[0].count > 0) {
+    if (relacionesInformacion[0].count > 0) {
       return NextResponse.json(
-        { message: 'No se puede eliminar la empresa porque tiene información asociada' },
+        { message: 'No se puede eliminar la empresa porque tiene información asociada.' },
         { status: 400 }
       );
     }
 
-    // Si no hay relaciones, intentar eliminar la empresa
+    // Intentar eliminar la empresa
     const [result] = await pool.query(
       'DELETE FROM TbEmpresa WHERE Id_Empresa = ?',
       [id]
@@ -83,22 +161,21 @@ export async function DELETE(request, { params }) {
 
     if (result.affectedRows === 0) {
       return NextResponse.json(
-        { message: 'Empresa no encontrada' },
+        { message: 'Empresa no encontrada.' },
         { status: 404 }
       );
     }
 
     return NextResponse.json(
-      { message: 'Empresa eliminada correctamente' },
+      { message: 'Empresa eliminada correctamente.' },
       { status: 200 }
     );
 
   } catch (error) {
-    console.error('Error en DELETE /api/empresas/[id]:', error);
+    // console.error('Error en DELETE /api/empresas/[id]:', error);
     return NextResponse.json(
       { message: 'Error al eliminar la empresa: ' + error.message },
       { status: 500 }
     );
   }
-} 
-
+}

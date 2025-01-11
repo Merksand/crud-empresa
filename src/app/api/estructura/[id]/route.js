@@ -58,16 +58,40 @@ export async function PUT(request, { params }) {
 
 
 
+
+
 export async function DELETE(request, { params }) {
-  try { 
-    const [result] = await pool.query('DELETE FROM TbEstructura WHERE Id_Estructura = ?', [params.id]);
-    
+  try {
+    const id = parseInt(params.id);
+
+    // Validar que el ID sea un número válido
+    if (isNaN(id)) {
+      return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
+    }
+
+    // Verificar si existen relaciones en TbArea
+    const [areasRelacionadas] = await pool.query(
+      'SELECT COUNT(*) AS count FROM TbArea WHERE Id_Estructura_Ar = ?',
+      [id]
+    );
+
+    if (areasRelacionadas[0].count > 0) {
+      return NextResponse.json(
+        { error: 'No se puede eliminar la estructura porque tiene áreas asociadas.' },
+        { status: 400 }
+      );
+    }
+
+    // Si no hay relaciones, eliminar la estructura
+    const [result] = await pool.query('DELETE FROM TbEstructura WHERE Id_Estructura = ?', [id]);
+
     if (result.affectedRows === 0) {
       return NextResponse.json({ error: 'Estructura no encontrada' }, { status: 404 });
     }
-    
+
     return NextResponse.json({ message: 'Estructura eliminada correctamente' });
   } catch (error) {
+    console.error('Error al eliminar la estructura:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
