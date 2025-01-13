@@ -105,7 +105,7 @@ export async function DELETE(request, { params }) {
 
     if (relaciones[0].count > 0) {
       return NextResponse.json(
-      { error: 'No se puede eliminar el empleado porque tiene relaciones en cargos.' },
+      { error: 'No se puede eliminar el empleado porque tiene relaciones en EmpleadoCargo.' },
         { status: 400 }
       );
     }

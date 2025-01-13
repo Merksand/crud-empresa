@@ -54,7 +54,7 @@ export default function cargo() {
       showNotification('Cargo eliminado correctamente');
       fetchcargo();
     } catch (error) {
-      console.error('Error:', error);
+      //console.error('Error:', error);
       showNotification(error.message || 'Error al eliminar el cargo', 'error');
     } finally {
       setDeleteModal({ show: false, cargo: null });
