@@ -65,7 +65,7 @@ export default function Empleado() {
       showNotification('Empleado eliminado correctamente');
       fetchData();
     } catch (error) {
-      console.error('Error:', error);
+     // console.error('Error:', error);
       showNotification(error.message || 'Error al eliminar el empleado', 'error');
     } finally {
       setDeleteModal({ show: false, empleado: null });
