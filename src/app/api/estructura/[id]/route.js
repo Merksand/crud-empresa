@@ -91,7 +91,6 @@ export async function DELETE(request, { params }) {
 
     return NextResponse.json({ message: 'Estructura eliminada correctamente' });
   } catch (error) {
-    console.error('Error al eliminar la estructura:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

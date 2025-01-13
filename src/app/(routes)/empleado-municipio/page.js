@@ -39,7 +39,7 @@ export default function Empleado() {
       setEmpleados(empleadosData);
       setMunicipios(municipiosData);
     } catch (error) {
-      console.error('Error al cargar datos:', error);
+      // console.error('Error al cargar datos:', error);
       showNotification('Error al cargar los datos', 'error');
     } finally {
       setLoading(false);
@@ -65,7 +65,11 @@ export default function Empleado() {
       showNotification('Empleado eliminado correctamente');
       fetchData();
     } catch (error) {
+<<<<<<< HEAD
      // console.error('Error:', error);
+=======
+      // console.error('Error:', error);
+>>>>>>> 337df1cdc70d5b93dbd977aae95076997d7c3db7
       showNotification(error.message || 'Error al eliminar el empleado', 'error');
     } finally {
       setDeleteModal({ show: false, empleado: null });
@@ -250,7 +254,7 @@ export default function Empleado() {
               setEmpleadoEditar(null);
               fetchData();
             } catch (error) {
-              console.error('Error:', error);
+              // console.error('Error:', error);
               showNotification(error.message || 'Error al guardar el empleado', 'error');
             }
           }}
