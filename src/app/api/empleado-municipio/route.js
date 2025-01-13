@@ -80,7 +80,6 @@ export async function POST(request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error en POST empleado:', error);
     return NextResponse.json(
       {
         error: error.message || 'Error al crear el empleado',
