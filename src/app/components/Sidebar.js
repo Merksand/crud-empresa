@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import TreeItem from './TreeItem';
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
@@ -80,12 +81,22 @@ export default function Sidebar() {
     },
     {
       title: 'Area',
-      path: '/area',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6h12m0 0l-4 4m4-4l-4-4" />
         </svg>
-      )
+      ),
+      children: [
+        { title: 'Área Principal 1', path: '/area' },
+        { title: 'Área Principal 2', path: '/area/2' },
+        {
+          title: 'Área Principal 3',
+          children: [
+            { title: 'Subárea 3.1', path: '/area/3/1' },
+            { title: 'Subárea 3.2', path: '/area/3/2' },
+          ],
+        },
+      ],
     },
     {
       title: 'Dependencias',
@@ -127,7 +138,7 @@ export default function Sidebar() {
           />
         </svg>
       )
-    }    
+    }
   ];
 
   return (
@@ -204,24 +215,27 @@ export default function Sidebar() {
 
           <ul className="flex-1 py-4 space-y-1 overflow-y-auto">
             {menuItems.map((item, index) => (
-              <li key={index} className="px-2">
-                <Link
-                  href={item.path}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === item.path
-                    ? 'bg-blue-500 text-white'
-                    : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
-                >
-                  <div className="min-w-[24px]">
-                    {item.icon}
-                  </div>
-                  <span className={`transition-all duration-300 ${!isOpen ? 'opacity-0 w-0' : 'opacity-100'}`}>
-                    {item.title}
-                  </span>
-                </Link>
+              <li key={index} className="px-2 select-none">
+                {item.children ? (
+                  <TreeItem item={item} isOpenSidebar={isOpen} />
+                ) : (
+                  <Link
+                    href={item.path}
+                    className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === item.path
+                      ? 'bg-blue-500 text-white'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                      }`}
+                  >
+                    <div className="min-w-[24px]">{item.icon}</div>
+                    <span className={`transition-all duration-300 ${!isOpen ? 'opacity-0 w-0' : 'opacity-100'}`}>
+                      {item.title}
+                    </span>
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
+
         </nav>
       </aside>
 
