@@ -45,9 +45,33 @@ export async function PUT(request, { params }) {
 }
 
 // DELETE - Eliminar un cargo
+
 export async function DELETE(request, { params }) {
   try {
-    const [result] = await pool.query('DELETE FROM TbCargo WHERE Id_Cargo = ?', [params.id]);
+    const id = parseInt(params.id);
+
+    if (isNaN(id)) {
+      return NextResponse.json(
+        { error: 'ID inválido' },
+        { status: 400 }
+      );
+    }
+
+    // Verificar si el empleado tiene relaciones en TbEmpleadoCargo
+    const [relaciones] = await pool.query(
+      'SELECT COUNT(*) AS count FROM TbEmpleadoCargo WHERE Id_Cargo_EC = ?',
+      [id]
+    );
+
+    if (relaciones[0].count > 0) {
+      return NextResponse.json(
+      { error: 'No se puede eliminar el cargo porque tiene relaciones en EmpleadoCargo.' },
+        { status: 400 }
+      );
+    }
+
+    // Intentar eliminar el cargo
+    const [result] = await pool.query('DELETE FROM TbCargo WHERE Id_Cargo = ?', [id]);
 
     if (result.affectedRows === 0) {
       return NextResponse.json(
@@ -58,9 +82,11 @@ export async function DELETE(request, { params }) {
 
     return NextResponse.json({ message: 'Cargo eliminado correctamente' });
   } catch (error) {
+   /// console.error('Error en DELETE /api/empleados/[id]:', error);
     return NextResponse.json(
       { error: 'Error al eliminar el cargo: ' + error.message },
       { status: 500 }
     );
   }
 }
+
