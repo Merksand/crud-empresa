@@ -1,22 +1,24 @@
 import { NextResponse } from "next/server";
 import { pool } from '../../../../lib/db';
 
-// GET - Obtener un cargo específico
+// GET - Obtener un cargo específico usando el procedimiento almacenado
 export async function GET(request, { params }) {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbCargo WHERE Id_Cargo = ?', [params.id]);
-    
-    if (rows.length === 0) {
+    // Llamar al procedimiento almacenado GetCargoById
+    const [rows] = await pool.query('CALL GetCargoById(?)', [params.id]);
+
+    if (rows[0].length === 0) {
       return NextResponse.json({ error: 'Cargo no encontrado' }, { status: 404 });
     }
-    
-    return NextResponse.json(rows[0]);
+
+    return NextResponse.json(rows[0][0]); // Extraer el primer registro del resultado
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-// PUT - Actualizar un cargo
+
+///PUT - ACTUALIZAR CARGO
 export async function PUT(request, { params }) {
   try {
     const data = await request.json();
@@ -25,13 +27,12 @@ export async function PUT(request, { params }) {
       Nivel_Car, 
       Sueldo_Car, 
       Sueldo_USD_Car, 
-      Resolucion_Car, 
-      Estado_Dep 
+      Resolucion_Car 
     } = data;
 
     const [result] = await pool.query(
-      'UPDATE TbCargo SET Nombre_Car = ?, Nivel_Car = ?, Sueldo_Car = ?, Sueldo_USD_Car = ?, Resolucion_Car = ?, Estado_Dep = ? WHERE Id_Cargo = ?',
-      [Nombre_Car, Nivel_Car, Sueldo_Car, Sueldo_USD_Car, Resolucion_Car, Estado_Dep, params.id]
+      'CALL UpdateCargo(?, ?, ?, ?, ?, ?)',
+      [params.id, Nombre_Car, Nivel_Car, Sueldo_Car, Sueldo_USD_Car, Resolucion_Car]
     );
 
     if (result.affectedRows === 0) {
@@ -44,8 +45,8 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE - Eliminar un cargo
 
+// DELETE - Dar de baja un cargo
 export async function DELETE(request, { params }) {
   try {
     const id = parseInt(params.id);
@@ -65,26 +66,18 @@ export async function DELETE(request, { params }) {
 
     if (relaciones[0].count > 0) {
       return NextResponse.json(
-      { error: 'No se puede eliminar el cargo porque tiene relaciones en EmpleadoCargo.' },
+        { error: 'No se puede eliminar el cargo porque tiene relaciones en EmpleadoCargo.' },
         { status: 400 }
       );
     }
 
-    // Intentar eliminar el cargo
-    const [result] = await pool.query('DELETE FROM TbCargo WHERE Id_Cargo = ?', [id]);
+    // Llamada al procedimiento almacenado para dar de baja el cargo
+    const [result] = await pool.query('CALL DeleteCargo(?)', [id]);
 
-    if (result.affectedRows === 0) {
-      return NextResponse.json(
-        { error: 'Cargo no encontrado' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ message: 'Cargo eliminado correctamente' });
+    return NextResponse.json({ message: 'Cargo dado de baja correctamente' });
   } catch (error) {
-   /// console.error('Error en DELETE /api/empleados/[id]:', error);
     return NextResponse.json(
-      { error: 'Error al eliminar el cargo: ' + error.message },
+      { error: 'Error al dar de baja el cargo: ' + error.message },
       { status: 500 }
     );
   }
