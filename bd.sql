@@ -2,12 +2,32 @@ drop database empresa;
 CREATE DATABASE empresa;
 use empresa;
 
-CREATE TABLE TbDepartamento (
-    Id_Departamento INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre_Dep VARCHAR(50),
-    Altura_Dep INT,
+-- Tabla: TbPais
+CREATE TABLE TbPais (
+    Id_Pais INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre_Pai VARCHAR(50),
+    Moneda_Pai VARCHAR(50),
+    Idioma_Pai VARCHAR(50),
+    Latitud_Pai INT,
+    Longitud_Pai INT,
+    Regimen_Impositivo_Pai VARCHAR(50),
+    IVA_Pai INT,
     Estado_Dep VARCHAR(10)
 );
+
+-- Tabla: TbDepartamento
+CREATE TABLE TbDepartamento (
+    Id_Departamento INT AUTO_INCREMENT PRIMARY KEY,
+    Id_Pais_Dep INT,
+    Nombre_Dep VARCHAR(50),
+    Altura_Dep INT,
+    Estado_Dep VARCHAR(10),
+    FOREIGN KEY (Id_Pais_Dep) REFERENCES TbPais(Id_Pais)
+);
+
+
+
+
 
 CREATE TABLE TbProvincia (
     Id_Provincia INT PRIMARY KEY AUTO_INCREMENT,
@@ -42,10 +62,11 @@ CREATE TABLE TbPersona (
 );
 
 CREATE TABLE TbGeolocalizacion (
-    Id_Geolocalizacion INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Geolocalizacion INT AUTO_INCREMENT PRIMARY KEY,
     Id_Persona_Geo INT,
     Latitud_Geo VARCHAR(50),
     Longitud_Geo VARCHAR(50),
+    Fecha_Geo DATE,
     Estado_Geo VARCHAR(10),
     FOREIGN KEY (Id_Persona_Geo) REFERENCES TbPersona(Id_Persona)
 );
@@ -71,6 +92,22 @@ CREATE TABLE TbEmpresa (
     Idioma_Emp                    VARCHAR(50),
     Estado_Emp                    VARCHAR(10)
 );
+
+
+
+CREATE TABLE TbEmpresaPais (
+    Id_EmpresaPais INT auto_increment PRIMARY KEY,
+    Id_Empresa_EP INT,
+    Id_Pais_EP INT,
+    Fecha_Inicio_EP DATE,
+    Fecha_Fin_EP DATE,
+    Estado_EC VARCHAR(10),
+    FOREIGN KEY (Id_Empresa_EP) REFERENCES TbEmpresa(Id_Empresa),
+    FOREIGN KEY (Id_Pais_EP) REFERENCES TbPais(Id_Pais)
+);
+
+
+
 
 CREATE TABLE TbEmpresaSucursal (
     Id_Empresa_Sucursal              INT PRIMARY KEY AUTO_INCREMENT,

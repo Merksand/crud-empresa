@@ -1,18 +1,67 @@
 -- Seleccionamos la base de datos
 USE empresa;
 
--- Insertar datos en TbDepartamento
-INSERT INTO TbDepartamento (Nombre_Dep, Altura_Dep, Estado_Dep) 
+INSERT INTO TbPais (Nombre_Pai, Moneda_Pai, Idioma_Pai, Latitud_Pai, Longitud_Pai, Regimen_Impositivo_Pai, IVA_Pai, Estado_Dep) 
 VALUES 
-('Santa Cruz', 416, 'Activo'),
-('La Paz', 3640, 'Activo'),
-('Cochabamba', 2558, 'Activo'),
-('Oruro', 3706, 'Activo'),
-('Potosí', 4090, 'Activo'),
-('Chuquisaca', 2790, 'Activo'),
-('Tarija', 1854, 'Activo'),
-('Beni', 155, 'Activo'),
-('Pando', 280, 'Activo');
+('Bolivia', 'Boliviano', 'Español', -17, -65, 'IVA General', 13, 'Activo'),
+('Argentina', 'Peso Argentino', 'Español', -38, -63, 'IVA General', 21, 'Activo'),
+('Brasil', 'Real', 'Portugués', -14, -51, 'Simples Nacional', 18, 'Activo'),
+('Chile', 'Peso Chileno', 'Español', -30, -71, 'IVA General', 19, 'Activo'),
+('Perú', 'Sol', 'Español', -9, -75, 'Régimen General', 18, 'Activo');
+
+
+INSERT INTO TbDepartamento (Id_Pais_Dep, Nombre_Dep, Altura_Dep, Estado_Dep) 
+VALUES 
+(1, 'Santa Cruz', 416, 'Activo'),
+(1, 'La Paz', 3640, 'Activo'),
+(1, 'Cochabamba', 2558, 'Activo'),
+(1, 'Oruro', 3706, 'Activo'),
+(1, 'Potosí', 4090, 'Activo'),
+(1, 'Chuquisaca', 2790, 'Activo'),
+(1, 'Tarija', 1854, 'Activo'),
+(1, 'Beni', 155, 'Activo'),
+(1, 'Pando', 280, 'Activo'),
+
+-- ARGENTINA
+(2, 'Buenos Aires', 25, 'Activo'),
+(2, 'Córdoba', 360, 'Activo'),
+(2, 'Santa Fe', 27, 'Activo'),
+(2, 'Mendoza', 746, 'Activo'),
+(2, 'Tucumán', 450, 'Activo'),
+(2, 'Salta', 1187, 'Activo'),
+(2, 'Misiones', 300, 'Activo'),
+(2, 'Chaco', 83, 'Activo'),
+(2, 'Neuquén', 260, 'Activo'),
+(2, 'Río Negro', 240, 'Activo'),
+-- BRASIL
+(3, 'Acre', 200, 'Activo'),
+(3, 'Alagoas', 13, 'Activo'),
+(3, 'Amapá', 10, 'Activo'),
+(3, 'Amazonas', 92, 'Activo'),
+(3, 'Bahía', 20, 'Activo'),
+(3, 'Ceará', 16, 'Activo'),
+(3, 'Distrito Federal', 1172, 'Activo'),
+(3, 'Espírito Santo', 12, 'Activo'),
+(3, 'Goiás', 749, 'Activo'),
+(3, 'Maranhão', 32, 'Activo'),
+(3, 'Mato Grosso', 248, 'Activo'),
+(3, 'Mato Grosso do Sul', 310, 'Activo'),
+(3, 'Minas Gerais', 570, 'Activo'),
+(3, 'Pará', 21, 'Activo'),
+(3, 'Paraíba', 36, 'Activo'),
+(3, 'Paraná', 945, 'Activo'),
+(3, 'Pernambuco', 20, 'Activo'),
+(3, 'Piauí', 180, 'Activo'),
+(3, 'Rio de Janeiro', 33, 'Activo'),
+(3, 'Rio Grande do Norte', 10, 'Activo'),
+(3, 'Rio Grande do Sul', 300, 'Activo'),
+(3, 'Rondônia', 200, 'Activo'),
+(3, 'Roraima', 90, 'Activo'),
+(3, 'Santa Catarina', 550, 'Activo'),
+(3, 'São Paulo', 760, 'Activo'),
+(3, 'Sergipe', 13, 'Activo'),
+(3, 'Tocantins', 267, 'Activo');
+
 
 
 -- Insertar datos en TbProvincia
@@ -69,6 +118,23 @@ INSERT INTO TbProvincia (Id_Departamento_Pro, Nombre_Pro, Estado_Pro) VALUES
 (9, 'Nicolás Suárez', 'Activo'),
 (9, 'Manuripi', 'Activo'),
 (9, 'Madre de Dios', 'Activo');
+
+-- ARGENTINA
+INSERT INTO TbProvincia (Id_Departamento_Pro, Nombre_Pro, Estado_Pro) 
+VALUES 
+(10, 'La Plata', 'Activo'),          -- Provincia asociada a Buenos Aires
+(11, 'Villa Carlos Paz', 'Activo'),  -- Provincia asociada a Córdoba
+(12, 'Rosario', 'Activo'),           -- Provincia asociada a Santa Fe
+(13, 'San Rafael', 'Activo'),        -- Provincia asociada a Mendoza
+(14, 'San Miguel de Tucumán', 'Activo'), -- Provincia asociada a Tucumán
+(15, 'Cafayate', 'Activo'),          -- Provincia asociada a Salta
+(16, 'Posadas', 'Activo'),           -- Provincia asociada a Misiones
+(17, 'Resistencia', 'Activo'),       -- Provincia asociada a Chaco
+(18, 'San Martín de los Andes', 'Activo'), -- Provincia asociada a Neuquén
+(19, 'Bariloche', 'Activo');         -- Provincia asociada a Río Negro
+
+
+
 
 -- Insertar datos en TbMunicipio
 -- Provincia Andrés Ibáñez, Departamento de Santa Cruz
@@ -220,13 +286,14 @@ VALUES
 
 
 
-INSERT INTO TbGeolocalizacion (Id_Persona_Geo, Latitud_Geo, Longitud_Geo, Estado_Geo)
+-- Suponiendo que ya existen registros en la tabla TbPersona con Id_Persona 1, 2 y 3.
+
+INSERT INTO TbGeolocalizacion (Id_Persona_Geo, Latitud_Geo, Longitud_Geo, Fecha_Geo, Estado_Geo)
 VALUES
-(1, '-17.783327', '-63.182140', 'Activo'),
-(2, '-17.779528', '-63.190568', 'Activo'),
-(3, '-17.785763', '-63.184992', 'Activo'),
-(4, '-17.770325', '-63.172874', 'Activo'),
-(5, '-17.776321', '-63.196574', 'Inactivo');
+(1, '-17.7833', '-63.1833', '2025-01-10', 'Activo'),
+(2, '-16.5000', '-68.1500', '2025-01-11', 'Activo'),
+(3, '-19.0333', '-65.2600', '2025-01-12', 'Inactivo');
+
 
 
 
@@ -240,9 +307,9 @@ VALUES
 -- Insertar datos en TbEmpresa
 INSERT INTO TbEmpresa (Id_InformacionEmpresa_Emp, Nombre_Emp, Sede_Emp, Fecha_Fundacion_Emp, Tipo_Emp, Idioma_Emp, Estado_Emp)
 VALUES
-(1, 'Empresa Tech', 'Ciudad Central', '2001-05-20', 'Tecnología', 'Español', 'Activo'),
-(2, 'Empresa Agro', 'Ciudad Norte', '1998-08-15', 'Agrícola', 'Español', 'Activo'),
-(3, 'Empresa Educativa', 'Ciudad Sur', '2010-03-10', 'Educación', 'Inglés', 'Inactivo');
+(1, 'Empresa Tech', 2, '2001-05-20', 'Tecnología', 'Español', 'Activo'),
+(2, 'Empresa Agro', 3, '1998-08-15', 'Agrícola', 'Español', 'Activo'),
+(3, 'Empresa Educativa', 5, '2010-03-10', 'Educación', 'Inglés', 'Inactivo');
 
 -- Insertar datos en TbEmpresaSucursal
 INSERT INTO TbEmpresaSucursal (Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES)
@@ -299,7 +366,6 @@ VALUES
 (3, '32198745', 'Jorge', 'Quiroga', 'Cruz', 'Masculino', 'Calle Aroma', 'Divorciado', '1980-07-12', 'Activo');
 
 
---Insertar datos empleadoCargo
 INSERT INTO TbEmpleadoCargo (Id_Cargo_EC, Id_Empleado_EC, Fecha_Inicio_EC, Fecha_Fin_EC, Estado_EC)
 VALUES 
     (1, 1, '2025-01-01', '2025-12-31', 'Activo'),

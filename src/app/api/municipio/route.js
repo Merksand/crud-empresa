@@ -2,9 +2,21 @@ import { NextResponse } from 'next/server';
 import { pool } from '../../../lib/db';
 
 // GET - Obtener todos los municipios
-export async function GET() {
+
+export async function GET(request) {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbMunicipio order by Nombre_Mun');
+    const { searchParams } = new URL(request.url);
+    const provinciaId = searchParams.get('provincia');
+
+    if (!provinciaId) {
+      return NextResponse.json({ error: 'ID de la provincia requerido' }, { status: 400 });
+    }
+
+    const [rows] = await pool.query(
+      'SELECT Id_Municipio, Nombre_Mun FROM TbMunicipio WHERE Id_Provincia_Mun = ?',
+      [provinciaId]
+    );
+
     return NextResponse.json(rows);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
