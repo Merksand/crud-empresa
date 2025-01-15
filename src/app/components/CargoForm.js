@@ -8,7 +8,7 @@ export default function CargoForm({ cargo, onSubmit, onClose }) {
             Sueldo_Car: parseFloat(formData.get("sueldo_local")),
             Sueldo_USD_Car: parseFloat(formData.get("sueldo_usd")),
             Resolucion_Car: formData.get("resolucion"),
-            Estado_Dep: formData.get("estado"),
+           // Estado_Dep: formData.get("estado"),
         };
         onSubmit(data);
     };
@@ -72,7 +72,7 @@ export default function CargoForm({ cargo, onSubmit, onClose }) {
                 />
             </div>
 
-            <div>
+         {/*   <div>
                 <label className="block text-sm font-medium mb-1">Estado</label>
                 <select
                     name="estado"
@@ -83,7 +83,7 @@ export default function CargoForm({ cargo, onSubmit, onClose }) {
                     <option value="Activo">Activo</option>
                     <option value="Inactivo">Inactivo</option>
                 </select>
-            </div>
+            </div>*/}
 
             <div className="flex justify-end gap-2 mt-6">
                 <button
