@@ -109,6 +109,9 @@ export default function Empresas() {
                   Sede
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Municipio
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Fecha Fundación
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -142,6 +145,7 @@ export default function Empresas() {
                     <tr key={empresa.Id_Empresa} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{empresa.Nombre_Emp}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{empresa.Pais}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{empresa.Municipio}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         {new Date(empresa.Fecha_Fundacion_Emp).toLocaleDateString()}
                       </td>

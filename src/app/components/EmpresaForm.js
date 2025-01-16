@@ -6,31 +6,47 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
     const [provincias, setProvincias] = useState([]);
     const [municipios, setMunicipios] = useState([]);
 
-    const [selectedPais, setSelectedPais] = useState(empresa?.Id_Pais || "");
-    const [selectedDepartamento, setSelectedDepartamento] = useState(empresa?.Id_Departamento || "");
-    const [selectedProvincia, setSelectedProvincia] = useState(empresa?.Id_Provincia || "");
-    const [selectedMunicipio, setSelectedMunicipio] = useState(empresa?.Sede_Emp || "");
-    const [nombrePais, setNombrePais] = useState("");
+    const [selectedPais, setSelectedPais] = useState("");
+    const [selectedDepartamento, setSelectedDepartamento] = useState("");
+    const [selectedProvincia, setSelectedProvincia] = useState("");
+    const [selectedMunicipio, setSelectedMunicipio] = useState("");
 
-    // Cargar países
+    // Cargar países al inicio
     useEffect(() => {
         fetch("/api/paises")
             .then((res) => res.json())
-            .then(setPaises);
+            .then((data) => {
+                setPaises(data);
+                console.log("Paises cargados:", data);
+            });
     }, []);
+
+    // Cargar datos de la empresa al editar
+    useEffect(() => {
+        if (empresa) {
+            console.log("Empresa recibida para editar:", empresa);
+            setSelectedPais(empresa.Id_Pais || "");
+            setSelectedDepartamento(empresa.Id_Departamento || "");
+            setSelectedProvincia(empresa.Id_Provincia || "");
+            setSelectedMunicipio(empresa.Sede_Emp || "");
+        }
+    }, [empresa]);
 
     // Cargar departamentos según el país seleccionado
     useEffect(() => {
         if (selectedPais) {
             fetch(`/api/departamentos?pais=${selectedPais}`)
                 .then((res) => res.json())
-                .then(setDepartamentos);
+                .then((data) => {
+                    setDepartamentos(data);
+                    console.log("Departamentos cargados:", data);
+                });
         } else {
             setDepartamentos([]);
         }
         setSelectedDepartamento("");
         setSelectedProvincia("");
-        setMunicipios([]);
+        setSelectedMunicipio("");
     }, [selectedPais]);
 
     // Cargar provincias según el departamento seleccionado
@@ -38,12 +54,15 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
         if (selectedDepartamento) {
             fetch(`/api/provincias?departamento=${selectedDepartamento}`)
                 .then((res) => res.json())
-                .then(setProvincias);
+                .then((data) => {
+                    setProvincias(data);
+                    console.log("Provincias cargadas:", data);
+                });
         } else {
             setProvincias([]);
         }
         setSelectedProvincia("");
-        setMunicipios([]);
+        setSelectedMunicipio("");
     }, [selectedDepartamento]);
 
     // Cargar municipios según la provincia seleccionada
@@ -51,33 +70,25 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
         if (selectedProvincia) {
             fetch(`/api/municipio?provincia=${selectedProvincia}`)
                 .then((res) => res.json())
-                .then(setMunicipios);
+                .then((data) => {
+                    setMunicipios(data);
+                    console.log("Municipios cargados:", data);
+                });
         } else {
             setMunicipios([]);
         }
         setSelectedMunicipio("");
     }, [selectedProvincia]);
 
-    // Actualizar nombre del país según el municipio seleccionado
-    useEffect(() => {
-        if (selectedMunicipio) {
-            const municipio = municipios.find((m) => m.Id_Municipio === parseInt(selectedMunicipio));
-            if (municipio) {
-                setNombrePais(municipio.Nombre_Pais); // `Nombre_Pais` debe venir en los datos del municipio
-            }
-        }
-    }, [selectedMunicipio, municipios]);
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
         const data = {
-            Nombre_Emp: formData.get("nombre"),
-            Sede_Emp: parseInt(selectedMunicipio), // Guardar Id del Municipio
-            Fecha_Fundacion_Emp: formData.get("fechaFundacion"),
-            Tipo_Emp: formData.get("tipo"),
-            Idioma_Emp: formData.get("idioma"),
+            Nombre_Emp: e.target.nombre.value,
+            Sede_Emp: selectedMunicipio,
+            Fecha_Fundacion_Emp: e.target.fechaFundacion.value,
+            Tipo_Emp: e.target.tipo.value,
         };
+        console.log("Datos a enviar:", data);
         onSubmit(data);
     };
 
@@ -97,14 +108,13 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
             <div>
                 <label className="block text-sm font-medium mb-1">País</label>
                 <select
+                    name="pais"
                     value={selectedPais}
                     onChange={(e) => setSelectedPais(e.target.value)}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
                 >
-                    <option value="" disabled>
-                        Seleccione un país
-                    </option>
+                    <option value="">Seleccione un país</option>
                     {paises.map((pais) => (
                         <option key={pais.Id_Pais} value={pais.Id_Pais}>
                             {pais.Nombre_Pai}
@@ -116,17 +126,16 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
             <div>
                 <label className="block text-sm font-medium mb-1">Departamento</label>
                 <select
+                    name="departamento"
                     value={selectedDepartamento}
                     onChange={(e) => setSelectedDepartamento(e.target.value)}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
                 >
-                    <option value="" disabled>
-                        Seleccione un departamento
-                    </option>
-                    {departamentos.map((departamento) => (
-                        <option key={departamento.Id_Departamento} value={departamento.Id_Departamento}>
-                            {departamento.Nombre_Dep}
+                    <option value="">Seleccione un departamento</option>
+                    {departamentos.map((dep) => (
+                        <option key={dep.Id_Departamento} value={dep.Id_Departamento}>
+                            {dep.Nombre_Dep}
                         </option>
                     ))}
                 </select>
@@ -135,17 +144,16 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
             <div>
                 <label className="block text-sm font-medium mb-1">Provincia</label>
                 <select
+                    name="provincia"
                     value={selectedProvincia}
                     onChange={(e) => setSelectedProvincia(e.target.value)}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
                 >
-                    <option value="" disabled>
-                        Seleccione una provincia
-                    </option>
-                    {provincias.map((provincia) => (
-                        <option key={provincia.Id_Provincia} value={provincia.Id_Provincia}>
-                            {provincia.Nombre_Pro}
+                    <option value="">Seleccione una provincia</option>
+                    {provincias.map((prov) => (
+                        <option key={prov.Id_Provincia} value={prov.Id_Provincia}>
+                            {prov.Nombre_Pro}
                         </option>
                     ))}
                 </select>
@@ -154,17 +162,16 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
             <div>
                 <label className="block text-sm font-medium mb-1">Municipio</label>
                 <select
+                    name="municipio"
                     value={selectedMunicipio}
                     onChange={(e) => setSelectedMunicipio(e.target.value)}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
                 >
-                    <option value="" disabled>
-                        Seleccione un municipio
-                    </option>
-                    {municipios.map((municipio) => (
-                        <option key={municipio.Id_Municipio} value={municipio.Id_Municipio}>
-                            {municipio.Nombre_Mun}
+                    <option value="">Seleccione un municipio</option>
+                    {municipios.map((mun) => (
+                        <option key={mun.Id_Municipio} value={mun.Id_Municipio}>
+                            {mun.Nombre_Mun}
                         </option>
                     ))}
                 </select>
@@ -189,9 +196,6 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
                     required
                 >
-                    <option value="" disabled>
-                        Seleccione un tipo
-                    </option>
                     <option value="S.A.">S.A.</option>
                     <option value="S.L.">S.L.</option>
                     <option value="Autónomo">Autónomo</option>
@@ -216,3 +220,4 @@ export default function EmpresaForm({ empresa, onSubmit, onClose }) {
         </form>
     );
 }
+;

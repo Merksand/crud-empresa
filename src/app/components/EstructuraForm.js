@@ -68,7 +68,7 @@ export default function EstructuraForm({ estructura, onSubmit, onClose }) {
   if (error) {
     return <p className="text-red-500">Error: {error}</p>;
   }
-
+console.log(formData)
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>

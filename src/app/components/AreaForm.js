@@ -23,7 +23,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
             console.error("Error: Fecha de creación no válida.");
             return;
         }
-
+        
         onSubmit(data);
     };
 
