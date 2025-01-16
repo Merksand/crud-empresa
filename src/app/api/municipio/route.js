@@ -1,27 +1,45 @@
 import { NextResponse } from 'next/server';
-import { pool } from '../../../lib/db';
+import { pool } from '@/lib/db';
 
-// GET - Obtener todos los municipios
 
+
+// GET - Obtener municipios (por provincia o sucursal)
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const provinciaId = searchParams.get('provincia');
+    const sucursalId = searchParams.get('sucursal');
 
-    if (!provinciaId) {
-      return NextResponse.json({ error: 'ID de la provincia requerido' }, { status: 400 });
+    if (!provinciaId && !sucursalId) {
+      return NextResponse.json(
+        { error: 'Se requiere ID de la provincia o sucursal' },
+        { status: 400 }
+      );
     }
 
-    const [rows] = await pool.query(
-      'SELECT Id_Municipio, Nombre_Mun FROM TbMunicipio WHERE Id_Provincia_Mun = ?',
-      [provinciaId]
-    );
+    let query = '';
+    let params = [];
 
+    if (provinciaId) {
+      query = 'SELECT Id_Municipio, Nombre_Mun FROM TbMunicipio WHERE Id_Provincia_Mun = ?';
+      params = [provinciaId];
+    } else if (sucursalId) {
+      query = `
+        SELECT m.Id_Municipio, m.Nombre_Mun
+        FROM TbMunicipio m
+        JOIN TbSucursal s ON m.Id_Municipio = s.Id_Municipio_Suc
+        WHERE s.Id_Sucursal = ?
+      `;
+      params = [sucursalId];
+    }
+
+    const [rows] = await pool.query(query, params);
     return NextResponse.json(rows);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
 
 // POST - Crear un nuevo municipio
 export async function POST(request) {

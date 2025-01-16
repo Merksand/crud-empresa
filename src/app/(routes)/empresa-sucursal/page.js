@@ -1,8 +1,8 @@
-'use client';
-import { useState, useEffect } from 'react';
-import Modal from '@/app/components/Modal';
-import EmpresaSucursalForm from '@/app/components/EmpresaSucursalForm';
-import DeleteConfirmationModal from '@/app/components/DeleteConfirmationModal';
+"use client";
+import { useState, useEffect } from "react";
+import Modal from "@/app/components/Modal";
+import EmpresaSucursalForm from "@/app/components/EmpresaSucursalForm";
+import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
 
 export default function EmpresaSucursal() {
   const [relaciones, setRelaciones] = useState([]);
@@ -18,18 +18,18 @@ export default function EmpresaSucursal() {
     fetchData();
   }, []);
 
-  const showNotification = (message, type = 'success') => {
+  const showNotification = (message, type = "success") => {
     setNotification({ show: true, message, type });
-    setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+    setTimeout(() => setNotification({ show: false, message: "", type: "" }), 3000);
   };
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const [relacionesRes, empresasRes, sucursalesRes] = await Promise.all([
-        fetch('/api/empresa-sucursal'),
-        fetch('/api/empresas'),
-        fetch('/api/sucursales'),
+        fetch("/api/empresa-sucursal"),
+        fetch("/api/empresas"),
+        fetch("/api/sucursales"),
       ]);
 
       const relacionesData = await relacionesRes.json();
@@ -40,41 +40,34 @@ export default function EmpresaSucursal() {
       setEmpresas(empresasData);
       setSucursales(sucursalesData);
     } catch (error) {
-      console.error('Error al cargar los datos:', error);
-      showNotification('Error al cargar los datos', 'error');
+      console.error("Error al cargar los datos:", error);
+      showNotification("Error al cargar los datos", "error");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (relacion) => {
-    console.log("RELACION A ELIMINAR: ", relacion);
-
+  const handleDelete = (relacion) => {
     setDeleteModal({ show: true, relacion });
   };
 
   const confirmDelete = async () => {
     try {
-
-      console.log("Relación seleccionada para eliminar:", deleteModal.relacion);
-
       const response = await fetch(
         `/api/empresa-sucursal/${deleteModal.relacion.Id_Empresa_ES}/${deleteModal.relacion.Id_Sucursal_ES}`,
-        {
-          method: 'DELETE',
-        }
+        { method: "DELETE" }
       );
-
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Error al eliminar la relación');
+        throw new Error(data.error || "Error al eliminar la relación");
       }
-      showNotification('Relación eliminada correctamente');
+
+      showNotification("Relación eliminada correctamente");
       fetchData();
     } catch (error) {
-      console.error('Error:', error);
-      showNotification(error.message || 'Error al eliminar la relación', 'error');
+      console.error("Error:", error);
+      showNotification(error.message || "Error al eliminar la relación", "error");
     } finally {
       setDeleteModal({ show: false, relacion: null });
     }
@@ -86,10 +79,7 @@ export default function EmpresaSucursal() {
         <h1 className="text-2xl font-bold">Gestión de Empresa-Sucursal</h1>
         <div className="flex items-center gap-4">
           {notification.show && (
-            <div className={`px-4 py-2 rounded-lg ${notification.type === 'error'
-              ? 'bg-red-500 text-white'
-              : 'bg-green-500 text-white'
-              }`}>
+            <div className={`px-4 py-2 rounded-lg ${notification.type === "error" ? "bg-red-500 text-white" : "bg-green-500 text-white"}`}>
               {notification.message}
             </div>
           )}
@@ -113,15 +103,13 @@ export default function EmpresaSucursal() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Empresa</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Sucursal</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Fecha Apertura</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Fecha Cierre</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
               {loading ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-4 text-center">
+                  <td colSpan="4" className="px-6 py-4 text-center">
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
                       <span className="ml-2">Cargando...</span>
@@ -130,45 +118,19 @@ export default function EmpresaSucursal() {
                 </tr>
               ) : relaciones.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
-                    No hay relaciones registradas
-                  </td>
+                  <td colSpan="4" className="px-6 py-4 text-center text-gray-500">No hay relaciones registradas</td>
                 </tr>
               ) : (
                 relaciones.map((relacion) => {
-                  const empresaId = relacion.Id_Empresa_ES || "sin-id";
-                  const sucursalId = relacion.Id_Sucursal_ES || "sin-id";
-
-                  const empresa = empresas.find(e => e.Id_Empresa === relacion.Id_Empresa_ES);
-                  const sucursal = sucursales.find(s => s.Id_Sucursal === relacion.Id_Sucursal_ES);
+                  const empresa = empresas.find((e) => e.Id_Empresa === relacion.Id_Empresa_ES);
+                  const sucursal = sucursales.find((s) => s.Id_Sucursal === relacion.Id_Sucursal_ES);
 
                   return (
-                    <tr key={`${empresaId}-${sucursalId}`} className="hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <tr key={`${relacion.Id_Empresa_ES}-${relacion.Id_Sucursal_ES}`} className="hover:bg-gray-50 dark:hover:bg-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{empresa?.Nombre_Emp || "Empresa desconocida"}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{sucursal?.Nombre_Suc || "Sucursal desconocida"}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        {empresa?.Nombre_Emp || "Empresa desconocida"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        {sucursal?.Nombre_Suc || "Sucursal desconocida"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        {relacion.Fecha_Apertura_ES
-                          ? new Date(relacion.Fecha_Apertura_ES).toLocaleDateString()
-                          : "-"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        {relacion.Fecha_Cierre_ES
-                          ? new Date(relacion.Fecha_Cierre_ES).toLocaleDateString()
-                          : "-"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${relacion.Estado_ES === "Activo"
-                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                            : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
-                            }`}
-                        >
-                          {relacion.Estado_ES}
-                        </span>
+                        {relacion.Fecha_Apertura_ES ? new Date(relacion.Fecha_Apertura_ES).toLocaleDateString() : "-"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
@@ -209,7 +171,7 @@ export default function EmpresaSucursal() {
           setIsModalOpen(false);
           setRelacionEditar(null);
         }}
-        title={relacionEditar ? 'Editar Relación' : 'Nueva Relación'}
+        title={relacionEditar ? "Editar Relación" : "Nueva Relación"}
       >
         <EmpresaSucursalForm
           relacion={relacionEditar}
@@ -218,44 +180,16 @@ export default function EmpresaSucursal() {
           relaciones={relaciones}
           onSubmit={async (data) => {
             try {
-              let response;
-              console.log("Datos enviados: ", data);
+              const method = relacionEditar ? "PUT" : "POST";
+              const url = relacionEditar
+                ? `/api/empresa-sucursal/${relacionEditar.Id_Empresa_ES}/${relacionEditar.Id_Sucursal_ES}`
+                : "/api/empresa-sucursal";
 
-              if (relacionEditar) {
-                // console.log("Relación a editar: ", relacionEditar);
-
-                // Validar que los datos existan
-                console.log("Antes del throw new error: ", relacionEditar)
-                if (!relacionEditar.Id_Empresa_ES || !relacionEditar.Id_Sucursal_ES) {
-                  throw new Error("Faltan valores para identificar la relación a editar.");
-                }
-
-
-                const formattedData = {
-                  Fecha_Apertura_ES: data.Fecha_Apertura_ES,
-                  Fecha_Cierre_ES: data.Fecha_Cierre_ES || null,
-                  Estado_ES: data.Estado_ES,
-                };
-
-
-                response = await fetch(
-                  `/api/empresa-sucursal/${relacionEditar.Id_Empresa_ES}/${relacionEditar.Id_Sucursal_ES}`,
-                  {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                  }
-                );
-
-              } else {
-                response = await fetch("/api/empresa-sucursal", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(data),
-                });
-              }
-
-              const responseData = await response.json();
+              const response = await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+              });
 
               if (!response.ok) {
                 const errorData = await response.json();
@@ -263,15 +197,13 @@ export default function EmpresaSucursal() {
               }
 
               showNotification(
-                relacionEditar
-                  ? "Relación actualizada correctamente"
-                  : "Relación creada correctamente"
+                relacionEditar ? "Relación actualizada correctamente" : "Relación creada correctamente"
               );
               setIsModalOpen(false);
               setRelacionEditar(null);
               await fetchData();
             } catch (error) {
-              console.error("Error: ", error);
+              console.error("Error:", error);
               showNotification(error.message || "Error al guardar la relación", "error");
             }
           }}
@@ -279,9 +211,8 @@ export default function EmpresaSucursal() {
             setIsModalOpen(false);
             setRelacionEditar(null);
           }}
-
         />
       </Modal>
     </div>
   );
-} 
+}

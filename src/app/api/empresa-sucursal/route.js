@@ -20,12 +20,12 @@ export async function GET() {
 export async function POST(request) {
   try {
     const data = await request.json();
-    const { Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES } = data;
+    const { Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES } = data;
 
     const [result] = await pool.query(
-      `INSERT INTO TbEmpresaSucursal (Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES)
-       VALUES (?, ?, ?, ?, ?)`,
-      [Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES]
+      `INSERT INTO TbEmpresaSucursal (Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES)
+       VALUES (?, ?, ?)`,
+      [Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES]
     );
 
     return NextResponse.json({ message: 'Relación creada correctamente', id: result.insertId });
