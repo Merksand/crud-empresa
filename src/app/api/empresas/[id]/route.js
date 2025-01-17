@@ -169,8 +169,8 @@ export async function DELETE(request, { params }) {
 
     // Intentar eliminar la empresa
     const [result] = await pool.query(
-      'DELETE FROM TbEmpresa WHERE Id_Empresa = ?',
-      [id]
+      'UPDATE TbEmpresa SET Estado_Emp = ? WHERE Id_Empresa = ?',
+      ['Inactivo', id]
     );
 
     if (result.affectedRows === 0) {

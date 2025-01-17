@@ -4,7 +4,7 @@ import { pool } from '../../../lib/db';
 // GET - Obtener todas las informaciones
 export async function GET() {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbInformacionEmpresa');
+    const [rows] = await pool.query('SELECT * FROM TbInformacionEmpresa WHERE Estado_IE = "Activo"');
     return NextResponse.json(rows);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
