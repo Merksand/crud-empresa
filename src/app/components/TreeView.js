@@ -18,10 +18,14 @@ const TreeItem = ({ node }) => {
         )}
         {/* Información del nodo */}
         <div>
-          <div className="font-semibold">{node.Nombre_Are}</div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            {node.Nombre_Emp} - {node.Resolucion_Est}
+          <div className="font-semibold">
+            {node.Nombre_Are || node.Nombre_Emp || "Nodo sin nombre"}
           </div>
+          {node.Resolucion_Est && (
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              {node.Resolucion_Est}
+            </div>
+          )}
         </div>
       </div>
 
@@ -29,7 +33,10 @@ const TreeItem = ({ node }) => {
       {expanded && node.children.length > 0 && (
         <ul className="ml-4 border-l border-gray-300 dark:border-gray-700">
           {node.children.map((child) => (
-            <TreeItem key={child.Id_Area} node={child} />
+            <TreeItem
+              key={child.Id_Area || `${child.Id_Empresa}-${child.Nombre_Are}`}
+              node={child}
+            />
           ))}
         </ul>
       )}
@@ -41,7 +48,10 @@ const TreeView = ({ data }) => {
   return (
     <ul className="space-y-2">
       {data.map((node) => (
-        <TreeItem key={node.Id_Area} node={node} />
+        <TreeItem
+          key={node.Id_Area || `${node.Id_Empresa}-${node.Nombre_Emp}`}
+          node={node}
+        />
       ))}
     </ul>
   );
