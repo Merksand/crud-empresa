@@ -12,6 +12,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
             Nombre_Are: formData.get("nombre"),
             Resolucion_Are: formData.get("resolucion"),
             Fecha_Creacion_Ar: fechaFormateada,
+            Estado_Are: formData.get("estado"),
             Id_Estructura_Ar: formData.get("estructura"),
             Nivel_Are: parseInt(formData.get("nivel"), 10), // Nuevo campo
         };
@@ -80,7 +81,19 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 />
             </div>
 
-         { /*  <div>
+            <div>
+                <label className="block text-sm font-medium mb-1">Nivel</label>
+                <input
+                    type="number"
+                    name="nivel"
+                    defaultValue={area?.Nivel_Are || 1} // Nivel predeterminado
+                    className="w-full p-2 border rounded-lg dark:bg-gray-700"
+                    min="1"
+                    required
+                />
+            </div>
+
+            <div>
                 <label className="block text-sm font-medium mb-1">Estado</label>
                 <select
                     name="estado"
@@ -92,7 +105,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                     <option value="Inactivo">Inactivo</option>
                 </select>
             </div>
-            */}
+
             <div className="flex justify-end gap-2 mt-6">
                 <button
                     type="button"
