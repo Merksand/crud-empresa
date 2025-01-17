@@ -34,38 +34,33 @@ export default function Area() {
     try {
       setLoading(true);
 
-      // Realiza las llamadas paralelas a las APIs
       const [areasRes, estructurasRes] = await Promise.all([
-        fetch("/api/area"), // Endpoint para obtener las áreas básicas
+        fetch("/api/area"), // Endpoint para obtener las áreas
         fetch("/api/estructura"), // Endpoint para obtener las estructuras
       ]);
 
-      // Verificar si las respuestas son válidas
       if (!areasRes.ok || !estructurasRes.ok) {
         throw new Error("Error al obtener los datos de áreas y estructuras");
       }
 
-      // Convertir las respuestas en JSON
       const areasData = await areasRes.json();
       const estructurasData = await estructurasRes.json();
 
-      // Combinar las áreas con las estructuras
       const processedData = areasData.map((area) => {
         const estructura = estructurasData.find(
           (est) => est.Id_Estructura === area.Id_Estructura_Ar
         );
         return {
-          ...area, // Datos básicos del área
-          Resolucion_Est: estructura?.Resolucion_Est || "Sin resolución", // Resolución
+          ...area,
+          Resolucion_Est: estructura
+            ? `${estructura.Nombre_Emp || "Sin Empresa"} - ${estructura.Resolucion_Est}`
+            : "Sin resolución",
         };
       });
+      console.log("Processed data:", processedData);
+      console.log("Estructuras data:", estructurasData);
 
       setEstructura(estructurasData);
-      // setEstructura(43);
-
-      console.log("Estructura Data: ", estructurasData);
-      console.log("Estructura Data id: ", estructurasData.Id_estructura);
-   
       setAreas(processedData);
     } catch (error) {
       console.error("Error al cargar las áreas y estructuras:", error);
@@ -74,10 +69,6 @@ export default function Area() {
       setLoading(false);
     }
   };
-  console.log("Estructura afuera del fetch: ", estructura);
-
-
-
 
   const handleDelete = async (area) => {
     setDeleteModal({ show: true, area });
@@ -138,6 +129,9 @@ export default function Area() {
                   Estructura
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Nivel
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Fecha de Creación
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -157,7 +151,7 @@ export default function Area() {
             <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
               {loading ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-4 text-center">
+                  <td colSpan="7" className="px-6 py-4 text-center">
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
                       <span className="ml-2">Cargando...</span>
@@ -167,7 +161,7 @@ export default function Area() {
               ) : areas.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="6"
+                    colSpan="7"
                     className="px-6 py-4 text-center text-gray-500"
                   >
                     No hay áreas registradas
@@ -178,29 +172,23 @@ export default function Area() {
                   console.log(area)
                   return (
                     <tr key={area.Id_Area} className="hover:bg-slate-500">
-                      <td className="px-6 py-4 text-sm">
-                        {area.Resolucion_Est}
-                      </td>
+                      <td className="px-6 py-4 text-sm">{area.Resolucion_Est}</td>
+
+                      <td className="px-6 py-4 text-sm">{area.Nivel_Are || "-"}</td>
                       <td className="px-6 py-4 text-sm">
                         {area.Fecha_Creacion_Ar
-                          ? new Date(
-                            area.Fecha_Creacion_Ar
-                          ).toLocaleDateString()
+                          ? new Date(area.Fecha_Creacion_Ar).toLocaleDateString()
                           : "-"}
                       </td>
-
                       <td className="px-6 py-4 text-sm">{area.Nombre_Are}</td>
+                      <td className="px-6 py-4 text-sm">{area.Resolucion_Are}</td>
                       <td className="px-6 py-4 text-sm">
-                        {area.Resolucion_Are}
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-
-
                         <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${area.Estado_Are === "Activo"
-                            ? "bg-green-700 text-green-300"
-                            : "bg-red-800   text-red-300"
-                            }`}
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            area.Estado_Are === "Activo"
+                              ? "bg-green-700 text-green-300"
+                              : "bg-red-800 text-red-300"
+                          }`}
                         >
                           {area.Estado_Are}
                         </span>
@@ -223,7 +211,7 @@ export default function Area() {
                         </button>
                       </td>
                     </tr>
-                  );
+                  )
                 })
               )}
             </tbody>
@@ -248,7 +236,7 @@ export default function Area() {
       >
         <AreaForm
           area={areaEditar}
-          estructuras={estructura} // Pasa las estructuras como prop
+          estructuras={estructura}
           onSubmit={async (data) => {
             try {
               console.log("Área data de editar: ", data);
@@ -282,7 +270,7 @@ export default function Area() {
               );
               setIsModalOpen(false);
               setAreaEditar(null);
-              fetchData(); // Actualiza la lista después de guardar
+              fetchData();
             } catch (error) {
               console.error("Error:", error);
               showNotification(
@@ -296,7 +284,6 @@ export default function Area() {
             setAreaEditar(null);
           }}
         />
-
       </Modal>
     </div>
   );

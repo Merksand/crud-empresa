@@ -81,22 +81,12 @@ export default function Sidebar() {
     },
     {
       title: 'Area',
+      path: '/area',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6h12m0 0l-4 4m4-4l-4-4" />
         </svg>
       ),
-      children: [
-        { title: 'Área Principal 1', path: '/area' },
-        { title: 'Área Principal 2', path: '/area/2' },
-        {
-          title: 'Área Principal 3',
-          children: [
-            { title: 'Subárea 3.1', path: '/area/3/1' },
-            { title: 'Subárea 3.2', path: '/area/3/2' },
-          ],
-        },
-      ],
     },
     {
       title: 'Dependencias',
@@ -107,6 +97,28 @@ export default function Sidebar() {
         </svg>
       )
     },
+    {
+      title: 'Tree view',
+      path: '/treeView',
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-6 h-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h8m-8 6h16"
+          />
+        </svg>
+      )
+    }
+    
+    ,
     {
       title: 'Cargo',
       path: '/cargo',

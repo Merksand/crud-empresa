@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(request) {
   try {
     const data = await request.json();
-    const { 
+    const {
       Id_Estructura_Ar,
       Fecha_Creacion_Ar,
       Nombre_Are,
@@ -30,7 +30,7 @@ export async function POST(request) {
       [Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are]
     );
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: 'Área creada correctamente',
       id: result[0][0].insertId 
     }, { status: 201 });

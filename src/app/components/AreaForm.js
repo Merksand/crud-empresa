@@ -1,5 +1,4 @@
 export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) {
-
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -14,16 +13,17 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
             Resolucion_Are: formData.get("resolucion"),
             Fecha_Creacion_Ar: fechaFormateada,
             Estado_Are: formData.get("estado"),
-            Id_Estructura_Ar: formData.get("estructura"),  
+            Id_Estructura_Ar: formData.get("estructura"),
+            Nivel_Are: parseInt(formData.get("nivel"), 10), // Nuevo campo
         };
 
-        console.log("data de areaForm ", data);
+        console.log("Datos enviados desde AreaForm:", data);
 
         if (!data.Fecha_Creacion_Ar) {
             console.error("Error: Fecha de creación no válida.");
             return;
         }
-        
+
         onSubmit(data);
     };
 

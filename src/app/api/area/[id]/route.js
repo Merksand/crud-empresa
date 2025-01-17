@@ -5,7 +5,7 @@ import { pool } from '@/lib/db';
 export async function GET(request, { params }) {
   try {
     const [rows] = await pool.query(
-      'SELECT * FROM TbArea WHERE Id_Area = ?', 
+      'SELECT Id_Area, Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are, Nivel_Are FROM TbArea WHERE Id_Area = ?', 
       [params.id]
     );
     
@@ -31,12 +31,13 @@ export async function PUT(request, { params }) {
       Fecha_Creacion_Ar,  
       Nombre_Are,
       Resolucion_Are,
-      Estado_Are
+      Estado_Are,
+      Nivel_Are // Nuevo campo
     } = data;
 
     const [result] = await pool.query(
-      'UPDATE TbArea SET Id_Estructura_Ar = ?, Fecha_Creacion_Ar = ?, Nombre_Are = ?, Resolucion_Are = ?, Estado_Are = ? WHERE Id_Area = ?',
-      [Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are, params.id]
+      'UPDATE TbArea SET Id_Estructura_Ar = ?, Fecha_Creacion_Ar = ?, Nombre_Are = ?, Resolucion_Are = ?, Estado_Are = ?, Nivel_Are = ? WHERE Id_Area = ?',
+      [Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are, Nivel_Are, params.id]
     );
 
     if (result.affectedRows === 0) {
@@ -55,8 +56,6 @@ export async function PUT(request, { params }) {
 // DELETE - Eliminar un área
 export async function DELETE(request, { params }) {
   try {
-  console.log("DELETE - ID recibido:", params.id);
-
     const [result] = await pool.query(
       'DELETE FROM TbArea WHERE Id_Area = ?',
       [params.id]
@@ -73,4 +72,4 @@ export async function DELETE(request, { params }) {
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-} 
+}
