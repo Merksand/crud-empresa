@@ -57,8 +57,8 @@ export default function Area() {
             : "Sin resolución",
         };
       });
-      console.log("Processed data:", processedData);
-      console.log("Estructuras data:", estructurasData);
+      // console.log("Processed data:", processedData);
+      // console.log("Estructuras data:", estructurasData);
 
       setEstructura(estructurasData);
       setAreas(processedData);
@@ -169,7 +169,7 @@ export default function Area() {
                 </tr>
               ) : (
                 areas.map((area) => {
-                  console.log(area)
+                  // console.log(area)
                   return (
                     <tr key={area.Id_Area} className="hover:bg-slate-500">
                       <td className="px-6 py-4 text-sm">{area.Resolucion_Est}</td>
@@ -238,8 +238,9 @@ export default function Area() {
           area={areaEditar}
           estructuras={estructura}
           onSubmit={async (data) => {
+            // console.log(data)
+            console.log("DATA : ", data);
             try {
-              console.log("Área data de editar: ", data);
               let response;
               if (areaEditar) {
                 response = await fetch(`/api/area/${areaEditar.Id_Area}`, {

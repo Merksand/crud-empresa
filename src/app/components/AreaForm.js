@@ -12,7 +12,6 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
             Nombre_Are: formData.get("nombre"),
             Resolucion_Are: formData.get("resolucion"),
             Fecha_Creacion_Ar: fechaFormateada,
-            Estado_Are: formData.get("estado"),
             Id_Estructura_Ar: formData.get("estructura"),
             Nivel_Are: parseInt(formData.get("nivel"), 10), // Nuevo campo
         };

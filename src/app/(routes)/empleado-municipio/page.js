@@ -28,7 +28,7 @@ export default function Empleado() {
       setLoading(true);
       const [empleadosRes, municipiosRes] = await Promise.all([
         fetch('/api/empleado-municipio'),
-        fetch('/api/municipio'),
+        fetch('/api/municipio2'),
       ]);
 
       const [empleadosData, municipiosData] = await Promise.all([
