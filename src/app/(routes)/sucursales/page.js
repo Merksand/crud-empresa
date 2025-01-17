@@ -27,7 +27,7 @@ export default function Sucursales() {
 
   const fetchMunicipios = async () => {
     try {
-      const response = await fetch('/api/municipio'); 
+      const response = await fetch('/api/municipio2'); 
       const data = await response.json();
       setMunicipios(data);
     } catch (error) {
