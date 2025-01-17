@@ -1,5 +1,4 @@
 ---CARGO
-
 --GET(ID)
 DELIMITER //
 CREATE PROCEDURE GetCargoById(
@@ -67,5 +66,70 @@ BEGIN
     UPDATE TbCargo
     SET Estado_Dep = 'Inactivo'
     WHERE Id_Cargo = p_Id_Cargo;
+END //
+DELIMITER ;
+
+
+
+--ESTRUCTURA
+-- Procedimiento para insertar una nueva estructura
+DELIMITER //
+CREATE PROCEDURE InsertEstructura (
+    IN p_Id_Empresa INT,
+    IN p_Fecha_Creacion_Est DATE,
+    IN p_Resolucion_Est VARCHAR(50)
+)
+BEGIN
+    INSERT INTO TbEstructura (Id_Empresa, Fecha_Creacion_Est, Resolucion_Est, Estado_Est)
+    VALUES (p_Id_Empresa, p_Fecha_Creacion_Est, p_Resolucion_Est, 'Activo');
+END //
+DELIMITER ;
+
+-- Procedimiento para actualizar una estructura existente
+DELIMITER //
+CREATE PROCEDURE UpdateEstructura (
+    IN p_Id_Estructura INT,
+    IN p_Id_Empresa INT,
+    IN p_Fecha_Creacion_Est DATE,
+    IN p_Resolucion_Est VARCHAR(50)
+)
+BEGIN
+    UPDATE TbEstructura
+    SET Id_Empresa = p_Id_Empresa,
+        Fecha_Creacion_Est = p_Fecha_Creacion_Est,
+        Resolucion_Est = p_Resolucion_Est
+    WHERE Id_Estructura = p_Id_Estructura;
+END //
+DELIMITER ;
+
+-- Procedimiento para eliminar una estructura (cambio lógico a inactivo)
+DELIMITER //
+CREATE PROCEDURE DeleteEstructura (
+    IN p_Id_Estructura INT
+)
+BEGIN
+    UPDATE TbEstructura
+    SET Estado_Est = 'Inactivo'
+    WHERE Id_Estructura = p_Id_Estructura;
+END //
+DELIMITER ;
+
+-- Procedimiento para obtener todas las estructuras activas
+DELIMITER //
+CREATE PROCEDURE GetActiveEstructuras ()
+BEGIN
+    SELECT * FROM TbEstructura
+    WHERE Estado_Est = 'Activo';
+END //
+DELIMITER ;
+
+-- Procedimiento para obtener una estructura específica por ID
+DELIMITER //
+CREATE PROCEDURE GetEstructuraById (
+    IN p_Id_Estructura INT
+)
+BEGIN
+    SELECT * FROM TbEstructura
+    WHERE Id_Estructura = p_Id_Estructura;
 END //
 DELIMITER ;

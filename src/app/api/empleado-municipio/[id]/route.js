@@ -122,10 +122,7 @@ export async function DELETE(request, { params }) {
 
     return NextResponse.json({ message: 'Empleado eliminado correctamente' });
   } catch (error) {
-<<<<<<< HEAD
-   /// console.error('Error en DELETE /api/empleados/[id]:', error);
-=======
->>>>>>> 337df1cdc70d5b93dbd977aae95076997d7c3db7
+    console.error('Error en DELETE /api/empleados/[id]:', error);
     return NextResponse.json(
       { error: 'Error al eliminar el empleado: ' + error.message },
       { status: 500 }
