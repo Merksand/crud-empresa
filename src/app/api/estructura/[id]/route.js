@@ -3,36 +3,38 @@ import { pool } from '@/lib/db';
 
 export async function GET(request, { params }) {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbEstructura WHERE Id_Estructura = ?', [params.id]);
-    
-    if (rows.length === 0) {
+    // Llamada al procedimiento almacenado GetEstructuraById
+    const [rows] = await pool.query('CALL GetEstructuraById(?)', [params.id]);
+
+    if (rows[0].length === 0) {
       return NextResponse.json({ error: 'Estructura no encontrada' }, { status: 404 });
     }
-    
-    return NextResponse.json(rows[0]);
+
+    return NextResponse.json(rows[0][0]); // Extraer el primer registro del resultado
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
+
 export async function PUT(request, { params }) {
   try {
     // Obtener los datos enviados desde el cliente
     const data = await request.json();
-    const { Id_Empresa, Fecha_Creacion_Est, Resolucion_Est, Estado_Est } = data;
+    const { Id_Empresa, Fecha_Creacion_Est, Resolucion_Est } = data;
 
     // Validar que los datos necesarios estén presentes
-    if (!Id_Empresa || !Fecha_Creacion_Est || !Resolucion_Est || !Estado_Est) {
+    if (!Id_Empresa || !Fecha_Creacion_Est || !Resolucion_Est) {
       return NextResponse.json(
         { error: "Datos incompletos para actualizar la estructura" },
         { status: 400 }
       );
     }
 
-    // Realizar la consulta de actualización
+    // Llamada al procedimiento almacenado UpdateEstructura
     const [result] = await pool.query(
-      "UPDATE TbEstructura SET Id_Empresa = ?, Fecha_Creacion_Est = ?, Resolucion_Est = ?, Estado_Est = ? WHERE Id_Estructura = ?",
-      [Id_Empresa, Fecha_Creacion_Est, Resolucion_Est, Estado_Est, params.id]
+      "CALL UpdateEstructura(?, ?, ?, ?)",
+      [params.id, Id_Empresa, Fecha_Creacion_Est, Resolucion_Est]
     );
 
     // Verificar si la estructura fue encontrada
@@ -58,8 +60,6 @@ export async function PUT(request, { params }) {
 
 
 
-
-
 export async function DELETE(request, { params }) {
   try {
     const id = parseInt(params.id);
@@ -82,14 +82,15 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    // Si no hay relaciones, eliminar la estructura
-    const [result] = await pool.query('DELETE FROM TbEstructura WHERE Id_Estructura = ?', [id]);
+    // Llamar al procedimiento almacenado DeleteEstructura
+    const [result] = await pool.query('CALL DeleteEstructura(?)', [id]);
 
+    // Verificar si la estructura fue encontrada y actualizada
     if (result.affectedRows === 0) {
       return NextResponse.json({ error: 'Estructura no encontrada' }, { status: 404 });
     }
 
-    return NextResponse.json({ message: 'Estructura eliminada correctamente' });
+    return NextResponse.json({ message: 'Estructura dada de baja correctamente' });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
