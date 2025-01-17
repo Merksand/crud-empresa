@@ -4,14 +4,24 @@ import { pool } from "@/lib/db";
 // GET - Obtener todas las estructuras
 export async function GET() {
   try {
-    // Llamada al procedimiento almacenado GetActiveEstructuras
-    const [rows] = await pool.query("CALL GetActiveEstructuras()");
-    return NextResponse.json(rows[0] || []); // Obtener el primer conjunto de resultados
+    const [rows] = await pool.query(`
+      SELECT 
+        e.Id_Estructura, 
+        e.Resolucion_Est, 
+        e.Estado_Est, 
+        e.Fecha_Creacion_Est, 
+        e.Id_Empresa, 
+        emp.Nombre_Emp
+      FROM 
+        TbEstructura e
+        LEFT JOIN TbEmpresa emp ON e.Id_Empresa = emp.Id_Empresa
+    `);
+
+    return NextResponse.json(rows || []);
   } catch (error) {
-    console.error("Error al obtener estructuras activas:", error);
+    console.error("Error al obtener estructuras:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
 }
 
 

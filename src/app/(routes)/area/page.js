@@ -57,6 +57,7 @@ export default function Area() {
             : "Sin resolución",
         };
       });
+      
       console.log("Processed data:", processedData);
       console.log("Estructuras data:", estructurasData);
 
