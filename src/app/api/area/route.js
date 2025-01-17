@@ -4,12 +4,14 @@ import { pool } from '@/lib/db';
 // GET - Obtener todas las áreas
 export async function GET() {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbArea');
-    return NextResponse.json(rows);
+    // Llamada al procedimiento almacenado GetActiveAreas
+    const [rows] = await pool.query('CALL GetActiveAreas()');
+    return NextResponse.json(rows[0]); // Obtener el primer conjunto de resultados
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
 
 // POST - Crear nueva área
 export async function POST(request) {
@@ -19,20 +21,20 @@ export async function POST(request) {
       Id_Estructura_Ar,
       Fecha_Creacion_Ar,
       Nombre_Are,
-      Resolucion_Are,
-      Estado_Are
+      Resolucion_Are
     } = data;
 
+    // Llamada al procedimiento almacenado InsertArea
     const [result] = await pool.query(
-      'INSERT INTO TbArea (Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are) VALUES (?, ?, ?, ?, ?)',
-      [Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are]
+      'CALL InsertArea(?, ?, ?, ?)',
+      [Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are]
     );
 
     return NextResponse.json({ 
       message: 'Área creada correctamente',
-      id: result.insertId 
+      id: result[0][0].insertId 
     }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-} 
+}

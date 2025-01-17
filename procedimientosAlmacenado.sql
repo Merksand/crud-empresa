@@ -136,6 +136,8 @@ END //
 DELIMITER ;
 
 
+--AREA
+
 -- Procedimiento para insertar un nuevo área
 DELIMITER //
 CREATE PROCEDURE InsertArea (
