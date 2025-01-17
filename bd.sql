@@ -114,7 +114,7 @@ CREATE TABLE TbEmpresaSucursal (
     Id_Empresa_ES                    INT,
     Id_Sucursal_ES                   INT,
     Fecha_Apertura_ES                DATE,
-    Fecha_Cierre_ES                  DATE,
+    -- Fecha_Cierre_ES                  DATE,
     Estado_ES                        VARCHAR(10),
     FOREIGN KEY (Id_Empresa_ES)      REFERENCES TbEmpresa(Id_Empresa),
     FOREIGN KEY (Id_Sucursal_ES)     REFERENCES TbSucursal(Id_Sucursal)
@@ -147,6 +147,7 @@ CREATE TABLE TbArea (
     Nombre_Are                    VARCHAR(50),  
     Resolucion_Are                VARCHAR(50),
     Estado_Are                    VARCHAR(10),
+    Nivel_Are					  VARCHAR(10),
     FOREIGN KEY (Id_Estructura_Ar)      REFERENCES TbEstructura(Id_Estructura)
 );
 
@@ -198,14 +199,3 @@ CREATE TABLE TbEmpleadoCargo (
 
 );
 
-
-/*SET FOREIGN_KEY_CHECKS = 0;
-
-
-truncate table TbEmpresa;
-truncate table TbSucursal;
-truncate table TbEmpresaSucursal;
-truncate table TbInformacionEmpresa;
-
-SET FOREIGN_KEY_CHECKS = 1;
-*/
