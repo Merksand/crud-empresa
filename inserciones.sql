@@ -66,10 +66,23 @@ VALUES
 
 -- Insertar datos en TbProvincia
 -- Departamento de Santa Cruz
-INSERT INTO TbProvincia (Id_Departamento_Pro, Nombre_Pro, Estado_Pro) VALUES
+INSERT INTO TbProvincia (Id_Departamento_Pro, Nombre_Pro, Estado_Pro) 
+VALUES
 (1, 'Andrés Ibáñez', 'Activo'),
 (1, 'Ignacio Warnes', 'Activo'),
-(1, 'Sara', 'Activo');
+(1, 'Sara', 'Activo'),
+(1, 'Cordillera', 'Activo'),
+(1, 'Chiquitos', 'Activo'),
+(1, 'Velasco', 'Activo'),
+(1, 'Ñuflo de Chávez', 'Activo'),
+(1, 'Obispo Santistevan', 'Activo'),
+(1, 'Ichilo', 'Activo'),
+(1, 'Guarayos', 'Activo'),
+(1, 'Vallegrande', 'Activo'),
+(1, 'Florida', 'Activo'),
+(1, 'Manuel María Caballero', 'Activo'),
+(1, 'Germán Busch', 'Activo'),
+(1, 'Ángel Sandoval', 'Activo');
 
 -- Departamento de La Paz
 INSERT INTO TbProvincia (Id_Departamento_Pro, Nombre_Pro, Estado_Pro) VALUES
@@ -138,9 +151,106 @@ VALUES
 
 -- Insertar datos en TbMunicipio
 -- Provincia Andrés Ibáñez, Departamento de Santa Cruz
+-- Provincia Andrés Ibáñez (Id_Provincia_Mun = 1)
 INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
 (1, 'Santa Cruz de la Sierra', 'Activo'),
-(1, 'Cotoca', 'Activo');
+(1, 'Cotoca', 'Activo'),
+(1, 'El Torno', 'Activo'),
+(1, 'La Guardia', 'Activo'),
+(1, 'Porongo', 'Activo');
+
+-- Provincia Ichilo (Id_Provincia_Mun = 2)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(2, 'Buena Vista', 'Activo'),
+(2, 'San Carlos', 'Activo'),
+(2, 'Yapacaní', 'Activo'),
+(2, 'San Juan de Yapacaní', 'Activo');
+
+-- Provincia Sara (Id_Provincia_Mun = 3)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(3, 'Portachuelo', 'Activo'),
+(3, 'Colpa Bélgica', 'Activo'),
+(3, 'Santa Rosa del Sara', 'Activo');
+
+-- Provincia Cordillera (Id_Provincia_Mun = 4)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(4, 'Lagunillas', 'Activo'),
+(4, 'Camiri', 'Activo'),
+(4, 'Charagua', 'Activo'),
+(4, 'Cabezas', 'Activo'),
+(4, 'Gutiérrez', 'Activo'),
+(4, 'Boyuibe', 'Activo'),
+(4, 'Cuevo', 'Activo');
+
+-- Provincia Chiquitos (Id_Provincia_Mun = 5)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(5, 'San José de Chiquitos', 'Activo'),
+(5, 'Pailón', 'Activo'),
+(5, 'Roboré', 'Activo');
+
+-- Provincia Velasco (Id_Provincia_Mun = 6)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(6, 'San Ignacio de Velasco', 'Activo'),
+(6, 'San Miguel de Velasco', 'Activo'),
+(6, 'San Rafael de Velasco', 'Activo');
+
+-- Provincia Ñuflo de Chávez (Id_Provincia_Mun = 7)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(7, 'Concepción', 'Activo'),
+(7, 'San Javier', 'Activo'),
+(7, 'San Ramón', 'Activo'),
+(7, 'San Julián', 'Activo'),
+(7, 'San Antonio de Lomerío', 'Activo');
+
+-- Provincia Obispo Santistevan (Id_Provincia_Mun = 8)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(8, 'Montero', 'Activo'),
+(8, 'Mineros', 'Activo'),
+(8, 'General Saavedra', 'Activo'),
+(8, 'San Pedro', 'Activo'),
+(8, 'Fernández Alonso', 'Activo');
+
+-- Provincia Guarayos (Id_Provincia_Mun = 9)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(9, 'Ascensión de Guarayos', 'Activo'),
+(9, 'El Puente', 'Activo'),
+(9, 'Urubichá', 'Activo');
+
+-- Provincia Germán Busch (Id_Provincia_Mun = 10)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(10, 'Puerto Suárez', 'Activo'),
+(10, 'Puerto Quijarro', 'Activo'),
+(10, 'El Carmen Rivero Tórrez', 'Activo');
+
+-- Provincia Florida (Id_Provincia_Mun = 11)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(11, 'Samaipata', 'Activo'),
+(11, 'Pampa Grande', 'Activo'),
+(11, 'Mairana', 'Activo'),
+(11, 'Quirusillas', 'Activo');
+
+-- Provincia Vallegrande (Id_Provincia_Mun = 12)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(12, 'Vallegrande', 'Activo'),
+(12, 'Moro Moro', 'Activo'),
+(12, 'Pucará', 'Activo'),
+(12, 'Postrer Valle', 'Activo'),
+(12, 'Trigal', 'Activo');
+
+-- Provincia Manuel María Caballero (Id_Provincia_Mun = 13)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(13, 'Comarapa', 'Activo'),
+(13, 'Saipina', 'Activo');
+
+-- Provincia Ángel Sandoval (Id_Provincia_Mun = 14)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(14, 'San Matías', 'Activo');
+
+-- Provincia Ignacio Warnes (Id_Provincia_Mun = 15)
+INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
+(15, 'Warnes', 'Activo'),
+(15, 'Okinawa Uno', 'Activo');
+
 
 -- Provincia Ignacio Warnes, Departamento de Santa Cruz
 INSERT INTO TbMunicipio (Id_Provincia_Mun, Nombre_Mun, Estado_Mun) VALUES
@@ -307,14 +417,14 @@ VALUES
 -- Insertar datos en TbEmpresa
 INSERT INTO TbEmpresa (Id_InformacionEmpresa_Emp, Nombre_Emp, Sede_Emp, Fecha_Fundacion_Emp, Tipo_Emp, Idioma_Emp, Estado_Emp)
 VALUES
-(1, 'Empresa Tech', 2, '2001-05-20', 'Tecnología', 'Español', 'Activo'),
-(2, 'Empresa Agro', 3, '1998-08-15', 'Agrícola', 'Español', 'Activo'),
-(3, 'Empresa Educativa', 5, '2010-03-10', 'Educación', 'Inglés', 'Inactivo');
+(1, 'Empresa Tech', 2, '2001-05-20', 'S.A.', 'Español', 'Activo'),
+(2, 'Empresa Agro', 3, '1998-08-15', 'S.L.', 'Español', 'Activo'),
+(3, 'Empresa Educativa', 5, '2010-03-10', 'Autónomo', 'Inglés', 'Inactivo');
 
 -- Insertar datos en TbEmpresaSucursal
-INSERT INTO TbEmpresaSucursal (Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Fecha_Cierre_ES, Estado_ES)
+INSERT INTO TbEmpresaSucursal (Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Estado_ES)
 VALUES
-    (1, 1, '2015-01-01', '2022-05-01', 'Activo');
+    (1, 1, '2015-01-01', 'Activo');
 
 
 -- Insertar datos en TbInformacionEmpresa

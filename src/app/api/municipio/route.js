@@ -28,7 +28,7 @@ export async function GET(request) {
         SELECT m.Id_Municipio, m.Nombre_Mun
         FROM TbMunicipio m
         JOIN TbSucursal s ON m.Id_Municipio = s.Id_Municipio_Suc
-        WHERE s.Id_Sucursal = ?
+        WHERE s.Id_Sucursal = ? order by m.Nombre_Mun
       `;
       params = [sucursalId];
     }

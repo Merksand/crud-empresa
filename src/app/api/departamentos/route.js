@@ -11,7 +11,7 @@ export async function GET(request) {
     }
 
     const [rows] = await pool.query(
-      'SELECT Id_Departamento, Nombre_Dep FROM TbDepartamento WHERE Id_Pais_Dep = ?',
+      'SELECT Id_Departamento, Nombre_Dep FROM TbDepartamento WHERE Id_Pais_Dep = ? order by Nombre_Dep',
       [paisId]
     );
 
