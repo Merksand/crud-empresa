@@ -57,19 +57,20 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     const [result] = await pool.query(
-      'DELETE FROM TbArea WHERE Id_Area = ?',
+      'UPDATE TbArea SET Estado_Are = "Inactivo" WHERE Id_Area = ?',
       [params.id]
     );
 
     if (result.affectedRows === 0) {
       return NextResponse.json(
-        { error: 'Área no encontrada' }, 
+        { error: 'Área no encontrada' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ message: 'Área eliminada correctamente' });
+    return NextResponse.json({ message: 'Área dada de baja correctamente' });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
