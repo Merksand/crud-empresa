@@ -23,9 +23,9 @@ export async function POST(request) {
     const { Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES } = data;
 
     const [result] = await pool.query(
-      `INSERT INTO TbEmpresaSucursal (Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES)
-       VALUES (?, ?, ?)`,
-      [Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES]
+      `INSERT INTO TbEmpresaSucursal (Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, Estado_ES)
+       VALUES (?, ?, ?, ?)`,
+      [Id_Empresa_ES, Id_Sucursal_ES, Fecha_Apertura_ES, 'Activo']
     );
 
     return NextResponse.json({ message: 'Relación creada correctamente', id: result.insertId });
