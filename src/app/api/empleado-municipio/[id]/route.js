@@ -15,8 +15,7 @@ export async function PUT(request, { params }) {
       Sexo_Emp,
       Direccion_Emp,
       Estado_Civil_Emp,
-      FDN_Emp,
-      Estado_Emp
+      FDN_Emp
     } = data;
 
     // Realizar la consulta de actualización
@@ -30,8 +29,7 @@ export async function PUT(request, { params }) {
            Sexo_Emp = ?, 
            Direccion_Emp = ?, 
            Estado_Civil_Emp = ?, 
-           FDN_Emp = ?, 
-           Estado_Emp = ? 
+           FDN_Emp = ?
        WHERE Id_Empleado = ?`,
       [
         Id_Municipio_Emp,
@@ -43,7 +41,6 @@ export async function PUT(request, { params }) {
         Direccion_Emp,
         Estado_Civil_Emp,
         FDN_Emp,
-        Estado_Emp,
         params.id
       ]
     );
@@ -81,11 +78,7 @@ export async function GET(request, { params }) {
   }
 }
 
-
-
-
-
-
+/// DELETE - Marcar empleado como "Inactivo" en lugar de eliminarlo
 export async function DELETE(request, { params }) {
   try {
     const id = parseInt(params.id);
@@ -105,13 +98,16 @@ export async function DELETE(request, { params }) {
 
     if (relaciones[0].count > 0) {
       return NextResponse.json(
-      { error: 'No se puede eliminar el empleado porque tiene relaciones en EmpleadoCargo.' },
+        { error: 'No se puede eliminar el empleado porque tiene relaciones en EmpleadoCargo.' },
         { status: 400 }
       );
     }
 
-    // Intentar eliminar el empleado
-    const [result] = await pool.query('DELETE FROM TbEmpleado WHERE Id_Empleado = ?', [id]);
+    // Actualizar el estado del empleado a "Inactivo"
+    const [result] = await pool.query(
+      'UPDATE TbEmpleado SET Estado_Emp = "Inactivo" WHERE Id_Empleado = ?',
+      [id]
+    );
 
     if (result.affectedRows === 0) {
       return NextResponse.json(
@@ -120,11 +116,11 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    return NextResponse.json({ message: 'Empleado eliminado correctamente' });
+    return NextResponse.json({ message: 'Empleado marcado como Inactivo correctamente' });
   } catch (error) {
     console.error('Error en DELETE /api/empleados/[id]:', error);
     return NextResponse.json(
-      { error: 'Error al eliminar el empleado: ' + error.message },
+      { error: 'Error al marcar como inactivo el empleado: ' + error.message },
       { status: 500 }
     );
   }

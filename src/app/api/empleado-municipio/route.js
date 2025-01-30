@@ -1,17 +1,24 @@
 import { NextResponse } from 'next/server';
 import { pool } from '../../../lib/db';
 
-// GET - Obtener todos los empleados
+// GET - Obtener todos los empleados activos
 export async function GET() {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbEmpleado');
-    return NextResponse.json(rows);
+    const [rows] = await pool.query(`
+      SELECT * 
+      FROM TbEmpleado 
+      WHERE Estado_Emp = 'Activo' -- Filtra solo los empleados activos
+    `);
+
+    return NextResponse.json(rows || []);
   } catch (error) {
+    console.error('Error al obtener empleados activos:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-// POST - Crear un nuevo empleado
+
+// POST - Crear un nuevo empleado 
 export async function POST(request) {
   try {
     const data = await request.json();
@@ -24,10 +31,8 @@ export async function POST(request) {
       Sexo_Emp,
       Direccion_Emp,
       Estado_Civil_Emp,
-      FDN_Emp,
-      Estado_Emp,
+      FDN_Emp
     } = data;
-    /////VERIFICAR
 
     // Verificar si ya existe un empleado con el mismo CI
     const [existingRows] = await pool.query(
@@ -42,11 +47,11 @@ export async function POST(request) {
       );
     }
 
-    // Insertar el nuevo empleado
+    // Insertar el nuevo empleado con Estado_Emp fijo en "Activo"
     const [result] = await pool.query(
       `INSERT INTO TbEmpleado 
        (Id_Municipio_Emp, CI_Emp, Nombre_Emp, Paterno_Emp, Materno_Emp, Sexo_Emp, Direccion_Emp, Estado_Civil_Emp, FDN_Emp, Estado_Emp) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Activo')`, // Estado_Emp siempre será "Activo"
       [
         Id_Municipio_Emp,
         CI_Emp,
@@ -56,8 +61,7 @@ export async function POST(request) {
         Sexo_Emp,
         Direccion_Emp,
         Estado_Civil_Emp,
-        FDN_Emp,
-        Estado_Emp || 'Activo',
+        FDN_Emp
       ]
     );
 
@@ -74,12 +78,13 @@ export async function POST(request) {
           Direccion_Emp,
           Estado_Civil_Emp,
           FDN_Emp,
-          Estado_Emp: Estado_Emp || 'Activo',
-        },
+          Estado_Emp: 'Activo' // Estado fijo en la respuesta
+        }
       },
       { status: 201 }
     );
   } catch (error) {
+    console.error('Error al crear el empleado:', error);
     return NextResponse.json(
       {
         error: error.message || 'Error al crear el empleado',

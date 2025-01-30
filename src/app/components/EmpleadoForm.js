@@ -179,7 +179,7 @@ export default function EmpleadoForm({ empleado, municipios, onSubmit, onClose }
               required
             />
           </div>
-          <div>
+          {/*<div>
             <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
               Estado
             </label>
@@ -193,6 +193,7 @@ export default function EmpleadoForm({ empleado, municipios, onSubmit, onClose }
               <option value="Inactivo">Inactivo</option>
             </select>
           </div>
+         */ }
         </div>
 
         {/* Botones */}
