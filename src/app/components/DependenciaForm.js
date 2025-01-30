@@ -127,7 +127,7 @@ export default function DependenciaForm({ dependencia, areas, onSubmit, onClose 
         />
       </div>
 
-      {/* Campo para el estado */}
+      {/* Campo para el estado 
       <div>
         <label className="block text-sm font-medium mb-1">Estado</label>
         <select
@@ -141,7 +141,7 @@ export default function DependenciaForm({ dependencia, areas, onSubmit, onClose 
           <option value="Inactivo">Inactivo</option>
         </select>
       </div>
-
+*/}
       {/* Botones para cancelar o guardar */}
       <div className="flex justify-end gap-2 mt-6">
         <button

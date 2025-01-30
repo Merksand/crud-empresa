@@ -74,11 +74,14 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE - Eliminar una dependencia
+
+// DELETE (eliminación lógica) - Marcar una dependencia como "Inactivo"
 export async function DELETE(request, { params }) {
   try {
     const [result] = await pool.query(
-      'DELETE FROM TbDependencia WHERE Id_Dependencia = ?',
+      `UPDATE TbDependencia 
+       SET Estado_Dep = 'Inactivo' 
+       WHERE Id_Dependencia = ?`,
       [params.id]
     );
 
@@ -86,9 +89,10 @@ export async function DELETE(request, { params }) {
       return NextResponse.json({ error: 'Dependencia no encontrada' }, { status: 404 });
     }
 
-    return NextResponse.json({ message: 'Dependencia eliminada correctamente' });
+    return NextResponse.json({ message: 'Dependencia marcada como Inactivo correctamente' });
   } catch (error) {
-    console.error('Error al eliminar dependencia:', error);
+    console.error('Error al cambiar estado de dependencia:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { pool } from '@/lib/db';
 
-// GET - Obtener todas las dependencias
+// GET - Obtener todas las dependencias activas
 export async function GET() {
   try {
     const [rows] = await pool.query(`
@@ -17,16 +17,18 @@ export async function GET() {
       FROM TbDependencia d
       LEFT JOIN TbArea ap ON d.Id_Area_Padre_Dep = ap.Id_Area
       LEFT JOIN TbArea ah ON d.Id_Area_Hijo_Dep = ah.Id_Area
+      WHERE d.Estado_Dep = 'Activo'  -- Filtra solo las dependencias activas
     `);
 
     return NextResponse.json(rows || []);
   } catch (error) {
-    console.error('Error al obtener dependencias:', error);
+    console.error('Error al obtener dependencias activas:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-// POST - Crear una nueva dependencia
+
+// POST - Crear una nueva dependencia con Estado_Dep siempre "Activo"
 export async function POST(request) {
   try {
     const data = await request.json();
@@ -35,18 +37,16 @@ export async function POST(request) {
       Id_Area_Hijo_Dep,
       Fecha_Asignacion_Dep,
       Resolucion_Are_Dep,
-      Estado_Dep,
     } = data;
 
     const [result] = await pool.query(
       `INSERT INTO TbDependencia (Id_Area_Padre_Dep, Id_Area_Hijo_Dep, Fecha_Asignacion_Dep, Resolucion_Are_Dep, Estado_Dep)
-       VALUES (?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, 'Activo')`, // Estado_Dep se fija como "Activo"
       [
         Id_Area_Padre_Dep,
         Id_Area_Hijo_Dep,
         Fecha_Asignacion_Dep,
-        Resolucion_Are_Dep,
-        Estado_Dep,
+        Resolucion_Are_Dep
       ]
     );
 
