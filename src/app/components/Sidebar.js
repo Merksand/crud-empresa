@@ -161,14 +161,14 @@ export default function Sidebar() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`fixed top-4 z-50 transition-all duration-300 ${isOpen ? 'left-60' : 'left-4'
-          } lg:hover:bg-gray-100 dark:lg:hover:bg-gray-700 p-2 rounded-lg `}
+          } lg:hover:bg-gray-100 dark:bg-gray-800 dark:lg:hover:bg-gray-700 p-2 rounded-lg `}
       >
         {isOpen ? (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
           </svg>
         ) : (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
           </svg>
         )}
@@ -177,10 +177,10 @@ export default function Sidebar() {
       {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-16'
-          } z-40 `}
+          } z-40`}
       >
 
-        <nav className={`flex flex-col h-full ${darkMode == true ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+        <nav className={`flex flex-col h-full ${darkMode == true ? 'bg-gray-800 text-white' : 'bg-white text-black'} `}>
           <div className="p-4 border-b border-gray-200 dark:border-gray-700">
             <h1 className={`text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent transition-opacity ${!isOpen && 'opacity-0'}`}>
               Gestión Empresarial
@@ -225,7 +225,7 @@ export default function Sidebar() {
           </div>
 
 
-          <ul className="flex-1 py-4 space-y-1 overflow-y-auto">
+          <ul className="flex-1 py-4 space-y-1  ">
             {menuItems.map((item, index) => (
               <li key={index} className="px-2 select-none">
                 {item.children ? (
