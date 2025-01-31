@@ -3,9 +3,9 @@ import Link from 'next/link'
 
 export default function NotFound() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-500 to-purple-700 text-white">
-      <div className="text-center px-6 py-8 md:px-12 ">
-        <h1 className="text-[21rem] font-bold animate-pulse">404</h1>
+    <div className="h-screen flex items-center justify-center  bg-gradient-to-br from-indigo-500 to-purple-700 text-white ">
+      <div className="text-center px-6 md:px-12 ">
+        <h1 className="text-[19rem] font-bold animate-pulse">404</h1>
         <p className="text-2xl md:text-4xl font-semibold mt-4">
           ¡Vaya! La página que buscas no existe.
         </p>
@@ -21,7 +21,7 @@ export default function NotFound() {
           </Link>
         </div>
         <div className="mt-12">
-         
+
         </div>
       </div>
     </div>

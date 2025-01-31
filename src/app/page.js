@@ -6,9 +6,14 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/empresas');
-  }, [router]);
-
+    // Redirigir al login si no hay sesión, de lo contrario al dashboard
+    const user = localStorage.getItem("session"); // Puedes usar AuthContext también
+    if (user) {
+        router.push("/dashboard");
+    } else {
+        router.push("/auth/login");
+    }
+}, []);
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="text-center">

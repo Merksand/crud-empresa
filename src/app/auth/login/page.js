@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import '@/app/globals.css'
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -32,7 +33,7 @@ export default function LoginPage() {
       }
 
       // Redirige al dashboard después de un inicio de sesión exitoso
-      router.push("/personas");
+      router.push("/clientes");
     } catch (err) {
       console.log(err)
       setError(err.message);
@@ -42,7 +43,7 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6">Iniciar Sesión</h1>
+        <h1 className="text-2xl text-blue-500 font-bold mb-6 text-center">Iniciar Sesión</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleLogin}>
           <div className="mb-4">
@@ -54,7 +55,7 @@ export default function LoginPage() {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="border rounded w-full p-2"
+              className="border rounded w-full p-2 text-black"
               placeholder="Ingrese su usuario"
               required
             />
@@ -68,7 +69,7 @@ export default function LoginPage() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="border rounded w-full p-2"
+              className="border rounded w-full p-2 text-black"
               placeholder="Ingrese su contraseña"
               required
             />

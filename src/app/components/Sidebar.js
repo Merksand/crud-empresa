@@ -36,7 +36,7 @@ export default function Sidebar() {
   const menuItems = [
     {
       title: 'Empresas',
-      path: '/empresas',
+      path: '/clientes/empresas',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -45,7 +45,7 @@ export default function Sidebar() {
     },
     {
       title: 'Sucursales',
-      path: '/sucursales',
+      path: '/clientes/sucursales',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -54,7 +54,7 @@ export default function Sidebar() {
     },
     {
       title: 'Empresa-Sucursal',
-      path: '/empresa-sucursal',
+      path: '/clientes/empresa-sucursal',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
@@ -63,7 +63,7 @@ export default function Sidebar() {
     },
     {
       title: 'Información Empresa',
-      path: '/informacion-empresa',
+      path: '/clientes/informacion-empresa',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -72,7 +72,7 @@ export default function Sidebar() {
     },
     {
       title: 'Estructuras',
-      path: '/estructura',
+      path: '/clientes/estructura',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
@@ -81,7 +81,7 @@ export default function Sidebar() {
     },
     {
       title: 'Area',
-      path: '/area',
+      path: '/clientes/area',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6h12m0 0l-4 4m4-4l-4-4" />
@@ -90,7 +90,7 @@ export default function Sidebar() {
     },
     {
       title: 'Dependencias',
-      path: '/dependencia',
+      path: '/clientes/dependencia',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
@@ -99,7 +99,7 @@ export default function Sidebar() {
     },
     {
       title: 'Tree view',
-      path: '/treeView',
+      path: '/clientes/treeView',
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +121,7 @@ export default function Sidebar() {
     ,
     {
       title: 'Cargo',
-      path: '/cargo',
+      path: '/clientes/cargo',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
@@ -130,7 +130,7 @@ export default function Sidebar() {
     },
     {
       title: 'Empleados',
-      path: '/empleado-municipio',
+      path: '/clientes/empleado-municipio',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2H5zM16 11a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -139,7 +139,7 @@ export default function Sidebar() {
     },
     {
       title: 'Empleado-Cargo',
-      path: '/empleado-cargo',
+      path: '/clientes/empleado-cargo',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
