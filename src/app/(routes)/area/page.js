@@ -57,7 +57,7 @@ export default function Area() {
             : "Sin resolución",
         };
       });
-      
+
       console.log("Processed data:", processedData);
       console.log("Estructuras data:", estructurasData);
 
@@ -185,11 +185,10 @@ export default function Area() {
                       <td className="px-6 py-4 text-sm">{area.Resolucion_Are}</td>
                       <td className="px-6 py-4 text-sm">
                         <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            area.Estado_Are === "Activo"
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${area.Estado_Are === "Activo"
                               ? "bg-green-700 text-green-300"
                               : "bg-red-800 text-red-300"
-                          }`}
+                            }`}
                         >
                           {area.Estado_Are}
                         </span>
