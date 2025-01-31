@@ -86,7 +86,18 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 />
             </div>
 
-            {/* Campo para el estado */}
+            <div>
+                <label className="block text-sm font-medium mb-1">Nivel</label>
+                <input
+                    type="number"
+                    name="nivel"
+                    defaultValue={area?.Nivel_Are || 1} // Nivel predeterminado
+                    className="w-full p-2 border rounded-lg dark:bg-gray-700"
+                    min="1"
+                    required
+                />
+            </div>
+
             <div>
                 <label className="block text-sm font-medium mb-1">Estado</label>
                 <select
@@ -100,7 +111,6 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 </select>
             </div>
 
-            {/* Botones para enviar o cancelar */}
             <div className="flex justify-end gap-2 mt-6">
                 <button
                     type="button"

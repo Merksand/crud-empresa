@@ -128,7 +128,7 @@ export default function InformacionEmpresaForm({ informacion, empresas, onSubmit
           placeholder="Ej: UTC-5"
         />
       </div>
-
+    {/*
       <div>
         <label className="block text-sm font-medium mb-1">Estado</label>
         <select
@@ -141,7 +141,7 @@ export default function InformacionEmpresaForm({ informacion, empresas, onSubmit
           <option value="Inactivo">Inactivo</option>
         </select>
       </div>
-
+    */}
       <div className="flex justify-end gap-2 mt-6">
         <button
           type="button"

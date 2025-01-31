@@ -41,7 +41,7 @@ export async function POST(request) {
       `INSERT INTO TbInformacionEmpresa 
        (Id_Empresa, Logo_IE, Regimen_Impositivo_IE, Zona_Horaria_IE, Estado_IE) 
        VALUES (?, ?, ?, ?, ?)`,
-      [Id_Empresa, Logo_IE, Regimen_Impositivo_IE, Zona_Horaria_IE, Estado_IE || "Activo"]
+      [Id_Empresa, Logo_IE, Regimen_Impositivo_IE, Zona_Horaria_IE, "Activo"]
     );
 
     const Id_InformacionEmpresa = insertResult.insertId;

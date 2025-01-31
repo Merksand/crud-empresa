@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 
-// GET - Obtener todas las estructuras
+// GET - Obtener todas las estructuras con estado "Activo"
 export async function GET() {
   try {
     const [rows] = await pool.query(`
@@ -15,6 +15,8 @@ export async function GET() {
       FROM 
         TbEstructura e
         LEFT JOIN TbEmpresa emp ON e.Id_Empresa = emp.Id_Empresa
+      WHERE 
+        e.Estado_Est = 'Activo'
     `);
 
     return NextResponse.json(rows || []);
@@ -23,6 +25,7 @@ export async function GET() {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
 
 
 export async function POST(request) {

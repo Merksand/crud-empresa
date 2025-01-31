@@ -5,7 +5,7 @@ import { pool } from '@/lib/db';
 export async function GET() {
   try {
     const [rows] = await pool.query(
-      'SELECT Id_Area, Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are, Nivel_Are FROM TbArea'
+      'SELECT Id_Area, Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are, Nivel_Are FROM TbArea WHERE Estado_Are = "Activo"'
     );
     return NextResponse.json(rows);
   } catch (error) {
@@ -13,7 +13,8 @@ export async function GET() {
   }
 }
 
-// POST - Crear nueva área
+
+// POST - Crear nueva área con estado "Activo"
 export async function POST(request) {
   try {
     const data = await request.json();
@@ -22,13 +23,12 @@ export async function POST(request) {
       Fecha_Creacion_Ar,
       Nombre_Are,
       Resolucion_Are,
-      Estado_Are = 'Activo', // Valor predeterminado para Estado_Are
-      Nivel_Are,
+      Nivel_Are, // Estado_Are eliminado del cliente
     } = data;
 
     const [result] = await pool.query(
       'INSERT INTO TbArea (Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are, Nivel_Are) VALUES (?, ?, ?, ?, ?, ?)',
-      [Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are, Nivel_Are]
+      [Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, 'Activo', Nivel_Are] // Estado_Are fijo como "Activo"
     );
 
     return NextResponse.json({
