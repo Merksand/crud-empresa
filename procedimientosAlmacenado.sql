@@ -1,5 +1,8 @@
----CARGO
---GET(ID)
+use empresa;
+
+
+-- CARGO
+-- GET(ID)
 DELIMITER //
 CREATE PROCEDURE GetCargoById(
     IN p_Id_Cargo INT
@@ -136,7 +139,7 @@ END //
 DELIMITER ;
 
 
---AREA
+-- AREA
 
 -- Procedimiento para insertar un nuevo área
 DELIMITER //

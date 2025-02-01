@@ -199,3 +199,52 @@ CREATE TABLE TbEmpleadoCargo (
 
 );
 
+
+CREATE TABLE TbUsuario (
+	Id_Usuario INT AUTO_INCREMENT PRIMARY KEY,
+	-- Id_Funcionario_Usu INT,
+	F_Creacion_Usu DATETIME DEFAULT current_timestamp ,
+	login_Usu VARCHAR(50),
+	Estado_Usu VARCHAR(10)
+	-- FOREIGN KEY (Id_Funcionario_Usu) REFERENCES TbFuncionario(Id_Funcionario)
+);
+
+CREATE TABLE TbPassword (
+    Id_Password INT AUTO_INCREMENT PRIMARY KEY,
+    Tipo_Pas VARCHAR(10),
+    Fecha_Pas DATETIME DEFAULT current_timestamp,
+    Password_Pas VARCHAR(90),
+    Estado_Pas VARCHAR(10)
+);
+
+CREATE TABLE TbUsuarioPassword (
+    Id_Usuario_UP INT,
+    Id_Password_UP INT,
+    FOREIGN KEY (Id_Usuario_UP) REFERENCES TbUsuario(Id_Usuario),
+    FOREIGN KEY (Id_Password_UP) REFERENCES TbPassword(Id_Password)
+);
+
+CREATE TABLE TbRol (
+    Id_Rol INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre_Rol VARCHAR(50),
+    Identificador_Rol VARCHAR(20),
+    Estado_Rol VARCHAR(10)
+);
+
+CREATE TABLE TbRol_Usuario (
+    Id_Rol_RU INT,
+    Id_Usu_RU INT,
+    Fecha_RU DATETIME,
+    Estado_RU VARCHAR(10),
+    FOREIGN KEY (Id_Rol_RU) REFERENCES TbRol(Id_Rol),
+    FOREIGN KEY (Id_Usu_RU) REFERENCES TbUsuario(Id_Usuario)
+);
+
+
+
+
+
+
+
+
+

@@ -1,9 +1,6 @@
 import { Geist } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
 
-const geist = Geist({
-  subsets: ["latin"],
-});
 
 export const metadata = {
   title: "Sistema de Gestión Empresarial",
@@ -12,10 +9,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
+    <div className="flex min-h-screen">
+
+      <main className={`flex-1 transition-all duration-300 p-4`} style={{ marginLeft: '16rem' }}>
         {children}
-      </body>
-    </html>
+      </main>
+    </div>
   );
 }

@@ -1033,5 +1033,57 @@ VALUES
     (1, 1, '2025-01-01', '2025-12-31', 'Activo'),
     (2, 2, '2024-06-01', '2025-05-31', 'Activo'),
     (3, 3, '2023-03-15', '2025-04-20', 'Inactivo');
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   -- Inserción en TbUsuario
+INSERT INTO TbUsuario (login_Usu, Estado_Usu) 
+VALUES 
+('admin', 'Activo'),
+('usuario2', 'Activo'),
+('usuario3', 'Inactivo');
 
+-- Inserción en TbPassword
+INSERT INTO TbPassword (Tipo_Pas, Password_Pas, Estado_Pas) 
+VALUES 
+('Normal', 'admin', 'Activo'),
+('Normal', '123', 'Activo'),
+('Temporal', 'admin123', 'Inactivo');
 
+-- Inserción en TbUsuarioPassword
+INSERT INTO TbUsuarioPassword (Id_Usuario_UP, Id_Password_UP) 
+VALUES 
+(1, 1),
+(2, 2),
+(3, 3);
+
+-- Inserción en TbRol
+INSERT INTO TbRol (Nombre_Rol, Identificador_Rol, Estado_Rol) 
+VALUES 
+('Administrador', 'ADMIN', 'Activo'),
+('Usuario', 'USER', 'Activo'),
+('Supervisor', 'SUP', 'Activo');
+
+-- Inserción en TbRol_Usuario
+INSERT INTO TbRol_Usuario (Id_Rol_RU, Id_Usu_RU, Fecha_RU, Estado_RU) 
+VALUES 
+(1, 1, NOW(), 'Activo'),
+(2, 2, NOW(), 'Activo'),
+(3, 3, NOW(), 'Inactivo');

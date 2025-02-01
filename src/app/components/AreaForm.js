@@ -1,4 +1,6 @@
 export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) {
+    console.log("Estructuras recibidas: ", estructuras); // Agrega este console.log para verificar los datos
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -13,11 +15,10 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
             Resolucion_Are: formData.get("resolucion"),
             Fecha_Creacion_Ar: fechaFormateada,
             Estado_Are: formData.get("estado"),
-            Id_Estructura_Ar: formData.get("estructura"),
-            Nivel_Are: parseInt(formData.get("nivel"), 10), // Nuevo campo
+            Id_Estructura_Ar: formData.get("estructura"), // Captura la estructura seleccionada
         };
 
-        console.log("Datos enviados desde AreaForm:", data);
+        console.log("data de areaForm ", data);
 
         if (!data.Fecha_Creacion_Ar) {
             console.error("Error: Fecha de creación no válida.");
@@ -29,6 +30,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Campo para seleccionar la estructura */}
             <div>
                 <label className="block text-sm font-medium mb-1">Estructura</label>
                 <select
@@ -48,6 +50,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 </select>
             </div>
 
+            {/* Campo para el nombre */}
             <div>
                 <label className="block text-sm font-medium mb-1">Nombre</label>
                 <input
@@ -59,6 +62,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 />
             </div>
 
+            {/* Campo para la resolución */}
             <div>
                 <label className="block text-sm font-medium mb-1">Resolución</label>
                 <input
@@ -70,6 +74,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 />
             </div>
 
+            {/* Campo para la fecha de creación */}
             <div>
                 <label className="block text-sm font-medium mb-1">Fecha de Creación</label>
                 <input
@@ -92,7 +97,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                     required
                 />
             </div>
-    {/*
+
             <div>
                 <label className="block text-sm font-medium mb-1">Estado</label>
                 <select
@@ -105,7 +110,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                     <option value="Inactivo">Inactivo</option>
                 </select>
             </div>
-       */ }   
+
             <div className="flex justify-end gap-2 mt-6">
                 <button
                     type="button"
