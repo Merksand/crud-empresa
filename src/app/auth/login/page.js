@@ -33,7 +33,7 @@ export default function LoginPage() {
       }
 
       // Redirige al dashboard después de un inicio de sesión exitoso
-      router.push("/clientes");
+      router.push("/dashboard");
     } catch (err) {
       console.log(err)
       setError(err.message);
