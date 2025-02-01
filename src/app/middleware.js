@@ -1,19 +1,29 @@
-// app/middleware.js
 import { NextResponse } from "next/server";
 
-export async function middleware(request) {
-  const token = await request.cookies.get('token');  // Asegúrate de usar `await`
+export function middleware(req) {
+    console.log("Middleware ejecutándose...");
 
-  // Si no hay token, redirige al login
-  if (!token) {
-    return NextResponse.redirect(new URL('/auth/login', request.url));
-  }
+    const token = req.cookies.has("session"); // Verifica si la cookie existe
+    const { pathname } = req.nextUrl;
 
-  // Si hay un token, permite el acceso a la ruta solicitada
-  return NextResponse.next();
+    console.log("Ruta actual:", pathname);
+    console.log("Token presente:", token);
+
+    // Redirigir si no hay token y no estamos en la página de login
+    if (!token && pathname !== "/auth/login") {
+        console.log("No hay sesión, redirigiendo al login");
+        return NextResponse.redirect(new URL("/auth/login", req.url));
+    }
+
+    // Redirigir si hay token y estamos en la página de login (ya autenticado)
+    if (token && pathname === "/auth/login") {
+        console.log("Usuario autenticado, redirigiendo al dashboard");
+        return NextResponse.redirect(new URL("/dashboard", req.url)); // O usa /(dashboard) dependiendo de la estructura de la ruta
+    }
+
+    return NextResponse.next();
 }
 
-// Define las rutas que serán protegidas por el middleware
 export const config = {
-  matcher: ['/clientes/*', '/(dashboard)/*', '/otraRutaProtegida/*'], // Asegúrate de usar el formato correcto
+    matcher: ["/", "/(dashboard)/:path*", "/clientes/:path*", "/auth/login"],
 };
