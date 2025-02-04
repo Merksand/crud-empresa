@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/db"; // Asegúrate de que esto está bien configurado
-
+import jwt from "jsonwebtoken";
 export async function POST(request) {
     try {
         const { username, password } = await request.json();
@@ -29,18 +29,19 @@ export async function POST(request) {
             return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });
         }
 
-        const sessionData = {
+        const token = jwt.sign({
             userId: user.Id_Usuario,
             username: user.login_Usu,
-        };
+            expiresIn: "1d",
+        }, 'secret',);
 
         const response = NextResponse.json({
             message: "Inicio de sesión exitoso",
-            session: sessionData,
+            success: true
         });
 
         // Guardar la cookie con la sesión
-        response.cookies.set("session", JSON.stringify(sessionData), {
+        response.cookies.set("session", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",

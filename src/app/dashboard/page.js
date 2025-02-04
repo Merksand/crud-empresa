@@ -1,14 +1,48 @@
+'use client'
+
 import Link from 'next/link';
 import SidebarDash from "@/app/components/SidebarDash";
+import { useRouter } from 'next/navigation';
 import { FaUsers, FaBox, FaUserTie, FaCogs } from 'react-icons/fa'; // Importa los iconos que necesites
 
 function HomeDash() {
+
+  const router = useRouter();
+
+  async function logout() {
+    try {
+      const response = await fetch("api/auth/logout",
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      router.push('/auth/login')
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+
+
+
+
+
+
+
+
+
+
+  }
+
+
   return (
     <>
       <SidebarDash />
       <div className="grid">
         {/* Nombre de usuario */}
-        <div className="w-10 h-10 rounded-full justify-self-end bg-white flex items-center justify-center shadow-md hover:shadow-lg transition-shadow duration-300">
+        <div onClick={() => logout()} className="w-10 h-10 rounded-full justify-self-end bg-white flex items-center justify-center shadow-md hover:shadow-lg transition-shadow duration-300">
           Miguel
         </div>
 
