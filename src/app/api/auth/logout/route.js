@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   try {
-    console.log(req)
     const response = NextResponse.json({ success: true });
 
     response.cookies.delete('session', {

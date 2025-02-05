@@ -29,11 +29,16 @@ export async function POST(request) {
             return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });
         }
 
-        const token = jwt.sign({
-            userId: user.Id_Usuario,
-            username: user.login_Usu,
-            expiresIn: "1d",
-        }, 'secret',);
+        const token = jwt.sign(
+            {
+                userId: user.Id_Usuario,
+                username: user.login_Usu
+            },
+            'secret',
+            { expiresIn: "30d" }
+        );
+
+
 
         const response = NextResponse.json({
             message: "Inicio de sesión exitoso",
@@ -46,7 +51,7 @@ export async function POST(request) {
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             path: "/",
-            maxAge: 60 * 60 * 24, // 1 día
+            maxAge: 60 * 60 * 24 * 30
         });
 
         return response;
