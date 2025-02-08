@@ -35,8 +35,8 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-
-/* .sidebar {
+/* 
+.sidebar {
   width: var(--sidebar-width);
   height: 100vh;
   position: fixed;
@@ -48,5 +48,7 @@ body {
 .main-content {
   margin-left: var(--sidebar-width);
   padding: 2rem;
-} */
+}  */
+
+
 

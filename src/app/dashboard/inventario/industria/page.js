@@ -47,7 +47,7 @@ export default function Empresas() {
         throw new Error("No se seleccionó ninguna empresa para eliminar.");
       }
 
-      const response = await fetch(`/api/empresas/${deleteModal.empresa.Id_Empresa}`, {
+      const response = await fetch(`/api/inventario/industria/${deleteModal.empresa.Id_Empresa}`, {
         method: "DELETE",
       });
 
@@ -67,7 +67,7 @@ export default function Empresas() {
   };
 
   return (
-    <div className="p-6 ">
+    <div className="p-6">
       {/* Notificaciones */}
       {notification.show && (
         <div

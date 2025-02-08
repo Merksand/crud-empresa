@@ -2,10 +2,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import TreeItem from './TreeItem';
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false); //true
+  const [isOpen, setIsOpen] = useState(true);
   const pathname = usePathname();
   const [darkMode, setDarkMode] = useState(false);
 
@@ -228,9 +227,7 @@ export default function Sidebar() {
           <ul className="flex-1 py-4 space-y-1  ">
             {menuItems.map((item, index) => (
               <li key={index} className="px-2 select-none">
-                {item.children ? (
-                  <TreeItem item={item} isOpenSidebar={isOpen} />
-                ) : (
+               
                   <Link
                     href={item.path}
                     className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === item.path
@@ -243,7 +240,7 @@ export default function Sidebar() {
                       {item.title}
                     </span>
                   </Link>
-                )}
+            
               </li>
             ))}
           </ul>
@@ -253,7 +250,7 @@ export default function Sidebar() {
 
       <style jsx global>{`
         main {
-          margin-left: ${isOpen ? '7rem' : '4rem'} !important;
+          margin-left: ${isOpen ? '10rem' : '4rem'} !important;
           transition: margin-left 0.3s ease-in-out;
         }
       `}</style>
@@ -268,13 +265,3 @@ export default function Sidebar() {
     </>
   );
 }
-
-
-
-
-
-
-
-
-
-
