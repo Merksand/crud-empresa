@@ -43,5 +43,3 @@ package-lock.json
 
 
 #db
-src/lib/db.js
-lib/db.js
