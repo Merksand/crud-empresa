@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import TreeItem from './TreeItem';
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true); //true
+  const [isOpen, setIsOpen] = useState(false); //true
   const pathname = usePathname();
   const [darkMode, setDarkMode] = useState(false);
 
