@@ -250,7 +250,7 @@ export default function Sidebar() {
 
       <style jsx global>{`
         main {
-          margin-left: ${isOpen ? '10rem' : '4rem'} !important;
+          margin-left: ${isOpen ? '7rem' : '1rem'} !important;
           transition: margin-left 0.3s ease-in-out;
         }
       `}</style>

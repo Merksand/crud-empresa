@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import TreeItem from './TreeItem';
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false); //true
+  const [isOpen, setIsOpen] = useState(true); //true
   const pathname = usePathname();
   const [darkMode, setDarkMode] = useState(false);
 
@@ -253,7 +253,7 @@ export default function Sidebar() {
 
       <style jsx global>{`
         main {
-          margin-left: ${isOpen ? '7rem' : '4rem'} !important;
+          margin-left: ${isOpen ? '7rem' : '1rem'} !important;
           transition: margin-left 0.3s ease-in-out;
         }
       `}</style>
