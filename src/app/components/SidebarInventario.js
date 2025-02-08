@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const [darkMode, setDarkMode] = useState(false);
 
@@ -35,7 +35,7 @@ export default function Sidebar() {
   const menuItems = [
     {
       title: 'Empresas',
-      path: '/dashboard/clientes/empresas',
+      path: '/dashboard/inventario/industria',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -250,8 +250,9 @@ export default function Sidebar() {
 
       <style jsx global>{`
         main {
-          margin-left: ${isOpen ? '7rem' : '1rem'} !important;
+          margin-left: ${isOpen ? '8rem' : '10px'} !important;
           transition: margin-left 0.3s ease-in-out;
+          background-color: ${darkMode ? '#0a0a0a' : '#ffffff'};
         }
       `}</style>
 
