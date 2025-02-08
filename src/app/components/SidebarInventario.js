@@ -252,7 +252,6 @@ export default function Sidebar() {
         main {
           margin-left: ${isOpen ? '8rem' : '1rem'} !important;
           transition: margin-left 0.3s ease-in-out;
-          background-color: ${darkMode ? '#0a0a0a' : '#ffffff'};
         }
       `}</style>
 

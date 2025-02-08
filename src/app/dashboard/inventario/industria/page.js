@@ -26,8 +26,10 @@ export default function Empresas() {
   const fetchEmpresas = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/empresas");
+      // const response = await fetch("/api/empresas");
+      const response = await fetch("/api/inventario/industria");
       const data = await response.json();
+      console.log(data)
       setEmpresas(data);
     } catch (error) {
       console.error("Error al cargar empresas:", error);
