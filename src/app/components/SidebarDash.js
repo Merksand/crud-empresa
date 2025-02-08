@@ -44,7 +44,7 @@ export default function Sidebar() {
       {/* Ajuste del contenido principal */}
       <style jsx global>{`
         main {
-          margin-left: ${isOpen ? '16rem' : '4rem'} !important;
+          margin-left: ${isOpen ? '120px' : '4rem'} !important;
           transition: margin-left 0.3s ease-in-out;
         }
       `}</style>
