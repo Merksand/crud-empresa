@@ -253,7 +253,7 @@ export default function Sidebar() {
 
       <style jsx global>{`
         main {
-          margin-left: ${isOpen ? '8rem' : '4rem'} !important;
+          margin-left: ${isOpen ? '8rem' : '10px'} !important;
           transition: margin-left 0.3s ease-in-out;
         }
       `}</style>

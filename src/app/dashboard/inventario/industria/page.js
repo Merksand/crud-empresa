@@ -67,7 +67,7 @@ export default function Empresas() {
   };
 
   return (
-    <div className="p-6 bg-green-500">
+    <div className="p-6">
       {/* Notificaciones */}
       {notification.show && (
         <div

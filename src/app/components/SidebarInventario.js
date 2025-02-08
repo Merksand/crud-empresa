@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const pathname = usePathname();
   const [darkMode, setDarkMode] = useState(false);
 
@@ -250,7 +250,7 @@ export default function Sidebar() {
 
       <style jsx global>{`
         main {
-          margin-left: ${isOpen ? '8rem' : '10px'} !important;
+          margin-left: ${isOpen ? '8rem' : '1rem'} !important;
           transition: margin-left 0.3s ease-in-out;
           background-color: ${darkMode ? '#0a0a0a' : '#ffffff'};
         }
