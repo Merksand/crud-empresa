@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const [darkMode, setDarkMode] = useState(false);
 
@@ -34,7 +34,7 @@ export default function Sidebar() {
 
   const menuItems = [
     {
-      title: 'Empresas',
+      title: 'Inv. Industria',
       path: '/dashboard/inventario/industria',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,113 +43,16 @@ export default function Sidebar() {
       )
     },
     {
-      title: 'Sucursales',
-      path: '/dashboard/clientes/sucursales',
+      title: 'Inv. Sucursal',
+      path: '/dashboard/inventario/sucursal',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      )
-    },
-    {
-      title: 'Empresa-Sucursal',
-      path: '/dashboard/clientes/empresa-sucursal',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-        </svg>
-      )
-    },
-    {
-      title: 'Información Empresa',
-      path: '/dashboard/clientes/informacion-empresa',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Estructuras',
-      path: '/dashboard/clientes/estructura',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Area',
-      path: '/dashboard/clientes/area',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6h12m0 0l-4 4m4-4l-4-4" />
-        </svg>
-      ),
-    },
-    {
-      title: 'Dependencias',
-      path: '/dashboard/clientes/dependencia',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Tree view',
-      path: '/dashboard/clientes/treeView',
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-6 h-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h8m-8 6h16"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-3-3H2a3 3 0 00-3 3v2h5v4h14v-4z" />
         </svg>
       )
     }
-    
-    ,
-    {
-      title: 'Cargo',
-      path: '/dashboard/clientes/cargo',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-        </svg>
-      )
-    },
-    {
-      title: 'Empleados',
-      path: '/dashboard/clientes/empleado-municipio',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2H5zM16 11a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Empleado-Cargo',
-      path: '/dashboard/clientes/empleado-cargo',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M17 20h5v-1a3 3 0 00-5.356-1.857M9 20H4v-1a3 3 0 015.356-1.857M16 3.13a4 4 0 110 7.747M7 3.13a4 4 0 110 7.747"
-          />
-        </svg>
-      )
-    }
+   
+
   ];
 
   return (
@@ -227,20 +130,20 @@ export default function Sidebar() {
           <ul className="flex-1 py-4 space-y-1  ">
             {menuItems.map((item, index) => (
               <li key={index} className="px-2 select-none">
-               
-                  <Link
-                    href={item.path}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === item.path
-                      ? 'bg-blue-500 text-white'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                      }`}
-                  >
-                    <div className="min-w-[24px]">{item.icon}</div>
-                    <span className={`transition-all duration-300 ${!isOpen ? 'opacity-0 w-0' : 'opacity-100'}`}>
-                      {item.title}
-                    </span>
-                  </Link>
-            
+
+                <Link
+                  href={item.path}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === item.path
+                    ? 'bg-blue-500 text-white'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                >
+                  <div className="min-w-[24px]">{item.icon}</div>
+                  <span className={`transition-all duration-300 ${!isOpen ? 'opacity-0 w-0' : 'opacity-100'}`}>
+                    {item.title}
+                  </span>
+                </Link>
+
               </li>
             ))}
           </ul>

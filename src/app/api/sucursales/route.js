@@ -17,7 +17,7 @@ export async function GET() {
       FROM TbSucursal suc
       LEFT JOIN TbMunicipio mun ON suc.Id_Municipio_Suc = mun.Id_Municipio
       LEFT JOIN TbGeolocalizacion geo ON suc.Id_Geolocalizacion_Suc = geo.Id_Geolocalizacion
-    WHERE suc.Estado_Suc = 'Activo'`);
+    WHERE suc.Estado_Suc = 'AC'`);
     return NextResponse.json(rows);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

@@ -12,6 +12,9 @@ export default function SucursalForm({ sucursal, municipios, geolocalizaciones, 
         onSubmit(data);
     };
 
+    // console.log(sucursal)
+    // console.log(municipios)
+
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>
