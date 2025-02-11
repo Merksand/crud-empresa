@@ -61,7 +61,7 @@ export default function Sucursales() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4">
       {/* Notificaciones */}
       {notification.show && (
         <div
@@ -72,7 +72,7 @@ export default function Sucursales() {
         </div>
       )}
       {/* Encabezado */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Gestión de Sucursales</h1>
         <button
           onClick={() => setIsModalOpen(true)}

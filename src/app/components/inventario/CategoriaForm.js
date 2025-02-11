@@ -1,15 +1,13 @@
-"use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function CategoriaForm({ categoria, onSubmit, onClose }) {
+export default function CategoriaForm({ categoria, categoriasPadre, onSubmit, onClose }) {
     const [nombreCat, setNombreCat] = useState("");
-    const [descripcionCat, setDescripcionCat] = useState("");
+    const [categoriaPadre, setCategoriaPadre] = useState("");
 
-    // Cargar datos de la categoría al editar
     useEffect(() => {
         if (categoria) {
             setNombreCat(categoria.Nombre_Cat);
-            setDescripcionCat(categoria.Descripcion_Cat);
+            setCategoriaPadre(categoria.Id_Categoria_Padre_Cat || "");
         }
     }, [categoria]);
 
@@ -17,7 +15,7 @@ export default function CategoriaForm({ categoria, onSubmit, onClose }) {
         e.preventDefault();
         const data = {
             Nombre_Cat: nombreCat,
-            Descripcion_Cat: descripcionCat,
+            Id_Categoria_Padre_Cat: categoriaPadre === "" ? null : categoriaPadre,
         };
         onSubmit(data);
     };
@@ -35,12 +33,19 @@ export default function CategoriaForm({ categoria, onSubmit, onClose }) {
                 />
             </div>
             <div>
-                <label className="block text-sm font-medium mb-1">Descripción</label>
-                <textarea
-                    value={descripcionCat}
-                    onChange={(e) => setDescripcionCat(e.target.value)}
+                <label className="block text-sm font-medium mb-1">Categoría Padre</label>
+                <select
+                    value={categoriaPadre}
+                    onChange={(e) => setCategoriaPadre(e.target.value)}
                     className="w-full p-2 border rounded-lg dark:bg-gray-700"
-                />
+                >
+                    <option value="">Ninguna</option>
+                    {categoriasPadre.map((cat) => (
+                        <option key={cat.Id_Categoria} value={cat.Id_Categoria}>
+                            {cat.Nombre_Cat}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div className="flex justify-end gap-2 mt-6">
                 <button
