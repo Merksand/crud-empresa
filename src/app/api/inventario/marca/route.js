@@ -6,7 +6,7 @@ export async function GET() {
     try {
         const [rows] = await pool.query(
             'SELECT Id_Marca, Nombre_Mar, Estado_Mar FROM TbInv_Marca WHERE Estado_Mar = ?',
-            ['Activo']
+            ['AC']
         );
         return NextResponse.json(rows);
     } catch (error) {
@@ -23,7 +23,7 @@ export async function POST(request) {
 
         const [result] = await pool.query(
             'INSERT INTO TbInv_Marca (Nombre_Mar, Estado_Mar) VALUES (?, ?)',
-            [Nombre_Mar, 'Activo']
+            [Nombre_Mar, 'AC']
         );
 
         return NextResponse.json({ 
