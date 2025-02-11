@@ -68,7 +68,7 @@ export async function DELETE(request, { params }) {
     }
 
     // Intentar eliminar la sucursal
-    const [result] = await pool.query('UPDATE TbSucursal SET Estado_Suc = ? WHERE Id_Sucursal = ?',  ['Inactivo',sucursalId]);
+    const [result] = await pool.query('UPDATE TbSucursal SET Estado_Suc = ? WHERE Id_Sucursal = ?',  ['BA',sucursalId]);
 
     if (result.affectedRows === 0) {
       return NextResponse.json({ error: 'Sucursal no encontrada' }, { status: 404 });

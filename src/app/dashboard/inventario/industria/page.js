@@ -29,7 +29,6 @@ export default function Industrias() {
             const data = await response.json();
             setIndustrias(data);
         } catch (error) {
-            console.error("Error al cargar industrias:", error);
             showNotification("Error al cargar las industrias", "error");
         } finally {
             setLoading(false);

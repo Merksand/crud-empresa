@@ -75,12 +75,11 @@ export async function PUT(request, { params }) {
 }
 
 
-// DELETE (eliminación lógica) - Marcar una dependencia como "Inactivo"
 export async function DELETE(request, { params }) {
   try {
     const [result] = await pool.query(
       `UPDATE TbDependencia 
-       SET Estado_Dep = 'Inactivo' 
+       SET Estado_Dep = 'BA' 
        WHERE Id_Dependencia = ?`,
       [params.id]
     );

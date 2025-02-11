@@ -72,7 +72,7 @@ export async function POST(request) {
       [
         Id_Provincia_Mun,
         Nombre_Mun,
-        Estado_Mun || 'Activo',
+        Estado_Mun || 'AC',
       ]
     );
 
@@ -82,7 +82,7 @@ export async function POST(request) {
         data: {
           Id_Provincia_Mun,
           Nombre_Mun,
-          Estado_Mun: Estado_Mun || 'Activo',
+          Estado_Mun: Estado_Mun || 'AC',
         },
       },
       { status: 201 }

@@ -12,8 +12,6 @@ export default function SucursalForm({ sucursal, municipios, geolocalizaciones, 
         onSubmit(data);
     };
 
-    // console.log(sucursal)
-    // console.log(municipios)
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -76,20 +74,6 @@ export default function SucursalForm({ sucursal, municipios, geolocalizaciones, 
                     required
                 />
             </div>
-        {/*
-            <div>
-                <label className="block text-sm font-medium mb-1">Estado</label>
-                <select
-                    name="estado"
-                    defaultValue={sucursal?.Estado_Suc || "Activo"}
-                    className="w-full p-2 border rounded-lg dark:bg-gray-700"
-                    required
-                >
-                    <option value="Activo">Activo</option>
-                    <option value="Inactivo">Inactivo</option>
-                </select>
-            </div>
-        */}
             <div className="flex justify-end gap-2 mt-6">
                 <button
                     type="button"

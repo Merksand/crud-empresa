@@ -100,13 +100,13 @@ export async function PUT(request, { params }) {
       // Si no existe relación, crearla
       await pool.query(
         'INSERT INTO TbEmpresaPais (Id_Empresa_EP, Id_Pais_EP, Fecha_Inicio_EP, Estado_EC) VALUES (?, ?, ?, ?)',
-        [params.id, Id_Pais, new Date(), 'Activo']
+        [params.id, Id_Pais, new Date(), 'AC']
       );
     } else {
       // Si existe, actualizarla
       await pool.query(
         'UPDATE TbEmpresaPais SET Fecha_Inicio_EP = ?, Estado_EC = ? WHERE Id_Empresa_EP = ? AND Id_Pais_EP = ?',
-        [new Date(), 'Activo', params.id, Id_Pais]
+        [new Date(), 'AC', params.id, Id_Pais]
       );
     }
 

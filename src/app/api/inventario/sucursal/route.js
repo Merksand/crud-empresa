@@ -9,12 +9,13 @@ export async function GET() {
         s.Id_Sucursal, 
         s.Id_Empresa_Suc, 
         s.Nombre_Parametro_Suc, 
-        s.Nombre_Suc, 
+        s.Nombre_Suc,
         s.Estado_Suc,
         e.Nombre_Emp AS Nombre_Empresa
       FROM TbInv_Sucursal s
       JOIN TbEmpresaSucursal es ON s.Id_Empresa_Suc = es.Id_Empresa_Sucursal
       JOIN TbEmpresa e ON es.Id_Empresa_ES = e.Id_Empresa
+      WHERE s.Estado_Suc = 'AC'
     `);
 
     return NextResponse.json(rows);
@@ -25,66 +26,22 @@ export async function GET() {
 }
 
 
-export async function PUT(request, { params }) {
+export async function POST(req) {
   try {
-    const { id } = params;
-    const { Id_Empresa_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc, Fecha_Apertura_ES, Estado_ES } = await request.json();
+    const { Id_Empresa_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc = 'AC' } = await req.json();
 
-    if (!Id_Empresa_Suc && !Nombre_Parametro_Suc && !Nombre_Suc && !Estado_Suc && !Fecha_Apertura_ES && !Estado_ES) {
-      return NextResponse.json({ error: 'No se proporcionaron campos para actualizar' }, { status: 400 });
+    if (!Id_Empresa_Suc || !Nombre_Parametro_Suc || !Nombre_Suc) {
+      return NextResponse.json({ message: 'Campos obligatorios faltantes' }, { status: 400 });
     }
 
-    // Actualizar en TbInv_Sucursal
-    const updateFieldsSucursal = [];
-    const valuesSucursal = [];
+    await pool.query(
+      'INSERT INTO TbInv_Sucursal (Id_Empresa_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc) VALUES (?, ?, ?, ?)',
+      [Id_Empresa_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc]
+    );
 
-    if (Id_Empresa_Suc) {
-      updateFieldsSucursal.push('Id_Empresa_Suc = ?');
-      valuesSucursal.push(Id_Empresa_Suc);
-    }
-
-    if (Nombre_Parametro_Suc) {
-      updateFieldsSucursal.push('Nombre_Parametro_Suc = ?');
-      valuesSucursal.push(Nombre_Parametro_Suc);
-    }
-
-    if (Nombre_Suc) {
-      updateFieldsSucursal.push('Nombre_Suc = ?');
-      valuesSucursal.push(Nombre_Suc);
-    }
-
-    if (Estado_Suc) {
-      updateFieldsSucursal.push('Estado_Suc = ?');
-      valuesSucursal.push(Estado_Suc);
-    }
-
-    valuesSucursal.push(id);
-
-    const querySucursal = `UPDATE TbInv_Sucursal SET ${updateFieldsSucursal.join(', ')} WHERE Id_Sucursal = ?`;
-    await pool.query(querySucursal, valuesSucursal);
-
-    // Actualizar en TbEmpresaSucursal
-    const updateFieldsEmpresaSucursal = [];
-    const valuesEmpresaSucursal = [];
-
-    if (Fecha_Apertura_ES) {
-      updateFieldsEmpresaSucursal.push('Fecha_Apertura_ES = ?');
-      valuesEmpresaSucursal.push(Fecha_Apertura_ES);
-    }
-
-    if (Estado_ES) {
-      updateFieldsEmpresaSucursal.push('Estado_ES = ?');
-      valuesEmpresaSucursal.push(Estado_ES);
-    }
-
-    valuesEmpresaSucursal.push(id);
-
-    const queryEmpresaSucursal = `UPDATE TbEmpresaSucursal SET ${updateFieldsEmpresaSucursal.join(', ')} WHERE Id_Sucursal_ES = ?`;
-    await pool.query(queryEmpresaSucursal, valuesEmpresaSucursal);
-
-    return NextResponse.json({ message: 'Sucursal actualizada correctamente' }, { status: 200 });
+    return NextResponse.json({ message: 'Sucursal creada correctamente' });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Error al actualizar la sucursal', message: error.message }, { status: 500 });
+    console.error('Error al crear sucursal:', error);
+    return NextResponse.json({ message: 'Error al crear sucursal', error: error.message }, { status: 500 });
   }
 }

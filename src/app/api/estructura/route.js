@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 
-// GET - Obtener todas las estructuras con estado "Activo"
 export async function GET() {
   try {
     const [rows] = await pool.query(`
@@ -16,7 +15,7 @@ export async function GET() {
         TbEstructura e
         LEFT JOIN TbEmpresa emp ON e.Id_Empresa = emp.Id_Empresa
       WHERE 
-        e.Estado_Est = 'Activo'
+        e.Estado_Est = 'AC'
     `);
 
     return NextResponse.json(rows || []);
@@ -32,7 +31,6 @@ export async function POST(request) {
   try {
     const data = await request.json();
 
-    // Llamada al procedimiento almacenado InsertEstructura
     const [result] = await pool.query(
       "CALL InsertEstructura(?, ?, ?)",
       [

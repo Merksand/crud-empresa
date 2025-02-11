@@ -44,7 +44,7 @@ export async function POST(request) {
     const data = await request.json();
 
     // Valores predeterminados
-    const estado = 'Activo';
+    const estado = 'AC';
     const idioma = data.Idioma_Emp || 'Spanish'; // Si no se envía un idioma, usa "Spanish"
 
     // Verificar datos obligatorios
