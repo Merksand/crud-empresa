@@ -17,7 +17,7 @@ export async function GET() {
       FROM TbDependencia d
       LEFT JOIN TbArea ap ON d.Id_Area_Padre_Dep = ap.Id_Area
       LEFT JOIN TbArea ah ON d.Id_Area_Hijo_Dep = ah.Id_Area
-      WHERE d.Estado_Dep = 'Activo'  -- Filtra solo las dependencias activas
+      WHERE d.Estado_Dep = 'AC' 
     `);
 
     return NextResponse.json(rows || []);
@@ -28,7 +28,6 @@ export async function GET() {
 }
 
 
-// POST - Crear una nueva dependencia con Estado_Dep siempre "Activo"
 export async function POST(request) {
   try {
     const data = await request.json();
@@ -41,7 +40,7 @@ export async function POST(request) {
 
     const [result] = await pool.query(
       `INSERT INTO TbDependencia (Id_Area_Padre_Dep, Id_Area_Hijo_Dep, Fecha_Asignacion_Dep, Resolucion_Are_Dep, Estado_Dep)
-       VALUES (?, ?, ?, ?, 'Activo')`, // Estado_Dep se fija como "Activo"
+       VALUES (?, ?, ?, ?, 'AC')`,  
       [
         Id_Area_Padre_Dep,
         Id_Area_Hijo_Dep,

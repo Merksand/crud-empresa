@@ -86,7 +86,7 @@ export async function DELETE(request, { params }) {
 
     const [result] = await pool.query(
       'UPDATE TbInformacionEmpresa SET Estado_IE = ? WHERE Id_Empresa = ?',
-      ['Inactivo', empresaId]
+      ['BA', empresaId]
     );
 
     if (result.affectedRows === 0) {

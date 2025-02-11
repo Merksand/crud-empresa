@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server';
 import { pool } from '@/lib/db';
 
-// GET - Obtener todos los cargos activos
 export async function GET() {
     try {
-        // Llamada al procedimiento almacenado para obtener cargos activos
         const [rows] = await pool.query('CALL GetActiveCargos()');
-        return NextResponse.json(rows[0]); // La primera posición contiene los resultados
+        return NextResponse.json(rows[0]);  
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
@@ -22,7 +20,7 @@ export async function POST(request) {
           Nivel_Car, 
           Sueldo_Car, 
           Sueldo_USD_Car, 
-          Resolucion_Car 
+          Resolucion_Car,
       } = data;
 
       // Llamada al procedimiento almacenado

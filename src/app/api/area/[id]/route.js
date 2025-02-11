@@ -57,7 +57,7 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     const [result] = await pool.query(
-      'UPDATE TbArea SET Estado_Are = "Inactivo" WHERE Id_Area = ?',
+      'UPDATE TbArea SET Estado_Are = "BA" WHERE Id_Area = ?',
       [params.id]
     );
 

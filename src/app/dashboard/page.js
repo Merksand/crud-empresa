@@ -67,7 +67,7 @@ function HomeDash() {
                 <FaBox size={40} />
               </div>
               <h2 className="text-lg font-semibold text-gray-700 mt-2">Inventario</h2>
-              <p className="text-2xl font-bold text-green-600">1</p>
+              <p className="text-2xl font-bold text-green-600">5</p>
             </div>
           </Link>
           <Link href="/dashboard/recursos-humanos">

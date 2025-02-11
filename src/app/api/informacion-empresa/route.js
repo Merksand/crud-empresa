@@ -4,7 +4,7 @@ import { pool } from '../../../lib/db';
 // GET - Obtener todas las informaciones
 export async function GET() {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbInformacionEmpresa WHERE Estado_IE = "Activo"');
+    const [rows] = await pool.query('SELECT * FROM TbInformacionEmpresa WHERE Estado_IE = "AC"');
     return NextResponse.json(rows);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -41,7 +41,7 @@ export async function POST(request) {
       `INSERT INTO TbInformacionEmpresa 
        (Id_Empresa, Logo_IE, Regimen_Impositivo_IE, Zona_Horaria_IE, Estado_IE) 
        VALUES (?, ?, ?, ?, ?)`,
-      [Id_Empresa, Logo_IE, Regimen_Impositivo_IE, Zona_Horaria_IE, "Activo"]
+      [Id_Empresa, Logo_IE, Regimen_Impositivo_IE, Zona_Horaria_IE, "AC"]
     );
 
     const Id_InformacionEmpresa = insertResult.insertId;

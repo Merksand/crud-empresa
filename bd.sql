@@ -242,84 +242,79 @@ CREATE TABLE TbRol_Usuario (
 
 
 
-----INVENTARIO
+-- INVENTARIO
 
 
+
+
+-- Tabla: TbInv_Sucursal (solo referencia, no implementar realmente)
 CREATE TABLE TbInv_Sucursal (
-    Id_Sucursal             INT PRIMARY KEY AUTO_INCREMENT,
-    Id_Empresa_Suc         INT,
-    Nombre_Parametro_Suc    VARCHAR(50),
-    Nombre_Suc             VARCHAR(50),
-    Estado_Suc             VARCHAR(10)
+    Id_Sucursal INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Empresa_Suc INT,
+    Nombre_Parametro_Suc VARCHAR(50),
+    Nombre_Suc VARCHAR(50),
+    Estado_Suc VARCHAR(10)
 );
 
+-- Tabla: TbInv_Industria
 CREATE TABLE TbInv_Industria (
-    Id_Industria     INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre_Ind       VARCHAR(50),
-    Estado_Pai       VARCHAR(10)
+    Id_Industria INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre_Ind VARCHAR(50),
+    Estado_Pai VARCHAR(10)
 );
 
 -- Tabla: Tb_Inv_Almacen
-CREATE TABLE Tb_Inv_Almacen (
-    Id_Almacen             INT PRIMARY KEY AUTO_INCREMENT,
-    Id_Sucursal_Alm        INT NOT NULL,
-    Nombre_Alm             VARCHAR(100) NOT NULL,
-    Ubicacion_Alm          VARCHAR(200) NOT NULL,
-    Capacidad_maxima_Alm   INT,
-    Estado_Alm             VARCHAR(10),
+CREATE TABLE TbInv_Almacen (
+    Id_Almacen INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Sucursal_Alm INT NOT NULL,
+    Nombre_Alm VARCHAR(100) NOT NULL,
+    Ubicacion_Alm VARCHAR(200) NOT NULL,
+    Capacidad_maxima_Alm INT,
+    Estado_Alm VARCHAR(10),
     FOREIGN KEY (Id_Sucursal_Alm) REFERENCES TbInv_Sucursal(Id_Sucursal)
 );
 
--- Tabla: Categoria
+-- Tabla: TbInv_Categoria
 CREATE TABLE TbInv_Categoria (
-    Id_Categoria             INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre_Cat               VARCHAR(100) NOT NULL,
-    Id_Categoria_Padre_Cat   INT NULL,
-    Estado_Cat               INT,
+    Id_Categoria INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre_Cat VARCHAR(100) NOT NULL,
+    Id_Categoria_Padre_Cat INT,
+    Estado_Cat VARCHAR(10),
     FOREIGN KEY (Id_Categoria_Padre_Cat) REFERENCES TbInv_Categoria(Id_Categoria)
 );
 
--- Tabla: Marca
+-- Tabla: TbInv_Marca
 CREATE TABLE TbInv_Marca (
-    Id_Marca      INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre_Mar    VARCHAR(100) NOT NULL,
-    Estado_Mar    VARCHAR(10)
+    Id_Marca INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre_Mar VARCHAR(100) NOT NULL,
+    Estado_Mar VARCHAR(10)
 );
 
--- Tabla: Proveedor
+-- Tabla: TbInv_Proveedor
 CREATE TABLE TbInv_Proveedor (
-    Id_Proveedor      INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre_Prov       VARCHAR(100) NOT NULL,
-    Direccion_Prov    VARCHAR(200),
-    Telefono_Prov     VARCHAR(20),
-    Correo_Prov       VARCHAR(100),
-    Estado_Prov       VARCHAR(10)
+    Id_Proveedor INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre_Prov VARCHAR(100) NOT NULL,
+    Direccion_Prov VARCHAR(200),
+    Telefono_Prov VARCHAR(20),
+    Correo_Prov VARCHAR(100),
+    Estado_Prov VARCHAR(10)
 );
 
--- Tabla: Producto
+-- Tabla: TbInv_Producto
 CREATE TABLE TbInv_Producto (
-    Id_Producto                     INT PRIMARY KEY AUTO_INCREMENT,
-    Id_Categoria_Pro                INT NOT NULL,
-    Id_marca_Pro                    INT NOT NULL,
-    Id_Industria_Pro                INT NOT NULL,
-    Nombre_Pro                      VARCHAR(100) NOT NULL,
-    Modelo_Pro                      VARCHAR(100) NOT NULL,
-    Descripcion_Pro                 TEXT,
-    Unidad_medida_Pro               VARCHAR(20) NOT NULL,
-    Stock_minimo_Pro                INT,
-    Stock_maximo_Pro                INT,
-    Foto_Pro                        TEXT,
-    Atributo_Personalizados_Pro     TEXT,
+    Id_Producto INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Categoria_Pro INT NOT NULL,
+    Id_Marca_Pro INT NOT NULL,
+    Id_Industria_Pro INT NOT NULL,
+    Nombre_Pro VARCHAR(100) NOT NULL,
+    Modelo_Pro VARCHAR(100) NOT NULL,
+    Descripcion_Pro TEXT,
+    Unidad_medida_Pro VARCHAR(20) NOT NULL,
+    Stock_minimo_Pro INT,
+    Stock_maximo_Pro INT,
+    Foto_Pro TEXT,
+    Atributo_Personalizados_Pro TEXT,
     FOREIGN KEY (Id_Categoria_Pro) REFERENCES TbInv_Categoria(Id_Categoria),
-    FOREIGN KEY (Id_marca_Pro) REFERENCES TbInv_Marca(Id_Marca),
+    FOREIGN KEY (Id_Marca_Pro) REFERENCES TbInv_Marca(Id_Marca),
     FOREIGN KEY (Id_Industria_Pro) REFERENCES TbInv_Industria(Id_Industria)
 );
-
-
-
-
-
-
-
-
-

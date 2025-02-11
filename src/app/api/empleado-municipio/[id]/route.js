@@ -103,9 +103,8 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    // Actualizar el estado del empleado a "Inactivo"
     const [result] = await pool.query(
-      'UPDATE TbEmpleado SET Estado_Emp = "Inactivo" WHERE Id_Empleado = ?',
+      'UPDATE TbEmpleado SET Estado_Emp = "BA" WHERE Id_Empleado = ?',
       [id]
     );
 

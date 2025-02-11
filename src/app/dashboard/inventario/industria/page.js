@@ -12,7 +12,6 @@ export default function Industrias() {
     const [deleteModal, setDeleteModal] = useState({ show: false, industria: null });
     const [notification, setNotification] = useState({ show: false, message: "", type: "" });
 
-    // Cargar industrias al inicializar
     useEffect(() => {
         fetchIndustrias();
     }, []);
@@ -27,14 +26,14 @@ export default function Industrias() {
             setLoading(true);
             const response = await fetch("/api/inventario/industria");
             const data = await response.json();
-            setIndustrias(data);
+            setIndustrias(Array.isArray(data) ? data : []);
         } catch (error) {
-            console.error("Error al cargar industrias:", error);
             showNotification("Error al cargar las industrias", "error");
         } finally {
             setLoading(false);
         }
     };
+    
 
     const confirmDelete = (industria) => {
         setDeleteModal({ show: true, industria });
@@ -60,21 +59,18 @@ export default function Industrias() {
             setDeleteModal({ show: false, industria: null });
         }
     };
+    
 
     return (
         <div className="p-4">
-            {/* Notificaciones */}
             {notification.show && (
-                <div
-                    className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${notification.type === "error" ? "bg-red-500 text-white" : "bg-green-500 text-white"
-                        }`}
-                >
+                <div className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${notification.type === "error" ? "bg-red-500 text-white" : "bg-green-500 text-white"}`}>
                     {notification.message}
                 </div>
             )}
-            {/* Encabezado */}
-            <div className="flex justify-between mb-4">
-                <h1 className="text-2xl font-bold mb-4">Inventario de Industrias</h1>
+
+            <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold">Inventario de Industrias</h1>
                 <button
                     onClick={() => setIsModalOpen(true)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
@@ -89,21 +85,15 @@ export default function Industrias() {
                     Nueva Industria
                 </button>
             </div>
-            {/* Tabla */}
+
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead className="bg-gray-50 dark:bg-gray-700">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Nombre
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Estado
-                                </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Acciones
-                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">

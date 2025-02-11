@@ -29,7 +29,6 @@ export default function Sucursales() {
       const data = await response.json();
       setSucursales(data);
     } catch (error) {
-      console.error("Error al cargar sucursales:", error);
       showNotification("Error al cargar las sucursales", "error");
     } finally {
       setLoading(false);
@@ -62,7 +61,7 @@ export default function Sucursales() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4">
       {/* Notificaciones */}
       {notification.show && (
         <div
@@ -73,7 +72,7 @@ export default function Sucursales() {
         </div>
       )}
       {/* Encabezado */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Gestión de Sucursales</h1>
         <button
           onClick={() => setIsModalOpen(true)}
@@ -97,6 +96,9 @@ export default function Sucursales() {
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Empresa
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Parametro
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Sucursal
@@ -127,6 +129,7 @@ export default function Sucursales() {
                   return (
                     <tr key={sucursal.Id_Sucursal} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{sucursal.Nombre_Empresa}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{sucursal.Nombre_Parametro_Suc}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{sucursal.Nombre_Suc}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
@@ -178,6 +181,7 @@ export default function Sucursales() {
               const url = sucursalEditar
                 ? `/api/inventario/sucursal/${sucursalEditar.Id_Sucursal}` // URL para actualizar
                 : "/api/inventario/sucursal"; // URL para crear
+                console.log(data)
               await fetch(url, {
                 method, // Usa el método dinámico
                 headers: { "Content-Type": "application/json" },

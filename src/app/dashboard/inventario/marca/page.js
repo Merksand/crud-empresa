@@ -62,7 +62,7 @@ export default function Marca() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4">
       {notification.show && (
         <div className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${notification.type === 'error'
           ? 'bg-red-500 text-white'
@@ -72,7 +72,7 @@ export default function Marca() {
         </div>
       )}
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Gestión de Marcas</h1>
         <button
           onClick={() => setIsModalOpen(true)}

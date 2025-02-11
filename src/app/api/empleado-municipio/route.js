@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import { pool } from '../../../lib/db';
 
-// GET - Obtener todos los empleados activos
 export async function GET() {
   try {
     const [rows] = await pool.query(`
       SELECT * 
       FROM TbEmpleado 
-      WHERE Estado_Emp = 'Activo' -- Filtra solo los empleados activos
+      WHERE Estado_Emp = 'AC' 
     `);
 
     return NextResponse.json(rows || []);
@@ -34,7 +33,6 @@ export async function POST(request) {
       FDN_Emp
     } = data;
 
-    // Verificar si ya existe un empleado con el mismo CI
     const [existingRows] = await pool.query(
       'SELECT * FROM TbEmpleado WHERE CI_Emp = ?',
       [CI_Emp]
@@ -47,11 +45,10 @@ export async function POST(request) {
       );
     }
 
-    // Insertar el nuevo empleado con Estado_Emp fijo en "Activo"
     const [result] = await pool.query(
       `INSERT INTO TbEmpleado 
        (Id_Municipio_Emp, CI_Emp, Nombre_Emp, Paterno_Emp, Materno_Emp, Sexo_Emp, Direccion_Emp, Estado_Civil_Emp, FDN_Emp, Estado_Emp) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Activo')`, // Estado_Emp siempre será "Activo"
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'AC')`, 
       [
         Id_Municipio_Emp,
         CI_Emp,
@@ -78,7 +75,7 @@ export async function POST(request) {
           Direccion_Emp,
           Estado_Civil_Emp,
           FDN_Emp,
-          Estado_Emp: 'Activo' // Estado fijo en la respuesta
+          Estado_Emp: 'AC' // Estado fijo en la respuesta
         }
       },
       { status: 201 }

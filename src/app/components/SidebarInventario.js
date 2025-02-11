@@ -34,6 +34,15 @@ export default function Sidebar() {
 
   const menuItems = [
     {
+      title: 'Inv. Sucursal',
+      path: '/dashboard/inventario/sucursal',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-3-3H2a3 3 0 00-3 3v2h5v4h14v-4z" />
+        </svg>
+      )
+    },
+    {
       title: 'Inv. Industria',
       path: '/dashboard/inventario/industria',
       icon: (
@@ -43,11 +52,20 @@ export default function Sidebar() {
       )
     },
     {
-      title: 'Inv. Sucursal',
-      path: '/dashboard/inventario/sucursal',
+      title: 'Inv. Almacen',
+      path: '/dashboard/inventario/almacen',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-3-3H2a3 3 0 00-3 3v2h5v4h14v-4z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h10a8 8 0 018 8v2M3 10a2 2 0 002 2h14a2 2 0 002-2M3 10V8a2 2 0 012-2h4a2 2 0 012 2v2M3 10h4v2-2z" />
+        </svg>
+      )
+    },
+    {
+      title: 'Inv. Categoria',
+      path: '/dashboard/inventario/categoria',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
         </svg>
       )
     },
