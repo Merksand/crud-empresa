@@ -23,7 +23,7 @@ export default function MarcaForm({ marca, onSubmit, onClose }) {
                 />
             </div>
 
-            {/* Campo para el estado de la marca */}
+            {/* Campo para el estado de la marca
             <div>
                 <label className="block text-sm font-medium mb-1">Estado</label>
                 <select
@@ -36,7 +36,7 @@ export default function MarcaForm({ marca, onSubmit, onClose }) {
                     <option value="Inactivo">Inactivo</option>
                 </select>
             </div>
-
+            */}
             {/* Botones para cancelar o guardar */}
             <div className="flex justify-end gap-2 mt-6">
                 <button
