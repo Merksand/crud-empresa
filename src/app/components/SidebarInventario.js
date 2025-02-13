@@ -88,7 +88,18 @@ export default function Sidebar() {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h18M9 3h6m-7 8h8m-9 4h10m-11 4h12" />
       </svg>
     )
+  },
+
+  {
+    title: 'Producto',
+    path: '/dashboard/inventario/producto',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1-2a2 2 0 012-1h12a2 2 0 012 1l1 2m-18 0h18m-18 0l2 9a2 2 0 002 2h8a2 2 0 002-2l2-9M5 19h14" />
+      </svg>
+    )
   }
+  
 
   ];
 

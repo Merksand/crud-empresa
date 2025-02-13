@@ -1141,3 +1141,12 @@ INSERT INTO TbInv_Proveedor (Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_
 -- Insertar en TbInv_Producto
 INSERT INTO TbInv_Producto (Id_Categoria_Pro, Id_Marca_Pro, Id_Industria_Pro, Nombre_Pro, Modelo_Pro, Descripcion_Pro, Unidad_medida_Pro, Stock_minimo_Pro, Stock_maximo_Pro, Foto_Pro, Atributo_Personalizados_Pro) VALUES
 (1, 1, 1, 'Producto A', 'Modelo A', 'Descripcion A', 'Unidad A', 10, 50, 'FotoA.jpg', 'Atributo A');
+
+
+INSERT INTO TbInv_Proveedor (Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, Estado_Prov)  
+VALUES  
+('Distribuidora Central', 'Av. Principal #123', '76543210', 'contacto@distribcentral.com', 'Activo'),  
+('Cervezas del Sur', 'Calle Secundaria #456', '71234567', 'ventas@cervezasur.com', 'Activo'),  
+('Bebidas Express', 'Zona Industrial #789', '73456789', 'info@bebidasexpress.com', 'Activo'),  
+('Importadora Andina', 'Av. Comercio #321', '75678901', 'contacto@importandina.com', 'Inactivo'),  
+('Proveedor del Norte', 'Calle Comercio #654', '79876543', 'ventas@provnorte.com', 'Activo');  

@@ -312,8 +312,9 @@ CREATE TABLE TbInv_Producto (
     Unidad_medida_Pro VARCHAR(20) NOT NULL,
     Stock_minimo_Pro INT,
     Stock_maximo_Pro INT,
-    Foto_Pro TEXT,
+    Foto_Pro VARCHAR(50),
     Atributo_Personalizados_Pro TEXT,
+    Estado_Pro VARCHAR(10),
     FOREIGN KEY (Id_Categoria_Pro) REFERENCES TbInv_Categoria(Id_Categoria),
     FOREIGN KEY (Id_Marca_Pro) REFERENCES TbInv_Marca(Id_Marca),
     FOREIGN KEY (Id_Industria_Pro) REFERENCES TbInv_Industria(Id_Industria)
