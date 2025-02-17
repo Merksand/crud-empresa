@@ -1,10 +1,18 @@
 import mysql from 'mysql2/promise';
 import 'dotenv/config';
 
+// Configuración para la base de datos `empresa`
 export const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: 'empresa',
+  host: process.env.DB_HOST_EMPRESA || 'localhost',
+  user: process.env.DB_USER_EMPRESA || 'root',
+  password: process.env.DB_PASSWORD_EMPRESA || 'Miguelangelomy1',
+  database: process.env.DB_NAME_EMPRESA || 'empresa',
 });
 
+// Configuración para la base de datos `clientes`
+export const poolClientes = mysql.createPool({
+  host: process.env.DB_HOST_CLIENTES || 'localhost',
+  user: process.env.DB_USER_CLIENTES || 'root',
+  password: process.env.DB_PASSWORD_CLIENTES || 'Miguelangelomy1',
+  database: process.env.DB_NAME_CLIENTES || 'Bd_INVENTARIO_12022025_2',
+});
