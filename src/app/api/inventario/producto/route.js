@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { pool } from '@/lib/db';
+import { poolInventario } from '@/lib/db';
 
 // GET - Obtener todos los productos activos
 export async function GET() {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbInv_Producto WHERE Estado_Pro = "ACTIVO"');
+    const [rows] = await poolInventario.query('SELECT * FROM TbInv_Producto WHERE Estado_Pro = "AC"');
     return NextResponse.json(rows);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -35,7 +35,7 @@ export async function POST(request) {
     }
 
     // Insertar el producto en la base de datos con Estado_Pro = "ACTIVO"
-    const [insertResult] = await pool.query(
+    const [insertResult] = await poolInventario.query(
       `INSERT INTO TbInv_Producto 
        (Id_Categoria_Pro, Id_Marca_Pro, Id_Industria_Pro, Nombre_Pro, Modelo_Pro, Descripcion_Pro, 
         Unidad_medida_Pro, Stock_minimo_Pro, Stock_maximo_Pro, Foto_Pro, Atributo_Personalizados_Pro, Estado_Pro) 

@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import {pool} from '@/lib/db';
+import {poolInventario} from '@/lib/db';
 
 
 export async function GET() {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbInv_Industria WHERE Estado_Pai = "AC"');
+    const [rows] = await poolInventario.query('SELECT * FROM TbInv_Industria WHERE Estado_Pai = "AC"');
     if (rows.length === 0) {
       return NextResponse.json({ error: 'Dato no encontrado' },
         { status: 404 });
@@ -29,7 +29,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 });
     }
 
-    const [result] = await pool.query(
+    const [result] = await poolInventario.query(
       'INSERT INTO TbInv_Industria (Nombre_Ind, Estado_Pai) VALUES (?, ?)',
       [Nombre_Ind, Estado_Pai]
     );

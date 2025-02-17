@@ -33,7 +33,7 @@ export default function Industrias() {
             setLoading(false);
         }
     };
-    
+
 
     const confirmDelete = (industria) => {
         setDeleteModal({ show: true, industria });
@@ -59,7 +59,7 @@ export default function Industrias() {
             setDeleteModal({ show: false, industria: null });
         }
     };
-    
+
 
     return (
         <div className="p-4">

@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import { pool } from '@/lib/db';
+import { poolInventario } from '@/lib/db';
 
 export async function GET(request, { params }) {
   try {
     const { id } = params;
 
-    const [rows] = await pool.query('SELECT * FROM TbInv_Industria WHERE Id_Industria = ?', [id]);
+    const [rows] = await poolInventario.query('SELECT * FROM TbInv_Industria WHERE Id_Industria = ?', [id]);
 
     if (rows.length === 0) {
       return NextResponse.json({ error: 'Industria no encontrada' }, { status: 404 });
@@ -45,7 +45,7 @@ export async function PUT(request, { params }) {
 
     const query = `UPDATE TbInv_Industria SET ${updateFields.join(', ')} WHERE Id_Industria = ?`;
 
-    const [result] = await pool.query(query, values);
+    const [result] = await poolInventario.query(query, values);
 
     if (result.affectedRows === 0) {
       return NextResponse.json({ error: 'Industria no encontrada' }, { status: 404 });
@@ -65,7 +65,7 @@ export async function DELETE(request, { params }) {
   try {
     const { id } = params;
 
-    const [result] = await pool.query('UPDATE TbInv_Industria SET Estado_Pai = "BA" WHERE Id_Industria = ?', [id]);
+    const [result] = await poolInventario.query('UPDATE TbInv_Industria SET Estado_Pai = "BA" WHERE Id_Industria = ?', [id]);
 
     if (result.affectedRows === 0) {
       return NextResponse.json({ error: 'Industria no encontrada' }, { status: 404 });

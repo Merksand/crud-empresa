@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { poolClientes, pool } from "@/lib/db"; // Asegurar que usamos el pool correcto
+import { poolInventario, poolEmpresa } from "@/lib/db"; // Asegurar que usamos el pool correcto
 
 /** 🔹 Obtener todas las sucursales con su empresa */
 export async function GET() {
   try {
-    const [rows] = await poolClientes.query(`
+    const [rows] = await poolInventario.query(`
       SELECT 
         s.Id_Sucursal, 
         s.Id_Empresa_Suc, 
@@ -40,7 +40,7 @@ export async function POST(req) {
       );
     }
 
-    await poolClientes.query(
+    await poolInventario.query(
       "INSERT INTO Bd_INVENTARIO_12022025_2.TbInv_Sucursal (Id_Empresa_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc) VALUES (?, ?, ?, ?)",
       [Id_Empresa_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc]
     );
