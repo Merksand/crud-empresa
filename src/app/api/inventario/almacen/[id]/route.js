@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { pool } from '@/lib/db';
+import { poolInventario } from '@/lib/db';
 
 export async function DELETE(req, { params }) {
   const { id } = params;
   try {
-    await pool.query(
+    await poolInventario.query(
       'UPDATE TbInv_Almacen SET Estado_Alm = "BA" WHERE Id_Almacen = ?',
       [id]
     );
@@ -20,7 +20,7 @@ export async function DELETE(req, { params }) {
 export async function GET(req, { params }) {
   const { id } = params;
   try {
-    const [rows] = await pool.query(
+    const [rows] = await poolInventario.query(
       'SELECT * FROM TbInv_Almacen WHERE Id_Almacen = ? AND Estado_Alm = "AC"',
       [id]
     );
@@ -47,7 +47,7 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ message: 'Campos obligatorios faltantes' }, { status: 400 });
     }
 
-    const [result] = await pool.query(
+    const [result] = await poolInventario.query(
       `UPDATE TbInv_Almacen 
        SET Id_Sucursal_Alm = ?, Nombre_Alm = ?, Ubicacion_Alm = ?, Capacidad_maxima_Alm = ? 
        WHERE Id_Almacen = ? AND Estado_Alm = 'AC'`,

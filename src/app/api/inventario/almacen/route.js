@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { pool } from '@/lib/db';
+import { poolInventario } from '@/lib/db';
 
 export async function GET() {
   try {
-    const [rows] = await pool.query(`
+    const [rows] = await poolInventario.query(`
       SELECT 
         a.Id_Almacen, 
         a.Id_Sucursal_Alm, 
@@ -33,7 +33,7 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Campos obligatorios faltantes' }, { status: 400 });
     }
 
-    await pool.query(
+    await poolInventario.query(
       'INSERT INTO TbInv_Almacen (Id_Sucursal_Alm, Nombre_Alm, Ubicacion_Alm, Capacidad_maxima_Alm, Estado_Alm) VALUES (?, ?, ?, ?, ?)',
       [Id_Sucursal_Alm, Nombre_Alm, Ubicacion_Alm, Capacidad_maxima_Alm, Estado_Alm]
     );

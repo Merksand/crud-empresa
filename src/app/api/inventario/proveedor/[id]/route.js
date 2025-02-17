@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { pool } from '@/lib/db';
+import { poolInventario } from '@/lib/db';
 
 // GET - Obtener un proveedor específico
 export async function GET(request, { params }) {
     try {
-        const [rows] = await pool.query(
+        const [rows] = await poolInventario.query(
             'SELECT Id_Proveedor, Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, Estado_Prov FROM TbInv_Proveedor WHERE Id_Proveedor = ?',
             [params.id]
         );
@@ -25,7 +25,7 @@ export async function PUT(request, { params }) {
         const data = await request.json();
         const { Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, Estado_Prov } = data;
 
-        const [result] = await pool.query(
+        const [result] = await poolInventario.query(
             'UPDATE TbInv_Proveedor SET Nombre_Prov = ?, Direccion_Prov = ?, Telefono_Prov = ?, Correo_Prov = ? WHERE Id_Proveedor = ?',
             [Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, params.id]
         );
@@ -49,7 +49,7 @@ export async function DELETE(request, { params }) {
             return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
         }
 
-        const [result] = await pool.query(
+        const [result] = await poolInventario.query(
             'UPDATE TbInv_Proveedor SET Estado_Prov = ? WHERE Id_Proveedor = ?',
             ['Inactivo', id]
         );

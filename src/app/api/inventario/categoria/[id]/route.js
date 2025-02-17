@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { pool } from '@/lib/db';
+import { poolInventario } from '@/lib/db';
 
 export async function PUT(req, { params }) {
   try {
@@ -19,7 +19,7 @@ export async function PUT(req, { params }) {
     `;
     const values = [Nombre_Cat, Id_Categoria_Padre_Cat || null, Estado_Cat || "AC", id];
 
-    await pool.query(query, values);
+    await poolInventario.query(query, values);
 
     return new Response(JSON.stringify({ message: "Categoría actualizada con éxito" }), { status: 200 });
   } catch (error) {
@@ -37,7 +37,7 @@ export async function DELETE(req, { params }) {
     const query = `
       UPDATE TbInv_Categoria SET Estado_Cat = 'BA' WHERE Id_Categoria = ?
     `;
-    await pool.query(query, [id]);
+    await poolInventario.query(query, [id]);
 
     return new Response(JSON.stringify({ message: "Categoría eliminada con éxito" }), { status: 200 });
   } catch (error) {

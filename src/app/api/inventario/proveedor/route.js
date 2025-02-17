@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { pool } from '@/lib/db';
+import { poolInventario } from '@/lib/db';
 
 // GET - Obtener todos los proveedores activos
 export async function GET() {
     try {
-        const [rows] = await pool.query(
+        const [rows] = await poolInventario.query(
             'SELECT Id_Proveedor, Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, Estado_Prov FROM TbInv_Proveedor WHERE Estado_Prov = ?',
-            ['Activo']
+            ['AC']
         );
         return NextResponse.json(rows);
     } catch (error) {
@@ -20,7 +20,7 @@ export async function POST(request) {
         const data = await request.json();
         const { Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov } = data;
 
-        const [result] = await pool.query(
+        const [result] = await poolInventario.query(
             'INSERT INTO TbInv_Proveedor (Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, Estado_Prov) VALUES (?, ?, ?, ?, ?)',
             [Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, 'Activo']
         );

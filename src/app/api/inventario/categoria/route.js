@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { pool } from '@/lib/db';
+import { poolInventario } from '@/lib/db';
 
 export async function GET() {
   try {
-    const [rows] = await pool.query('SELECT * FROM TbInv_Categoria WHERE Estado_Cat = "AC"');
+    const [rows] = await poolInventario.query('SELECT * FROM TbInv_Categoria WHERE Estado_Cat = "AC"');
     return NextResponse.json(rows);
   } catch (error) {
     console.error(error);
@@ -27,10 +27,14 @@ export async function POST(req) {
     `;
     const values = [Nombre_Cat, Id_Categoria_Padre_Cat || null, Estado_Cat || "AC"];
 
-    await pool.query(query, values);
+    await poolInventario.query(query, values);
 
     return new Response(JSON.stringify({ message: "Categoría creada con éxito" }), { status: 201 });
   } catch (error) {
     return new Response(JSON.stringify({ message: "Error al crear la categoría" }), { status: 500 });
   }
 }
+
+
+
+

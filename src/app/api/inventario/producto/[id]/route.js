@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { pool } from '@/lib/db';
+import { poolInventario } from '@/lib/db';
 
 // GET - Obtener un producto específico por ID
 export async function GET(request, { params }) {
   try {
     const { productoId } = params;
 
-    const [rows] = await pool.query(
+    const [rows] = await poolInventario.query(
       'SELECT * FROM TbInv_Producto WHERE Id_Producto = ?',
       [productoId]
     );
@@ -49,7 +49,7 @@ export async function PUT(request, { params }) {
     const { productoId } = params;
 
     // Verificar si el producto existe
-    const [existing] = await pool.query(
+    const [existing] = await poolInventario.query(
       'SELECT * FROM TbInv_Producto WHERE Id_Producto = ?',
       [productoId]
     );
@@ -62,7 +62,7 @@ export async function PUT(request, { params }) {
     }
 
     // Actualizar el producto en la base de datos
-    const [result] = await pool.query(
+    const [result] = await poolInventario.query(
       `UPDATE TbInv_Producto 
        SET Id_Categoria_Pro = ?, 
            Id_Marca_Pro = ?, 
@@ -102,7 +102,7 @@ export async function PUT(request, { params }) {
     }
 
     // Obtener los datos actualizados
-    const [updated] = await pool.query(
+    const [updated] = await poolInventario.query(
       'SELECT * FROM TbInv_Producto WHERE Id_Producto = ?',
       [productoId]
     );
@@ -125,7 +125,7 @@ export async function DELETE(request, { params }) {
   try {
     const { productoId } = params;
     console.log(productoId)
-    const [result] = await pool.query(
+    const [result] = await poolInventario.query(
       'UPDATE TbInv_Producto SET Estado_Pro = ? WHERE Id_Producto = ?',
       ['BA',productoId]
     );

@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { pool } from '../../../../../lib/db';
+import { poolInventario } from '../../../../../lib/db';
 
 // GET - Obtener una marca específica
 export async function GET(request, { params }) {
     try {
-        const [rows] = await pool.query(
+        const [rows] = await poolInventario.query(
             'SELECT Id_Marca, Nombre_Mar, Estado_Mar FROM TbInv_Marca WHERE Id_Marca = ?',
             [params.id]
         );
@@ -25,7 +25,7 @@ export async function PUT(request, { params }) {
         const data = await request.json();
         const { Nombre_Mar } = data;
 
-        const [result] = await pool.query(
+        const [result] = await poolInventario.query(
             'UPDATE TbInv_Marca SET Nombre_Mar = ? WHERE Id_Marca = ?',
             [Nombre_Mar, params.id]
         );
@@ -52,7 +52,7 @@ export async function DELETE(request, { params }) {
             );
         }
 
-        const [result] = await pool.query(
+        const [result] = await poolInventario.query(
             'UPDATE TbInv_Marca SET Estado_Mar = ? WHERE Id_Marca = ?',
             ['Inactivo', id]
         );
