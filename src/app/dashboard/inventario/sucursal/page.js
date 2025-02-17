@@ -111,7 +111,7 @@ export default function Sucursales() {
             <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
               {loading ? (
                 <tr>
-                  <td colSpan="3" className="px-6 py-4 text-center">
+                  <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
                       <span className="ml-2">Cargando...</span>
@@ -181,7 +181,7 @@ export default function Sucursales() {
               const url = sucursalEditar
                 ? `/api/inventario/sucursal/${sucursalEditar.Id_Sucursal}` // URL para actualizar
                 : "/api/inventario/sucursal"; // URL para crear
-                console.log(data)
+              console.log(data)
               await fetch(url, {
                 method, // Usa el método dinámico
                 headers: { "Content-Type": "application/json" },

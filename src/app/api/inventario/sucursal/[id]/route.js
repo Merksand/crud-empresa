@@ -1,5 +1,3 @@
-// src/app/api/sucursal/[id]/route.js
-
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 
