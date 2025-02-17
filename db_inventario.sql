@@ -35,7 +35,7 @@ CREATE TABLE TbInv_Categoria (
     Id_Categoria          INT PRIMARY KEY AUTO_INCREMENT,
     Nombre_Cat            VARCHAR(100) NOT NULL,
     Id_Categoria_Padre_Cat INT,
-    Estado_Cat            INT,
+    Estado_Cat             VARCHAR(10),
     FOREIGN KEY (Id_Categoria_Padre_Cat) REFERENCES TbInv_Categoria(Id_Categoria)
 );
 

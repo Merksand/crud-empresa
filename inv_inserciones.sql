@@ -1,3 +1,5 @@
+use Bd_INVENTARIO_12022025_2;
+
 -- Inserciones para TbInv_Sucursal
 INSERT INTO TbInv_Sucursal (Id_Sucursal, Id_Empresa_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc) 
 VALUES 
@@ -28,11 +30,14 @@ VALUES
 -- Inserciones para TbInv_Categoria
 INSERT INTO TbInv_Categoria (Nombre_Cat, Id_Categoria_Padre_Cat, Estado_Cat) 
 VALUES 
-('Electrodomésticos', 0, 1),
-('Móviles', 1, 1),
-('Computación', 0, 1),
-('Ropa Deportiva', 0, 1),
-('Accesorios', 4, 1);
+('Electrodomésticos', 1, 'AC'),
+('Móviles', 1, 'AC'),
+('Computación', 1, 'AC'),
+('Ropa Deportiva', 1, 'AC'),
+('Accesorios', 4, 'AC');
+
+
+
 
 -- Inserciones para TbInv_Marca
 INSERT INTO TbInv_Marca (Nombre_Mar, Estado_Mar) 
@@ -55,11 +60,11 @@ VALUES
 -- Inserciones para TbInv_Producto con URLs de imágenes
 INSERT INTO TbInv_Producto (Id_Codigo_Pro, Id_Categoria_Pro, Id_marca_Pro, Id_Industria_Pro, Codigo_Barras_Pro, Nombre_Pro, Modelo_Pro, Descripcion_Pro, Unidad_medida_Pro, Stock_minimo_Pro, Stock_maximo_Pro, Foto_Pro, Atributo_Personalizados_Pro, Estado_pro)
 VALUES 
-(1001, 1, 1, 2, '1234567890123', 'Refrigerador', 'SAMSUNG-XR200', 'Refrigerador No Frost', 'Unidad', 10, 50, 'https://example.com/images/refrigerador.jpg', '{}', 'AC'),
-(1002, 2, 1, 2, '7894561230123', 'Teléfono Móvil', 'SAMSUNG-GALAXY S21', 'Smartphone de última generación', 'Unidad', 5, 30, 'https://example.com/images/galaxy-s21.jpg', '{}', 'AC'),
-(1003, 3, 2, 2, '3216549870123', 'Laptop', 'LG-ULTRA15', 'Laptop ultradelgada', 'Unidad', 5, 20, 'https://example.com/images/lg-laptop.jpg', '{}', 'AC'),
-(1004, 4, 3, 3, '9876543210123', 'Zapatillas', 'NIKE-AIRMAX', 'Zapatillas deportivas', 'Par', 15, 60, 'https://example.com/images/nike-airmax.jpg', '{}', 'AC'),
-(1005, 5, 4, 3, '1237896540123', 'Gorra', 'ADIDAS-CAP', 'Gorra deportiva', 'Unidad', 20, 80, 'https://example.com/images/adidas-cap.jpg', '{}', 'AC');
+(1001, 1, 1, 2, '1234567890123', 'Refrigerador', 'SAMSUNG-XR200', 'Refrigerador No Frost', 'Unidad', 10, 50, 'https://acortar.link/rSpXuZ', '{}', 'AC'),
+(1002, 1, 1, 2, '7894561230123', 'Teléfono Móvil', 'SAMSUNG-GALAXY S21', 'Smartphone de última generación', 'Unidad', 5, 30, 'https://acortar.link/wsGsdH', '{}', 'AC'),
+(1003, 1, 2, 2, '3216549870123', 'Laptop', 'LG-ULTRA15', 'Laptop ultradelgada', 'Unidad', 5, 20, 'https://acortar.link/YoTU16', '{}', 'AC'),
+(1004, 1, 3, 3, '9876543210123', 'Zapatillas', 'NIKE-AIRMAX', 'Zapatillas deportivas', 'Par', 15, 60, 'https://acortar.link/Se3sPv', '{}', 'AC'),
+(1005, 1, 4, 3, '1237896540123', 'Gorra', 'ADIDAS-CAP', 'Gorra deportiva', 'Unidad', 20, 80, 'https://acortar.link/vCz6AE', '{}', 'AC');
 
 -- Inserciones para TbInv_Funcionario
 INSERT INTO TbInv_Funcionario (Id_Persona_Fun, Nombre_Fun, Apellido_Fun, Cargo_Funcionario, Documento_Fun, Telefono_Fun, Correo_Fun, Estado_Fun)
