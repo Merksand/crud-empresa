@@ -52,22 +52,6 @@ export async function DELETE(request, { params }) {
             );
         }
 
-        // Aquí puedes agregar la verificación de relaciones si es necesario
-        // Por ejemplo, si tienes una tabla que relacione productos con marcas:
-        /*
-        const [relaciones] = await pool.query(
-            'SELECT COUNT(*) AS count FROM TbInv_Productos WHERE Id_Marca = ?',
-            [id]
-        );
-
-        if (relaciones[0].count > 0) {
-            return NextResponse.json(
-                { error: 'No se puede eliminar la marca porque tiene productos asociados.' },
-                { status: 400 }
-            );
-        }
-        */
-
         const [result] = await pool.query(
             'UPDATE TbInv_Marca SET Estado_Mar = ? WHERE Id_Marca = ?',
             ['Inactivo', id]

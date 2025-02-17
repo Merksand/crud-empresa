@@ -124,10 +124,10 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     const { productoId } = params;
-
+    console.log(productoId)
     const [result] = await pool.query(
-      'UPDATE TbInv_Producto SET Estado_Pro = "INACTIVO" WHERE Id_Producto = ?',
-      [productoId]
+      'UPDATE TbInv_Producto SET Estado_Pro = ? WHERE Id_Producto = ?',
+      ['BA',productoId]
     );
 
     if (result.affectedRows === 0) {

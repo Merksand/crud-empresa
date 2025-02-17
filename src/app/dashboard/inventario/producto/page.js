@@ -59,11 +59,16 @@ export default function Producto() {
   };
 
   const confirmDelete = async () => {
+
+    console.log("Pene: ",productos)
+    console.log(deleteModal.producto.Id_Producto)
+
     try {
-      const response = await fetch(`/api/productos/${deleteModal.producto.Id_Producto}`, {
+      const response = await fetch(`/api/inventario/producto/${deleteModal.producto.Id_Producto}`, {
         method: 'DELETE',
       });
 
+      
       if (!response.ok) {
         throw new Error('Error al eliminar el producto');
       }
@@ -113,32 +118,38 @@ export default function Producto() {
                   <td colSpan="7" className="px-6 py-4 text-center text-gray-500">No hay productos registrados</td>
                 </tr>
               ) : (
-                productos.map((producto) => (
-                  <tr key={producto.Id_Producto}>
-                    <td className="px-6 py-4 text-sm">{producto.Nombre_Pro}</td>
-                    <td className="px-6 py-4 text-sm">{producto.Modelo_Pro}</td>
-                    <td className="px-6 py-4 text-sm">{producto.Unidad_Medida_Pro}</td>
-                    <td className="px-6 py-4 text-sm">{producto.Foto_Pro}</td>
-                    <td className="px-6 py-4 text-sm">{producto.Estado_Pro}</td>
-                    <td className="px-6 py-4 text-right text-sm">
-                      <button
-                        onClick={() => {
-                          setProductoEditar(producto);
-                          setIsModalOpen(true);
-                        }}
-                        className="text-blue-600 hover:text-blue-900 mr-4"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => handleDelete(producto)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        Eliminar
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                productos.map((producto) =>{
+                  //console.log(producto)
+                  return (
+                    <tr key={producto.Id_Producto}>
+                      <td className="px-6 py-4 text-sm">{producto.Nombre_Pro}</td>
+                      <td className="px-6 py-4 text-sm">{producto.Modelo_Pro}</td>
+                      <td className="px-6 py-4 text-sm">{producto.Unidad_medida_Pro}</td>
+                      <td className="px-6 py-4 text-sm">
+                        <img src={producto.Foto_Pro} width={100} ></img>
+                      </td>
+                      <td className="px-6 py-4 text-sm">{producto.Estado_Pro}</td>
+                      <td className="px-6 py-4 text-right text-sm">
+                        <button
+                          onClick={() => {
+                            setProductoEditar(producto);
+                            setIsModalOpen(true);
+                          }}
+                          className="text-blue-600 hover:text-blue-900 mr-4"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => handleDelete(producto)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                } 
+                )
               )}
             </tbody>
           </table>
