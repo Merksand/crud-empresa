@@ -98,7 +98,72 @@ export default function Sidebar() {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1-2a2 2 0 012-1h12a2 2 0 012 1l1 2m-18 0h18m-18 0l2 9a2 2 0 002 2h8a2 2 0 002-2l2-9M5 19h14" />
       </svg>
     )
+  },
+  {
+    title: 'Funcionario',
+    path: '/dashboard/inventario/funcionario',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+    )
+  },
+  {
+    title: 'funcionarioAlmacen',
+    path: '/dashboard/inventario/funcionarioAlmacen',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+      </svg>
+    )
+  },
+  {
+    title: 'Inventario',
+    path: '/dashboard/inventario/inventario',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+      </svg>
+    )
+  },
+  {
+    title: 'Tipo movimiento',
+    path: '/dashboard/inventario/tipoMovimiento',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+      </svg>
+    )
+
+  },
+  {
+    title: 'Metodo Valoracion',
+    path: '/dashboard/inventario/metodoValoracion',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10H9m3-3v6m0-6V4" />
+      </svg>
+    )
+  },
+  {
+    title: 'Movimiento Inventario',
+    path: '/dashboard/inventario/movimientoInventario',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+      </svg>
+    )
+  },
+  {
+    title: "Inventario Bajas",
+    path: '/dashboard/inventario/bajas',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M10 14h4M4 18h16" />
+      </svg>
+    )
   }
+
   
 
   ];
