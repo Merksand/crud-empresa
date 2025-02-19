@@ -105,7 +105,6 @@ export default function Producto() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Modelo</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Unidad Medida</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Foto</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
@@ -129,7 +128,6 @@ export default function Producto() {
                       <td className="px-6 py-4 text-sm">
                         <img src={producto.Foto_Pro} width={100} ></img>
                       </td>
-                      <td className="px-6 py-4 text-sm">{producto.Estado_Pro}</td>
                       <td className="px-6 py-4 text-right text-sm">
                         <button
                           onClick={() => {
