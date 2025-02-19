@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
 
 export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose }) {
     const [tiposMovimiento, setTiposMovimiento] = useState([]);
@@ -20,8 +17,9 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     const [debito, setDebito] = useState("");
     const [fechaMovimiento, setFechaMovimiento] = useState("");
 
+    // Cargar listas de selección al iniciar
     useEffect(() => {
-        fetch("/api/inventario/tipoMovimiento") 
+        fetch("/api/inventario/tipoMovimiento")
             .then((res) => res.json())
             .then((data) => setTiposMovimiento(data));
 
@@ -33,7 +31,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             .then((res) => res.json())
             .then((data) => setAlmacenes(data));
 
-        fetch("/api/inventario/metodoValoracion") 
+        fetch("/api/inventario/metodoValoracion")
             .then((res) => res.json())
             .then((data) => setMetodosValoracion(data));
 
@@ -42,6 +40,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             .then((data) => setInventarios(data));
     }, []);
 
+    // Cargar datos si está en modo edición
     useEffect(() => {
         if (movimiento) {
             setTipoMovimiento(movimiento.Id_TipoMovimiento_MoI || "");
@@ -52,14 +51,26 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             setMetodoValoracion(movimiento.Id_MetodoValoracion_MoI || "");
             setCantidad(movimiento.Cantidad_MoI || "");
             setDebito(movimiento.Debito_MoI || "");
-            setFechaMovimiento(movimiento.FechaMovimiento_MoI ? movimiento.FechaMovimiento_MoI.split("T")[0] : ""); // Solo en edición
+            setFechaMovimiento(movimiento.FechaMovimiento_MoI ? movimiento.FechaMovimiento_MoI.split("T")[0] : "");
         }
     }, [movimiento]);
 
+    // Actualizar almacenes según el tipo de movimiento
+    useEffect(() => {
+        if (tipoMovimiento === "1") setAlmacenOrigen("");
+        if (tipoMovimiento === "2") setAlmacenDestino("");
+        if (tipoMovimiento !== "3") {
+            setAlmacenOrigen("");
+            setAlmacenDestino("");
+        }
+    }, [tipoMovimiento]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Validaciones
         if (!tipoMovimiento || !producto || !inventario || !cantidad || !metodoValoracion || debito === "") {
-            toast.error("Por favor, complete todos los campos obligatorios.");
+            alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
 
@@ -73,6 +84,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             return;
         }
 
+        // Validación de almacenes según el tipo de movimiento
         if (tipoMovimiento === "1" && !almacenDestino) {
             alert("Debe seleccionar un almacén de destino para la entrada.");
             return;
@@ -95,11 +107,11 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             Id_Producto_MoI: producto,
             Id_Inventario_MoI: inventario,
             Id_MetodoValoracion_MoI: metodoValoracion,
-            Id_AlmacenOrigen_MoI: almacenOrigen || null,
-            Id_AlmacenDestino_MoI: almacenDestino || null,
+            Id_AlmacenOrigen_MoI: tipoMovimiento === "2" || tipoMovimiento === "3" ? almacenOrigen : null,
+            Id_AlmacenDestino_MoI: tipoMovimiento === "1" || tipoMovimiento === "3" ? almacenDestino : null,
             Cantidad_MoI: cantidad,
             Debito_MoI: debito,
-            FechaMovimiento_MoI: movimiento ? fechaMovimiento : undefined, // Solo se envía en edición
+            FechaMovimiento_MoI: movimiento ? fechaMovimiento : undefined,
             Estado_MoI: "AC",
         };
 
@@ -133,9 +145,45 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                 <select value={inventario} onChange={(e) => setInventario(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
                     <option value="">Seleccione un inventario</option>
                     {inventarios.map((inv) => (
-                        <option key={inv.Id_Inventario} value={inv.Id_Inventario}>{`ID: ${inv.Id_Inventario} - Producto: ${inv.Nombre_Producto} - Cantidad: ${inv.Cantidad_Inv}`}</option>
+                        <option key={inv.Id_Inventario} value={inv.Id_Inventario}>
+                            {`ID: ${inv.Id_Inventario} - Producto: ${inv.Nombre_Producto} - Cantidad: ${inv.Cantidad_Inv}`}
+                        </option>
                     ))}
                 </select>
+            </div>
+
+            {tipoMovimiento === "2" || tipoMovimiento === "3" ? (
+                <div>
+                    <label className="block text-sm font-medium mb-1">Almacén Origen</label>
+                    <select value={almacenOrigen} onChange={(e) => setAlmacenOrigen(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
+                        <option value="">Seleccione un almacén de origen</option>
+                        {almacenes.map((a) => (
+                            <option key={a.Id_Almacen} value={a.Id_Almacen}>{a.Nombre_Alm}</option>
+                        ))}
+                    </select>
+                </div>
+            ) : null}
+
+            {tipoMovimiento === "1" || tipoMovimiento === "3" ? (
+                <div>
+                    <label className="block text-sm font-medium mb-1">Almacén Destino</label>
+                    <select value={almacenDestino} onChange={(e) => setAlmacenDestino(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
+                        <option value="">Seleccione un almacén de destino</option>
+                        {almacenes.map((a) => (
+                            <option key={a.Id_Almacen} value={a.Id_Almacen}>{a.Nombre_Alm}</option>
+                        ))}
+                    </select>
+                </div>
+            ) : null}
+
+            <div>
+                <label className="block text-sm font-medium mb-1">Cantidad</label>
+                <input type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
+            </div>
+
+            <div>
+                <label className="block text-sm font-medium mb-1">Débito</label>
+                <input type="number" value={debito} onChange={(e) => setDebito(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
             </div>
 
             {movimiento && (
@@ -144,11 +192,6 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                     <input type="date" value={fechaMovimiento} onChange={(e) => setFechaMovimiento(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" />
                 </div>
             )}
-
-            <div>
-                <label className="block text-sm font-medium mb-1">Débito</label>
-                <input type="number" value={debito} onChange={(e) => setDebito(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
-            </div>
 
             <div className="flex justify-end gap-2 mt-6">
                 <button type="button" onClick={onClose} className="px-4 py-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">Cancelar</button>
