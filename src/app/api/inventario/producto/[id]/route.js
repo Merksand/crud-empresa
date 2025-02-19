@@ -32,6 +32,7 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     const data = await request.json();
+    console.log(data)
     const {
       Id_Categoria_Pro,
       Id_Marca_Pro,
@@ -44,14 +45,17 @@ export async function PUT(request, { params }) {
       Stock_maximo_Pro,
       Foto_Pro,
       Atributo_Personalizados_Pro,
-      Estado_Pro, // Permite actualizar el estado del producto
+      Estado_Pro = 'AC',  
     } = data;
-    const { productoId } = params;
+    const { id } = params;
+
+    console.log("ID: ", id)
+    console.log("params: ", params)
 
     // Verificar si el producto existe
     const [existing] = await poolInventario.query(
       'SELECT * FROM TbInv_Producto WHERE Id_Producto = ?',
-      [productoId]
+      [id]
     );
 
     if (existing.length === 0) {
@@ -89,8 +93,8 @@ export async function PUT(request, { params }) {
         Stock_maximo_Pro || 0,
         Foto_Pro || null,
         Atributo_Personalizados_Pro || null,
-        Estado_Pro || 'ACTIVO', // Si no se especifica, mantiene activo
-        productoId,
+        Estado_Pro || 'AC', 
+        id,
       ]
     );
 
@@ -104,7 +108,7 @@ export async function PUT(request, { params }) {
     // Obtener los datos actualizados
     const [updated] = await poolInventario.query(
       'SELECT * FROM TbInv_Producto WHERE Id_Producto = ?',
-      [productoId]
+      [id]
     );
 
     return NextResponse.json({
@@ -120,14 +124,13 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE - Eliminación lógica (cambia Estado_Pro a "INACTIVO")
 export async function DELETE(request, { params }) {
   try {
-    const { productoId } = params;
-    console.log(productoId)
+    const { id } = params;
+    console.log(params)
     const [result] = await poolInventario.query(
       'UPDATE TbInv_Producto SET Estado_Pro = ? WHERE Id_Producto = ?',
-      ['BA',productoId]
+      ['BA',id]
     );
 
     if (result.affectedRows === 0) {

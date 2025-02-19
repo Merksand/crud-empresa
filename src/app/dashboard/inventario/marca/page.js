@@ -41,6 +41,7 @@ export default function Marca() {
 
   const confirmDelete = async () => {
     try {
+      console.log(deleteModal.marca.Id_Marca)
       const response = await fetch(`/api/inventario/marca/${deleteModal.marca.Id_Marca}`, {
         method: 'DELETE',
       });

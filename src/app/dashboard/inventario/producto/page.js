@@ -60,7 +60,7 @@ export default function Producto() {
 
   const confirmDelete = async () => {
 
-    console.log("Pene: ",productos)
+    // console.log("Pene: ",productos)
     console.log(deleteModal.producto.Id_Producto)
 
     try {
@@ -68,9 +68,10 @@ export default function Producto() {
         method: 'DELETE',
       });
 
-      
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Error al eliminar el producto');
+        throw new Error(data.error || 'Error al eliminar el producto');
       }
 
       showNotification('Producto eliminado correctamente');
@@ -119,7 +120,7 @@ export default function Producto() {
                 </tr>
               ) : (
                 productos.map((producto) =>{
-                  //console.log(producto)
+                  // console.log(producto)
                   return (
                     <tr key={producto.Id_Producto}>
                       <td className="px-6 py-4 text-sm">{producto.Nombre_Pro}</td>
@@ -178,6 +179,9 @@ export default function Producto() {
   industrias={industrias}
   onSubmit={async (data) => { // <-- Aquí agregamos la función que faltaba
     try {
+
+      console.log(data)
+      // console.log(productoEditar.Id_Producto)
       let response;
       if (productoEditar) {
         response = await fetch(`/api/inventario/producto/${productoEditar.Id_Producto}`, {
@@ -185,6 +189,9 @@ export default function Producto() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         });
+
+        // const responseData = await response.json();
+
       } else {
         response = await fetch('/api/inventario/producto', {
           method: 'POST',

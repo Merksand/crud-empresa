@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { poolInventario } from '@/lib/db';
 
-// GET - Obtener todos los productos activos
 export async function GET() {
   try {
     const [rows] = await poolInventario.query('SELECT * FROM TbInv_Producto WHERE Estado_Pro = "AC"');
@@ -29,17 +28,17 @@ export async function POST(request) {
       Atributo_Personalizados_Pro,
     } = data;
 
+    console.log(data)
     // Validar datos obligatorios
     if (!Id_Categoria_Pro || !Id_Marca_Pro || !Id_Industria_Pro || !Nombre_Pro || !Modelo_Pro || !Unidad_medida_Pro) {
       return NextResponse.json({ error: "Faltan datos obligatorios" }, { status: 400 });
     }
 
-    // Insertar el producto en la base de datos con Estado_Pro = "ACTIVO"
     const [insertResult] = await poolInventario.query(
       `INSERT INTO TbInv_Producto 
        (Id_Categoria_Pro, Id_Marca_Pro, Id_Industria_Pro, Nombre_Pro, Modelo_Pro, Descripcion_Pro, 
         Unidad_medida_Pro, Stock_minimo_Pro, Stock_maximo_Pro, Foto_Pro, Atributo_Personalizados_Pro, Estado_Pro) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "ACTIVO")`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "AC")`,
       [
         Id_Categoria_Pro,
         Id_Marca_Pro,
@@ -71,7 +70,7 @@ export async function POST(request) {
           Stock_maximo_Pro,
           Foto_Pro,
           Atributo_Personalizados_Pro,
-          Estado_Pro: "ACTIVO",
+          Estado_Pro: "AC",
         },
       },
       { status: 201 }

@@ -5,7 +5,6 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
   const [isLoading, setIsLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [isImageValid, setIsImageValid] = useState(!!producto?.Foto_Pro);
-
   useEffect(() => {
     setFotoUrl(producto?.Foto_Pro || '');
     setImageError(false);
@@ -57,14 +56,13 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
     };
     onSubmit(data);
   };
-
   return (
     <div className="p-4 mx-auto max-w-[900px] bg-white dark:bg-gray-800 rounded-lg shadow-md">
 
-      
+
       <form onSubmit={handleSubmit} className="space-y-3 max-h-screen overflow-y-auto p-1.5">
-        
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-medium mb-1">Categoría</label>
             <select
@@ -86,16 +84,20 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
             <label className="block text-sm font-medium mb-1">Marca</label>
             <select
               name="marca"
-              defaultValue={producto?.Id_Marca_Pro || ''}
+              defaultValue={producto?.Id_marca_Pro || ''}
               className="w-full p-1.5 border rounded-lg dark:bg-gray-700"
               required
             >
               <option value="" disabled>Seleccione una marca</option>
-              {marcas?.map((marca) => (
-                <option key={marca.Id_Marca} value={marca.Id_Marca}>
-                  {marca.Nombre_Mar}
-                </option>
-              ))}
+              {marcas?.map((marca) => {
+
+                return (
+
+                  <option key={marca.Id_Marca} value={marca.Id_Marca}>
+                    {marca.Nombre_Mar}
+                  </option>
+                )
+              })}
             </select>
           </div>
 
@@ -130,9 +132,9 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
               placeholder="Ingrese el nombre del producto"
             />
           </div>
-      </div>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-medium mb-1">Modelo</label>
             <input
@@ -156,7 +158,7 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
               placeholder="Ingrese la descripcion"
             />
           </div>
-        </div>    
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-medium mb-1">Unidad de Medida</label>
@@ -182,84 +184,83 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
             />
           </div>
         </div>
-        
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Stock Maximo</label>
-          <input
-            type="text"
-            name="stock_maximo"
-            defaultValue={producto?.Stock_maximo_Pro}
-            className="w-full p-1.5 border rounded-lg dark:bg-gray-700"
-            required
-            placeholder="Stock maximo"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Stock Maximo</label>
+            <input
+              type="text"
+              name="stock_maximo"
+              defaultValue={producto?.Stock_maximo_Pro}
+              className="w-full p-1.5 border rounded-lg dark:bg-gray-700"
+              required
+              placeholder="Stock maximo"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Atributo</label>
+            <input
+              type="text"
+              name="atributos"
+              defaultValue={producto?.Atributo_Personalizados_Pro}
+              className="w-full p-1.5 border rounded-lg dark:bg-gray-700"
+              required
+              placeholder="Ingrese Atributo"
+            />
+          </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Atributo</label>
-          <input
-            type="text"
-            name="atributos"
-            defaultValue={producto?.Atributo_Personalizados_Pro}
-            className="w-full p-1.5 border rounded-lg dark:bg-gray-700"
-            required
-            placeholder="Ingrese Atributo"
-          />
-        </div>
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm font-medium mb-1">Foto (URL)</label>
+            <input
+              type="text"
+              name="foto"
+              value={fotoUrl}
+              onChange={handleFotoChange}
+              className={`w-full p-1.5 border rounded-lg dark:bg-gray-700 ${imageError ? 'border-red-500' : ''
+                }`}
+              required
+              placeholder="Ingrese la URL de la imagen"
+            />
+            {imageError && (
+              <p className="text-red-500 text-sm mt-1">
+                La URL proporcionada no es una imagen válida
+              </p>
+            )}
+            {fotoUrl && !imageError && (
+              <div className="mt-2 relative">
+                {isLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 rounded-lg">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                  </div>
+                )}
+                <img
+                  src={fotoUrl}
+                  alt="Foto preview"
+                  className="max-h-32 rounded-lg"
+                  onError={() => setImageError(true)}
+                />
+              </div>
+            )}
+          </div>
 
-      <div>
-          <label className="block text-sm font-medium mb-1">Foto (URL)</label>
-          <input
-            type="text"
-            name="foto"
-            value={fotoUrl}
-            onChange={handleFotoChange}
-            className={`w-full p-1.5 border rounded-lg dark:bg-gray-700 ${
-              imageError ? 'border-red-500' : ''
-            }`}
-            required
-            placeholder="Ingrese la URL de la imagen"
-          />
-          {imageError && (
-            <p className="text-red-500 text-sm mt-1">
-              La URL proporcionada no es una imagen válida
-            </p>
-          )}
-          {fotoUrl && !imageError && (
-            <div className="mt-2 relative">
-              {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 rounded-lg">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                </div>
-              )}
-              <img
-                src={fotoUrl}
-                alt="Foto preview"
-                className="max-h-32 rounded-lg"
-                onError={() => setImageError(true)}
-              />
-            </div>
-          )}
+          {/* <div>
+            <label className="block text-sm font-medium mb-1">Estado</label>
+            <select
+              name="estado"
+              defaultValue={producto?.Estado_Pro || 'ACTIVO'}
+              className="w-full p-1.5 border rounded-lg dark:bg-gray-700"
+              required
+            >
+              <option value="ACTIVO">Activo</option>
+              <option value="INACTIVO">Inactivo</option>
+            </select>
+          </div> */}
         </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Estado</label>
-          <select
-            name="estado"
-            defaultValue={producto?.Estado_Pro || 'ACTIVO'}
-            className="w-full p-1.5 border rounded-lg dark:bg-gray-700"
-            required
-          >
-            <option value="ACTIVO">Activo</option>
-            <option value="INACTIVO">Inactivo</option>
-          </select>
-        </div>
-      </div>
         <div className="flex justify-end gap-1.5 mt-6">
           <button
             type="button"
@@ -271,11 +272,10 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
           <button
             type="submit"
             disabled={!isImageValid || imageError}
-            className={`px-4 py-2 rounded-lg ${
-              !isImageValid || imageError
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-500 hover:bg-blue-600 text-white'
-            }`}
+            className={`px-4 py-2 rounded-lg ${!isImageValid || imageError
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-blue-500 hover:bg-blue-600 text-white'
+              }`}
           >
             {producto ? 'Actualizar' : 'Crear'}
           </button>
