@@ -184,8 +184,18 @@ export default function Sidebar() {
       <circle cx="18" cy="17" r="2" />
     </svg>
   )
-}
-  
+},
+
+{
+  title: "Monedas",
+  path: '/dashboard/inventario/moneda',
+  icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 8v4l2 2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+} 
 
   ];
 
