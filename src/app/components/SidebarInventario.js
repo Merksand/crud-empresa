@@ -184,8 +184,29 @@ export default function Sidebar() {
       <circle cx="18" cy="17" r="2" />
     </svg>
   )
+},
+
+{
+  title: "Monedas",
+  path: '/dashboard/inventario/moneda',
+  icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 8v4l2 2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+},
+
+{
+  title: "Tipo de Cambio",
+  path: '/dashboard/inventario/tipoCambio',
+  icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8V4m0 0L8 8m4-4l4 4m-4 8v4m0 0l4-4m-4 4l-4-4M4 12h16" />
+    </svg>
+  )
 }
-  
+
 
   ];
 
