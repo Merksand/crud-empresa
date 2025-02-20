@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Modal from '@/app/components/Modal';
 import ProductoForm from '@/app/components/inventario/ProductoForm';
 import DeleteConfirmationModal from '@/app/components/DeleteConfirmationModal';
+import Notification from '@/app/components/Notification';
+import useNotification from '@/app/hooks/useNotification';
 
 export default function Producto() {
   const [productos, setProductos] = useState([]);
@@ -14,16 +16,12 @@ export default function Producto() {
   const [productoEditar, setProductoEditar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ show: false, producto: null });
-  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+  const { notification, showNotification } = useNotification();
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const showNotification = (message, type = 'success') => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
-  };
 
   const fetchData = async () => {
     try {
@@ -86,6 +84,7 @@ export default function Producto() {
 
   return (
     <div className="p-6">
+      {notification.show && <Notification message={notification.message} type={notification.type} />}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Gestión de Productos</h1>
         <button
@@ -105,7 +104,6 @@ export default function Producto() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Modelo</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Unidad Medida</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Foto</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
@@ -119,7 +117,7 @@ export default function Producto() {
                   <td colSpan="7" className="px-6 py-4 text-center text-gray-500">No hay productos registrados</td>
                 </tr>
               ) : (
-                productos.map((producto) =>{
+                productos.map((producto) => {
                   // console.log(producto)
                   return (
                     <tr key={producto.Id_Producto}>
@@ -129,8 +127,7 @@ export default function Producto() {
                       <td className="px-6 py-4 text-sm">
                         <img src={producto.Foto_Pro} width={100} ></img>
                       </td>
-                      <td className="px-6 py-4 text-sm">{producto.Estado_Pro}</td>
-                      <td className="px-6 py-4 text-right text-sm">
+                      <td className="px-6 py-4 text-left text-sm">
                         <button
                           onClick={() => {
                             setProductoEditar(producto);
@@ -149,7 +146,7 @@ export default function Producto() {
                       </td>
                     </tr>
                   )
-                } 
+                }
                 )
               )}
             </tbody>
@@ -173,58 +170,58 @@ export default function Producto() {
         title={productoEditar ? 'Editar Producto' : 'Nuevo Producto'}
       >
         <ProductoForm
-  producto={productoEditar}
-  categorias={categorias}
-  marcas={marcas}
-  industrias={industrias}
-  onSubmit={async (data) => { // <-- Aquí agregamos la función que faltaba
-    try {
+          producto={productoEditar}
+          categorias={categorias}
+          marcas={marcas}
+          industrias={industrias}
+          onSubmit={async (data) => {
+            try {
 
-      console.log(data)
-      // console.log(productoEditar.Id_Producto)
-      let response;
-      if (productoEditar) {
-        response = await fetch(`/api/inventario/producto/${productoEditar.Id_Producto}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
+              console.log(data)
+              // console.log(productoEditar.Id_Producto)
+              let response;
+              if (productoEditar) {
+                response = await fetch(`/api/inventario/producto/${productoEditar.Id_Producto}`, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(data),
+                });
 
-        // const responseData = await response.json();
+                // const responseData = await response.json();
 
-      } else {
-        response = await fetch('/api/inventario/producto', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-      }
+              } else {
+                response = await fetch('/api/inventario/producto', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(data),
+                });
+              }
 
-      const responseData = await response.json();
+              const responseData = await response.json();
 
-      if (!response.ok) {
-        throw new Error(responseData.error || 'Error al guardar el producto');
-      }
+              if (!response.ok) {
+                throw new Error(responseData.error || 'Error al guardar el producto');
+              }
 
-      showNotification(
-        productoEditar
-          ? 'Producto actualizado correctamente'
-          : 'Producto creado correctamente'
-      );
-      setIsModalOpen(false);
-      setProductoEditar(null);
-      fetchData();
-    } catch (error) {
-      console.error('Error:', error);
-      showNotification(error.message || 'Error al guardar el producto', 'error');
-    }
-  }}
-  onClose={() => {
-    setIsModalOpen(false);
-    setProductoEditar(null);
-  }}
-  fetchData={fetchData}
-/>
+              showNotification(
+                productoEditar
+                  ? 'Producto actualizado correctamente'
+                  : 'Producto creado correctamente'
+              );
+              setIsModalOpen(false);
+              setProductoEditar(null);
+              fetchData();
+            } catch (error) {
+              console.error('Error:', error);
+              showNotification(error.message || 'Error al guardar el producto', 'error');
+            }
+          }}
+          onClose={() => {
+            setIsModalOpen(false);
+            setProductoEditar(null);
+          }}
+          fetchData={fetchData}
+        />
 
       </Modal>
     </div>

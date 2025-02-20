@@ -3,24 +3,23 @@ import { useState, useEffect } from "react";
 import Modal from "@/app/components/Modal";
 import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
 import TipoMovimientoForm from "@/app/components/inventario/TipoMovimientoForm";
+import Notification from "@/app/components/Notification";
+import useNotification from "@/app/hooks/useNotification";
 
 export default function TipoMovimiento() {
+  const { notification, showNotification } = useNotification();
   const [movimientos, setMovimientos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [movimientoEditar, setMovimientoEditar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ show: false, item: null });
-  const [notification, setNotification] = useState({ show: false, message: "", type: "" });
 
   // Cargar movimientos al inicializar
   useEffect(() => {
     fetchMovimientos();
   }, []);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => setNotification({ show: false, message: "", type: "" }), 3000);
-  };
+
 
   const fetchMovimientos = async () => {
     try {
@@ -93,16 +92,7 @@ export default function TipoMovimiento() {
 
   return (
     <div className="p-4">
-      {/* Notificaciones */}
-      {notification.show && (
-        <div
-          className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${
-            notification.type === "error" ? "bg-red-500 text-white" : "bg-green-500 text-white"
-          }`}
-        >
-          {notification.message}
-        </div>
-      )}
+      {notification.show && <Notification message={notification.message} type={notification.type} />}
       {/* Encabezado */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Gestión de Tipos de Movimiento</h1>

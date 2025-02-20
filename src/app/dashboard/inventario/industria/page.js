@@ -3,23 +3,20 @@ import { useState, useEffect } from "react";
 import Modal from "@/app/components/Modal";
 import IndustriaForm from "@/app/components/IndustriaForm";
 import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
+import Notification from "@/app/components/Notification";
+import useNotification from "@/app/hooks/useNotification";
 
 export default function Industrias() {
+    const { notification, showNotification } = useNotification();
     const [industrias, setIndustrias] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [industriaEditar, setIndustriaEditar] = useState(null);
     const [loading, setLoading] = useState(true);
     const [deleteModal, setDeleteModal] = useState({ show: false, industria: null });
-    const [notification, setNotification] = useState({ show: false, message: "", type: "" });
 
     useEffect(() => {
         fetchIndustrias();
     }, []);
-
-    const showNotification = (message, type = "success") => {
-        setNotification({ show: true, message, type });
-        setTimeout(() => setNotification({ show: false, message: "", type: "" }), 3000);
-    };
 
     const fetchIndustrias = async () => {
         try {
@@ -63,11 +60,7 @@ export default function Industrias() {
 
     return (
         <div className="p-4">
-            {notification.show && (
-                <div className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${notification.type === "error" ? "bg-red-500 text-white" : "bg-green-500 text-white"}`}>
-                    {notification.message}
-                </div>
-            )}
+            {notification.show && <Notification message={notification.message} type={notification.type} />}
 
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-2xl font-bold">Inventario de Industrias</h1>
@@ -92,7 +85,6 @@ export default function Industrias() {
                         <thead className="bg-gray-50 dark:bg-gray-700">
                             <tr>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
                                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
                             </tr>
                         </thead>
@@ -117,7 +109,6 @@ export default function Industrias() {
                                     return (
                                         <tr key={industria.Id_Industria} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">{industria.Nombre_Ind}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm">{industria.Estado_Pai}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <button
                                                     onClick={() => {

@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Modal from '@/app/components/Modal';
 import ProveedorForm from '@/app/components/inventario/ProveedorForm';
 import DeleteConfirmationModal from '@/app/components/DeleteConfirmationModal';
+import Notification from '@/app/components/Notification';
+import useNotification from '@/app/hooks/useNotification';
 
 export default function Proveedor() {
   const [proveedores, setProveedores] = useState([]);
@@ -10,16 +12,14 @@ export default function Proveedor() {
   const [proveedorEditar, setProveedorEditar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ show: false, proveedor: null });
-  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+
+  const { notification, showNotification } = useNotification();
 
   useEffect(() => {
     fetchProveedores();
   }, []);
 
-  const showNotification = (message, type = 'success') => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
-  };
+
 
   const fetchProveedores = async () => {
     try {
@@ -62,11 +62,7 @@ export default function Proveedor() {
 
   return (
     <div className="p-6">
-      {notification.show && (
-        <div className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${notification.type === 'error' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}>
-          {notification.message}
-        </div>
-      )}
+      {notification.show && <Notification message={notification.message} type={notification.type} />}
 
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Gestión de Proveedores</h1>
@@ -87,7 +83,6 @@ export default function Proveedor() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Direccion</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Telefono</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Correo</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
@@ -108,14 +103,6 @@ export default function Proveedor() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{proveedor.Telefono_Prov}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{proveedor.Correo_Prov}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${proveedor.Estado_Prov === 'Activo'
-                          ? 'bg-green-600'
-                          : 'bg-red-600'
-                          }`}>
-                          {proveedor.Estado_Prov}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
                         onClick={() => {
                           setProveedorEditar(proveedor);

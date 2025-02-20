@@ -3,23 +3,21 @@ import { useState, useEffect } from "react";
 import Modal from "@/app/components/Modal";
 import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
 import AlmacenForm from "@/app/components/inventario/AlmacenForm";
+import Notification from "@/app/components/Notification";
+import useNotification from "@/app/hooks/useNotification";
 
 export default function Almacenes() {
+  const { notification, showNotification } = useNotification();
   const [almacenes, setAlmacenes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [almacenEditar, setAlmacenEditar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ show: false, almacen: null });
-  const [notification, setNotification] = useState({ show: false, message: "", type: "" });
 
   useEffect(() => {
     fetchAlmacenes();
   }, []);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => setNotification({ show: false, message: "", type: "" }), 3000);
-  };
 
   const fetchAlmacenes = async () => {
     try {
@@ -62,12 +60,7 @@ export default function Almacenes() {
 
   return (
     <div className="p-4">
-      {notification.show && (
-        <div className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${notification.type === "error" ? "bg-red-500 text-white" : "bg-green-500 text-white"}`}>
-          {notification.message}
-        </div>
-      )}
-
+      {notification.show && <Notification message={notification.message} type={notification.type} />}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Gestión de Almacenes</h1>
         <button

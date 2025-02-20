@@ -52,7 +52,7 @@ export async function PUT(req, { params }) {
 
 /** 🔹 Eliminar lógicamente un movimiento de inventario */
 export async function DELETE(req, { params }) {
-  const { id } = params;
+  const { id } = await params;
   try {
     await poolInventario.query(
       `UPDATE TbInv_MovimientoInventario 

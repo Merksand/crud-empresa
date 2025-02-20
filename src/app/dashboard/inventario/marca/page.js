@@ -3,23 +3,21 @@ import { useState, useEffect } from 'react';
 import Modal from '@/app/components/Modal';
 import MarcaForm from '@/app/components/inventario/MarcaForm'; // Asegúrate de tener este componente
 import DeleteConfirmationModal from '@/app/components/DeleteConfirmationModal';
+import Notification from '@/app/components/Notification';
+import useNotification from '@/app/hooks/useNotification';
 
 export default function Marca() {
+  const { notification, showNotification } = useNotification();
   const [marcas, setMarcas] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [marcaEditar, setMarcaEditar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ show: false, marca: null });
-  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
   useEffect(() => {
     fetchMarcas();
   }, []);
 
-  const showNotification = (message, type = 'success') => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
-  };
 
   const fetchMarcas = async () => {
     try {
@@ -64,14 +62,7 @@ export default function Marca() {
 
   return (
     <div className="p-4">
-      {notification.show && (
-        <div className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${notification.type === 'error'
-          ? 'bg-red-500 text-white'
-          : 'bg-green-500 text-white'
-          }`}>
-          {notification.message}
-        </div>
-      )}
+      {notification.show && <Notification message={notification.message} type={notification.type} />}
 
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Gestión de Marcas</h1>
@@ -92,7 +83,6 @@ export default function Marca() {
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
@@ -117,14 +107,6 @@ export default function Marca() {
                   return (
                     <tr key={marca.Id_Marca} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{marca.Nombre_Mar}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${marca.Estado_Mar === 'Activo'
-                          ? 'bg-green-600'
-                          : 'bg-red-600'
-                          }`}>
-                          {marca.Estado_Mar}
-                        </span>
-                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
                           onClick={() => {

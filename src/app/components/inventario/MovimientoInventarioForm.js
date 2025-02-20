@@ -14,10 +14,8 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     const [almacenDestino, setAlmacenDestino] = useState("");
     const [metodoValoracion, setMetodoValoracion] = useState("");
     const [cantidad, setCantidad] = useState("");
-    const [debito, setDebito] = useState("");
     const [fechaMovimiento, setFechaMovimiento] = useState("");
 
-    // Cargar listas de selección al iniciar
     useEffect(() => {
         fetch("/api/inventario/tipoMovimiento")
             .then((res) => res.json())
@@ -40,7 +38,6 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             .then((data) => setInventarios(data));
     }, []);
 
-    // Cargar datos si está en modo edición
     useEffect(() => {
         if (movimiento) {
             setTipoMovimiento(movimiento.Id_TipoMovimiento_MoI || "");
@@ -50,12 +47,10 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             setAlmacenDestino(movimiento.Id_AlmacenDestino_MoI || "");
             setMetodoValoracion(movimiento.Id_MetodoValoracion_MoI || "");
             setCantidad(movimiento.Cantidad_MoI || "");
-            setDebito(movimiento.Debito_MoI || "");
             setFechaMovimiento(movimiento.FechaMovimiento_MoI ? movimiento.FechaMovimiento_MoI.split("T")[0] : "");
         }
     }, [movimiento]);
 
-    // Actualizar almacenes según el tipo de movimiento
     useEffect(() => {
         if (tipoMovimiento === "1") setAlmacenOrigen("");
         if (tipoMovimiento === "2") setAlmacenDestino("");
@@ -68,8 +63,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Validaciones
-        if (!tipoMovimiento || !producto || !inventario || !cantidad || !metodoValoracion || debito === "") {
+        if (!tipoMovimiento || !producto || !inventario || !cantidad || !metodoValoracion) {
             alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
@@ -79,12 +73,6 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             return;
         }
 
-        if (debito < 0) {
-            alert("El débito no puede ser negativo.");
-            return;
-        }
-
-        // Validación de almacenes según el tipo de movimiento
         if (tipoMovimiento === "1" && !almacenDestino) {
             alert("Debe seleccionar un almacén de destino para la entrada.");
             return;
@@ -110,7 +98,6 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             Id_AlmacenOrigen_MoI: tipoMovimiento === "2" || tipoMovimiento === "3" ? almacenOrigen : null,
             Id_AlmacenDestino_MoI: tipoMovimiento === "1" || tipoMovimiento === "3" ? almacenDestino : null,
             Cantidad_MoI: cantidad,
-            Debito_MoI: debito,
             FechaMovimiento_MoI: movimiento ? fechaMovimiento : undefined,
             Estado_MoI: "AC",
         };
@@ -142,7 +129,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
 
             <div>
                 <label className="block text-sm font-medium mb-1">Inventario</label>
-                <select value={inventario} onChange={(e) => setInventario(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
+                <select value={inventario} onChange={(e) => setInventario(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required disabled>
                     <option value="">Seleccione un inventario</option>
                     {inventarios.map((inv) => (
                         <option key={inv.Id_Inventario} value={inv.Id_Inventario}>
@@ -179,11 +166,6 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             <div>
                 <label className="block text-sm font-medium mb-1">Cantidad</label>
                 <input type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
-            </div>
-
-            <div>
-                <label className="block text-sm font-medium mb-1">Débito</label>
-                <input type="number" value={debito} onChange={(e) => setDebito(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
             </div>
 
             {movimiento && (

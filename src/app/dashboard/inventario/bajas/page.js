@@ -3,8 +3,11 @@ import { useState, useEffect } from "react";
 import Modal from "@/app/components/Modal";
 import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
 import BajasForm from "@/app/components/inventario/BajasForm";
+import Notification from "@/app/components/Notification";
+import useNotification from "@/app/hooks/useNotification";
 
 export default function Bajas() {
+  const { notification, showNotification } = useNotification();
   const [bajas, setBajas] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bajaEditar, setBajaEditar] = useState(null);
@@ -43,9 +46,11 @@ export default function Bajas() {
       if (!response.ok) {
         throw new Error("Error al eliminar la baja.");
       }
+      showNotification("Baja eliminada correctamente");
       fetchBajas();
     } catch (error) {
       console.error(error);
+      showNotification(error.message, "error");
     } finally {
       setDeleteModal({ show: false, baja: null });
     }
@@ -53,6 +58,7 @@ export default function Bajas() {
 
   return (
     <div className="p-4">
+      {notification.show && <Notification message={notification.message} type={notification.type} />}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Gestión de Bajas</h1>
         <button
@@ -156,6 +162,11 @@ export default function Bajas() {
                 body: JSON.stringify(data),
               });
 
+              showNotification(
+                bajaEditar
+                  ? "Baja actualizada correctamente"
+                  : "Baja creada correctamente"
+              );
               fetchBajas();
               setIsModalOpen(false);
               setBajaEditar(null);

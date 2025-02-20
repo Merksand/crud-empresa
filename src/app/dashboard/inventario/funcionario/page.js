@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import Modal from "@/app/components/Modal";
 import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
 import FuncionarioForm from "@/app/components/inventario/FuncionarioForm";
+import Notification from "@/app/components/Notification";
+import useNotification from "@/app/hooks/useNotification";
 
 export default function Funcionarios() {
   const [funcionarios, setFuncionarios] = useState([]);
@@ -13,24 +15,15 @@ export default function Funcionarios() {
     show: false,
     funcionario: null,
   });
-  const [notification, setNotification] = useState({
-    show: false,
-    message: "",
-    type: "",
-  });
+  const { notification, showNotification } = useNotification();
+
 
   // Cargar funcionarios al inicializar
   useEffect(() => {
     fetchFuncionarios();
   }, []);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ show: true, message, type });
-    setTimeout(
-      () => setNotification({ show: false, message: "", type: "" }),
-      3000
-    );
-  };
+
 
   const fetchFuncionarios = async () => {
     try {
@@ -78,7 +71,7 @@ export default function Funcionarios() {
       const url = funcionarioEditar
         ? `/api/inventario/funcionario/${funcionarioEditar.Id_Funcionario}`
         : '/api/inventario/funcionario';
-      
+
       const response = await fetch(url, {
         method: funcionarioEditar ? 'PUT' : 'POST',
         headers: {
@@ -98,10 +91,10 @@ export default function Funcionarios() {
           ? 'Funcionario actualizado correctamente'
           : 'Funcionario creado correctamente'
       );
-      
+
       // Actualizar la lista de funcionarios
       fetchFuncionarios();
-      
+
       // Cerrar el modal
       setIsModalOpen(false);
       setFuncionarioEditar(null);
@@ -112,18 +105,8 @@ export default function Funcionarios() {
 
   return (
     <div className="p-4">
-      {/* Notificaciones */}
-      {notification.show && (
-        <div
-          className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${
-            notification.type === "error"
-              ? "bg-red-500 text-white"
-              : "bg-green-500 text-white"
-          }`}
-        >
-          {notification.message}
-        </div>
-      )}
+      {notification.show && <Notification message={notification.message} type={notification.type} />}
+      {/* Encabezado */}
       {/* Encabezado */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Gestión de Funcionarios</h1>

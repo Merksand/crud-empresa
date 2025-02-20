@@ -39,7 +39,7 @@ export async function GET(req, { params }) {
 /** 🔹 Actualizar una asignación */
 export async function PUT(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const {
       Id_Funcionario_FA,
       Id_Almacen_FA,
@@ -96,7 +96,7 @@ export async function PUT(req, { params }) {
 /** 🔹 Eliminar lógicamente una asignación */
 export async function DELETE(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     
     // Verificar si existe la asignación
     const [existingAssignment] = await poolInventario.query(

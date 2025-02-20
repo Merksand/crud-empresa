@@ -3,24 +3,22 @@ import { useState, useEffect } from "react";
 import Modal from "@/app/components/Modal";
 import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
 import SucursalForm from "@/app/components/inventario/SucursalForm";
+import Notification from "@/app/components/Notification";
+import useNotification from "@/app/hooks/useNotification";
 
 export default function Sucursales() {
+  const { notification, showNotification } = useNotification();
   const [sucursales, setSucursales] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sucursalEditar, setSucursalEditar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ show: false, sucursal: null });
-  const [notification, setNotification] = useState({ show: false, message: "", type: "" });
 
   // Cargar sucursales al inicializar
   useEffect(() => {
     fetchSucursales();
   }, []);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => setNotification({ show: false, message: "", type: "" }), 3000);
-  };
 
   const fetchSucursales = async () => {
     try {
@@ -62,15 +60,7 @@ export default function Sucursales() {
 
   return (
     <div className="p-4">
-      {/* Notificaciones */}
-      {notification.show && (
-        <div
-          className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${notification.type === "error" ? "bg-red-500 text-white" : "bg-green-500 text-white"
-            }`}
-        >
-          {notification.message}
-        </div>
-      )}
+      {notification.show && <Notification message={notification.message} type={notification.type} />}
       {/* Encabezado */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Gestión de Sucursales</h1>

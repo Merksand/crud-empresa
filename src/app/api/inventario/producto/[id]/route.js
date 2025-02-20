@@ -32,7 +32,6 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     const data = await request.json();
-    console.log(data)
     const {
       Id_Categoria_Pro,
       Id_Marca_Pro,
@@ -49,8 +48,6 @@ export async function PUT(request, { params }) {
     } = data;
     const { id } = params;
 
-    console.log("ID: ", id)
-    console.log("params: ", params)
 
     // Verificar si el producto existe
     const [existing] = await poolInventario.query(
@@ -126,8 +123,7 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
-    const { id } = params;
-    console.log(params)
+    const { id } = await params;
     const [result] = await poolInventario.query(
       'UPDATE TbInv_Producto SET Estado_Pro = ? WHERE Id_Producto = ?',
       ['BA',id]

@@ -23,7 +23,7 @@ export async function GET(req, { params }) {
 
 // ✅ Editar una baja
 export async function PUT(req, { params }) {
-  const { id } = params;
+  const { id } = await params;
   const { Motivo_Baj, Autorizacion_Baj } = await req.json();
 
   try {
@@ -45,7 +45,7 @@ export async function PUT(req, { params }) {
 
 // ✅ Eliminar una baja (Eliminación lógica)
 export async function DELETE(req, { params }) {
-  const { id } = params;
+  const { id } = await params;
   try {
     const [result] = await poolInventario.query(
       `UPDATE TbInv_Bajas SET Estado_Baj = 'BA' WHERE Id_Baja = ?`,

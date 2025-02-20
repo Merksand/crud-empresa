@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import Modal from "@/app/components/Modal";
 import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
 import MovimientoInventarioForm from "@/app/components/inventario/MovimientoInventarioForm";
+import Notification from "@/app/components/Notification";
+import useNotification from "@/app/hooks/useNotification";
+
 
 export default function MovimientoInventario() {
   const [movimientos, setMovimientos] = useState([]);
@@ -10,24 +13,13 @@ export default function MovimientoInventario() {
   const [movimientoEditar, setMovimientoEditar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ show: false, item: null });
-  const [notification, setNotification] = useState({
-    show: false,
-    message: "",
-    type: "",
-  });
+  const { notification, showNotification } = useNotification();
 
   // Cargar movimientos de inventario al inicializar
   useEffect(() => {
     fetchMovimientos();
   }, []);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ show: true, message, type });
-    setTimeout(
-      () => setNotification({ show: false, message: "", type: "" }),
-      3000
-    );
-  };
 
   const fetchMovimientos = async () => {
     try {
@@ -110,15 +102,11 @@ export default function MovimientoInventario() {
     <div className="p-4">
       {/* Notificaciones */}
       {notification.show && (
-        <div
-          className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${
-            notification.type === "error"
-              ? "bg-red-500 text-white"
-              : "bg-green-500 text-white"
-          }`}
-        >
-          {notification.message}
-        </div>
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={() => showNotification({ show: false, message: "", type: "" })}
+        />
       )}
       {/* Encabezado */}
       <div className="flex justify-between items-center mb-4">
@@ -159,6 +147,12 @@ export default function MovimientoInventario() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Cantidad
                 </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Almacen Origen
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Almacen Destino
+                </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Acciones
                 </th>
@@ -184,39 +178,48 @@ export default function MovimientoInventario() {
                   </td>
                 </tr>
               ) : (
-                movimientos.map((item) => (
-                  <tr
-                    key={item.Id_MovimientoInventario}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700"
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {item.Nombre_Producto}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {item.Nombre_TipoMovimiento}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {item.Cantidad_MoI}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        onClick={() => {
-                          setMovimientoEditar(item);
-                          setIsModalOpen(true);
-                        }}
-                        className="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 mr-4"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => confirmDelete(item)}
-                        className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
-                      >
-                        Eliminar
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                movimientos.map((item) => {
+                  console.log(item)
+                  return (
+                    <tr
+                      key={item.Id_MovimientoInventario}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {item.Nombre_Producto}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {item.Nombre_TipoMovimiento}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {item.Cantidad_MoI}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {item.Nombre_AlmacenOrigen}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {item.Nombre_AlmacenDestino}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={() => {
+                            setMovimientoEditar(item);
+                            setIsModalOpen(true);
+                          }}
+                          className="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 mr-4"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => confirmDelete(item)}
+                          className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
+                        >
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })
               )}
             </tbody>
           </table>
