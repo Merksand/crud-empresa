@@ -94,7 +94,6 @@ export default function Lote() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Descripción</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Código de Barras</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Fecha de Vencimiento</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
@@ -122,7 +121,7 @@ export default function Lote() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{lote.CodigoBarras_Lot}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       {lote.FechaVencimiento_Lot ? new Date(lote.FechaVencimiento_Lot).toLocaleDateString() : "-"}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${lote.Estado_Lot === 'AC'
                         ? 'bg-green-600'
                         : 'bg-red-600'
@@ -130,6 +129,7 @@ export default function Lote() {
                         {lote.Estado_Lot === 'AC' ? 'Activo' : 'Inactivo'}
                       </span>
                     </td>
+                  */}
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
                         onClick={() => {
