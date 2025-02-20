@@ -175,7 +175,7 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
           <div>
             <label className="block text-sm font-medium mb-1">Stock Minimo</label>
             <input
-              type="text"
+              type="number"
               name="stock_minimo"
               defaultValue={producto?.Stock_minimo_Pro}
               className="w-full p-1.5 border rounded-lg dark:bg-gray-700"
@@ -190,7 +190,7 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
           <div>
             <label className="block text-sm font-medium mb-1">Stock Maximo</label>
             <input
-              type="text"
+              type="number"
               name="stock_maximo"
               defaultValue={producto?.Stock_maximo_Pro}
               className="w-full p-1.5 border rounded-lg dark:bg-gray-700"

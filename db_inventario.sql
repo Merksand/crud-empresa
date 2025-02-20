@@ -171,7 +171,7 @@ CREATE TABLE TbInv_Devoluciones (
     Motivo_Dev            VARCHAR(255),
     Autorizacion_Dev      VARCHAR(100),
     Fecha_Dev             DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Estado_Baj            VARCHAR(10),
+    Estado_Dev            VARCHAR(10),
     FOREIGN KEY (Id_Movimiento_Dev) REFERENCES TbInv_MovimientoInventario(Id_MovimientoInventario)
 );
 
@@ -181,6 +181,7 @@ CREATE TABLE TbInv_Ajustes (
     Id_Movimiento_Aju     INT NOT NULL,
     Motivo_Aju            VARCHAR(255),
     FechaAju              DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Estado_Aju            VARCHAR(10),
     FOREIGN KEY (Id_Movimiento_Aju) REFERENCES TbInv_MovimientoInventario(Id_MovimientoInventario)
 );
 
@@ -188,7 +189,7 @@ CREATE TABLE TbInv_Ajustes (
 CREATE TABLE TbInv_Lote (
     Id_Lote               INT PRIMARY KEY AUTO_INCREMENT,
     NroLote_Lot           INT NOT NULL,
-    Descripcion_Lot       INT NOT NULL,
+    Descripcion_Lot       VARCHAR(255),
     CodigoBarras_Lot      TEXT,
     FechaVencimiento_Lot  DATE,
     Estado_Lot            VARCHAR(10)

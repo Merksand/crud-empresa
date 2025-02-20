@@ -162,8 +162,29 @@ export default function Sidebar() {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M10 14h4M4 18h16" />
       </svg>
     )
-  }
+  },
 
+  {
+    title: "Lotes",
+    path: '/dashboard/inventario/lote',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1.293-1.293a1 1 0 011.414 0L12 15.586l6.293-6.293a1 1 0 011.414 0L21 10M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+    )
+},
+
+{
+  title: "Lote Productos",
+  path: '/dashboard/inventario/loteProducto',
+  icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h18M3 12h18m-9 5h9" />
+      <circle cx="6" cy="17" r="2" />
+      <circle cx="18" cy="17" r="2" />
+    </svg>
+  )
+}
   
 
   ];
