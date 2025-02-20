@@ -129,7 +129,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
 
             <div>
                 <label className="block text-sm font-medium mb-1">Inventario</label>
-                <select value={inventario} onChange={(e) => setInventario(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required disabled>
+                <select value={inventario} onChange={(e) => setInventario(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required >
                     <option value="">Seleccione un inventario</option>
                     {inventarios.map((inv) => (
                         <option key={inv.Id_Inventario} value={inv.Id_Inventario}>

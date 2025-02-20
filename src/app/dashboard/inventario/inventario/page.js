@@ -5,6 +5,8 @@ import DeleteConfirmationModal from "@/app/components/DeleteConfirmationModal";
 import InventarioForm from "@/app/components/inventario/InventarioForm";
 import Notification from "@/app/components/Notification";
 import useNotification from "@/app/hooks/useNotification";
+import { io } from "socket.io-client";
+import useSocket from "@/app/hooks/useSocket";
 
 export default function Inventario() {
   const { notification, showNotification } = useNotification();
@@ -31,6 +33,45 @@ export default function Inventario() {
       setLoading(false);
     }
   };
+
+
+
+  useSocket({
+    "inventario-actualizado": (productoActualizado) => {
+        console.log("🔔 Evento recibido: inventario-actualizado", productoActualizado);
+
+        setInventario((prev) => {
+            const index = prev.findIndex(
+                (item) => String(item.Id_Inventario) === String(productoActualizado.Id_Inventario)
+            );
+
+            if (index !== -1) {
+                // ✅ Actualiza solo la fila correspondiente sin agregar nuevas
+                return prev.map((item, i) =>
+                    i === index ? { ...item, ...productoActualizado } : item
+                );
+            } else {
+                return prev; // ✅ No agrega una nueva fila si no se encuentra
+            }
+        });
+    },
+
+    "inventario-agregado": (nuevoProducto) => {
+        console.log("🔔 Evento recibido: inventario-agregado", nuevoProducto);
+        setInventario((prev) => [...prev, nuevoProducto]); // ✅ Agrega un nuevo producto
+    },
+
+    "inventario-eliminado": (idProducto) => {
+        console.log("🔔 Evento recibido: inventario-eliminado", idProducto);
+        setInventario((prev) =>
+            prev.filter((item) => String(item.Id_Inventario) !== String(idProducto))
+        ); // ✅ Elimina la fila correspondiente
+    }
+});
+
+
+
+
 
   const handleSubmit = async (data) => {
     try {
