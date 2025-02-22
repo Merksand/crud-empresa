@@ -5,11 +5,9 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     const [productos, setProductos] = useState([]);
     const [almacenes, setAlmacenes] = useState([]);
     const [metodosValoracion, setMetodosValoracion] = useState([]);
-    const [inventarios, setInventarios] = useState([]);
 
     const [tipoMovimiento, setTipoMovimiento] = useState("");
     const [producto, setProducto] = useState("");
-    const [inventario, setInventario] = useState("");
     const [almacenOrigen, setAlmacenOrigen] = useState("");
     const [almacenDestino, setAlmacenDestino] = useState("");
     const [metodoValoracion, setMetodoValoracion] = useState("");
@@ -32,17 +30,12 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
         fetch("/api/inventario/metodoValoracion")
             .then((res) => res.json())
             .then((data) => setMetodosValoracion(data));
-
-        fetch("/api/inventario/inventario")
-            .then((res) => res.json())
-            .then((data) => setInventarios(data));
     }, []);
 
     useEffect(() => {
         if (movimiento) {
             setTipoMovimiento(movimiento.Id_TipoMovimiento_MoI || "");
             setProducto(movimiento.Id_Producto_MoI || "");
-            setInventario(movimiento.Id_Inventario_MoI || "");
             setAlmacenOrigen(movimiento.Id_AlmacenOrigen_MoI || "");
             setAlmacenDestino(movimiento.Id_AlmacenDestino_MoI || "");
             setMetodoValoracion(movimiento.Id_MetodoValoracion_MoI || "");
@@ -52,18 +45,21 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     }, [movimiento]);
 
     useEffect(() => {
-        if (tipoMovimiento === "1") setAlmacenOrigen("");
-        if (tipoMovimiento === "2") setAlmacenDestino("");
-        if (tipoMovimiento !== "3") {
-            setAlmacenOrigen("");
-            setAlmacenDestino("");
+        if (!movimiento) {  // Solo se ejecuta si es un nuevo movimiento
+            if (tipoMovimiento === "1") setAlmacenOrigen(""); // Entrada
+            if (tipoMovimiento === "2") setAlmacenDestino(""); // Salida
+            if (tipoMovimiento !== "3") {
+                setAlmacenOrigen("");
+                setAlmacenDestino("");
+            }
         }
-    }, [tipoMovimiento]);
+    }, [tipoMovimiento, movimiento]);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!tipoMovimiento || !producto || !inventario || !cantidad || !metodoValoracion) {
+        if (!tipoMovimiento || !producto || !cantidad || !metodoValoracion) {
             alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
@@ -93,15 +89,18 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
         const data = {
             Id_TipoMovimiento_MoI: tipoMovimiento,
             Id_Producto_MoI: producto,
-            Id_Inventario_MoI: inventario,
             Id_MetodoValoracion_MoI: metodoValoracion,
-            Id_AlmacenOrigen_MoI: tipoMovimiento === "2" || tipoMovimiento === "3" ? almacenOrigen : null,
-            Id_AlmacenDestino_MoI: tipoMovimiento === "1" || tipoMovimiento === "3" ? almacenDestino : null,
+            Id_AlmacenOrigen_MoI: almacenOrigen,
+            Id_AlmacenDestino_MoI: almacenDestino,
             Cantidad_MoI: cantidad,
             FechaMovimiento_MoI: movimiento ? fechaMovimiento : undefined,
             Estado_MoI: "AC",
         };
 
+
+        console.log("🚀 Datos enviados al backend:", data);  // <-- Revisa la consola para asegurarte de que los valores no sean `null`
+        console.log("ALAMCEN  ORIGEN:", almacenOrigen)
+        console.log("ALAMCEN DESTINO:", almacenDestino)
         onSubmit(data);
     };
 
@@ -121,21 +120,12 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                 <label className="block text-sm font-medium mb-1">Producto</label>
                 <select value={producto} onChange={(e) => setProducto(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
                     <option value="">Seleccione un producto</option>
-                    {productos.map((p) => (
-                        <option key={p.Id_Producto} value={p.Id_Producto}>{p.Nombre_Pro}</option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <label className="block text-sm font-medium mb-1">Inventario</label>
-                <select value={inventario} onChange={(e) => setInventario(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required >
-                    <option value="">Seleccione un inventario</option>
-                    {inventarios.map((inv) => (
-                        <option key={inv.Id_Inventario} value={inv.Id_Inventario}>
-                            {`ID: ${inv.Id_Inventario} - Producto: ${inv.Nombre_Producto} - Cantidad: ${inv.Cantidad_Inv}`}
-                        </option>
-                    ))}
+                    {productos.map((p) => {
+                        // console.log("Producto: ", p)
+                        return (
+                            <option key={p.Id_Producto} value={p.Id_Producto}>{p.Nombre_Pro}</option>
+                        )
+                    })}
                 </select>
             </div>
 
@@ -162,6 +152,16 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                     </select>
                 </div>
             ) : null}
+
+            <div>
+                <label className="block text-sm font-medium mb-1">Método de Valoración</label>
+                <select value={metodoValoracion} onChange={(e) => setMetodoValoracion(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
+                    <option value="">Seleccione un método de valoración</option>
+                    {metodosValoracion.map((mv) => (
+                        <option key={mv.Id_MetodoValoracion} value={mv.Id_MetodoValoracion}>{mv.Nombre_MeV}</option>
+                    ))}
+                </select>
+            </div>
 
             <div>
                 <label className="block text-sm font-medium mb-1">Cantidad</label>

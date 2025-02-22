@@ -179,7 +179,7 @@ export default function MovimientoInventario() {
                 </tr>
               ) : (
                 movimientos.map((item) => {
-                  console.log(item)
+                  // console.log("PAGE: ",item)
                   return (
                     <tr
                       key={item.Id_MovimientoInventario}
