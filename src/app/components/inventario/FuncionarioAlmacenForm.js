@@ -30,6 +30,7 @@ export default function FuncionarioAlmacenForm({ asignacion, onSubmit, onClose }
         }
     }, [asignacion]);
 
+
     const fetchFuncionarios = async () => {
         try {
             const response = await fetch("/api/inventario/funcionario");
@@ -51,9 +52,11 @@ export default function FuncionarioAlmacenForm({ asignacion, onSubmit, onClose }
     };
 
     const formatDate = (dateString) => {
+        if (!dateString) return "";
         const date = new Date(dateString);
-        return date.toISOString().split('T')[0];
+        return date.toLocaleDateString("sv-SE"); // Formato YYYY-MM-DD sin cambiar la zona horaria
     };
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;

@@ -74,148 +74,148 @@ export default function Sidebar() {
       title: 'Marca',
       path: '/dashboard/inventario/marca',
       icon: (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-          </svg>
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+        </svg>
       )
-  },
-  {
+    },
+    {
 
-    title: 'Proveedor',
-    path: '/dashboard/inventario/proveedor',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h18M9 3h6m-7 8h8m-9 4h10m-11 4h12" />
-      </svg>
-    )
-  },
+      title: 'Proveedor',
+      path: '/dashboard/inventario/proveedor',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h18M9 3h6m-7 8h8m-9 4h10m-11 4h12" />
+        </svg>
+      )
+    },
 
-  {
-    title: 'Producto',
-    path: '/dashboard/inventario/producto',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1-2a2 2 0 012-1h12a2 2 0 012 1l1 2m-18 0h18m-18 0l2 9a2 2 0 002 2h8a2 2 0 002-2l2-9M5 19h14" />
-      </svg>
-    )
-  },
-  {
-    title: 'Funcionario',
-    path: '/dashboard/inventario/funcionario',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-      </svg>
-    )
-  },
-  {
-    title: 'funcionarioAlmacen',
-    path: '/dashboard/inventario/funcionarioAlmacen',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-      </svg>
-    )
-  },
-  {
-    title: 'Inventario',
-    path: '/dashboard/inventario/inventario',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-      </svg>
-    )
-  },
-  {
-    title: 'Tipo movimiento',
-    path: '/dashboard/inventario/tipoMovimiento',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-      </svg>
-    )
+    {
+      title: 'Producto',
+      path: '/dashboard/inventario/producto',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1-2a2 2 0 012-1h12a2 2 0 012 1l1 2m-18 0h18m-18 0l2 9a2 2 0 002 2h8a2 2 0 002-2l2-9M5 19h14" />
+        </svg>
+      )
+    },
+    {
+      title: 'Funcionario',
+      path: '/dashboard/inventario/funcionario',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+      )
+    },
+    {
+      title: 'funcionarioAlmacen',
+      path: '/dashboard/inventario/funcionarioAlmacen',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+      )
+    },
+    {
+      title: 'Inventario',
+      path: '/dashboard/inventario/inventario',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+      )
+    },
+    {
+      title: 'Tipo movimiento',
+      path: '/dashboard/inventario/tipoMovimiento',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+        </svg>
+      )
 
-  },
-  {
-    title: 'Metodo Valoracion',
-    path: '/dashboard/inventario/metodoValoracion',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10H9m3-3v6m0-6V4" />
-      </svg>
-    )
-  },
-  {
-    title: 'Movimiento Inventario',
-    path: '/dashboard/inventario/movimientoInventario',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-      </svg>
-    )
-  },
-  {
-    title: "Inventario Bajas",
-    path: '/dashboard/inventario/bajas',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M10 14h4M4 18h16" />
-      </svg>
-    )
-  },
+    },
+    {
+      title: 'Metodo Valoracion',
+      path: '/dashboard/inventario/metodoValoracion',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10H9m3-3v6m0-6V4" />
+        </svg>
+      )
+    },
+    {
+      title: 'Movimiento Inventario',
+      path: '/dashboard/inventario/movimientoInventario',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+        </svg>
+      )
+    },
+    {
+      title: "Inventario Bajas",
+      path: '/dashboard/inventario/bajas',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M10 14h4M4 18h16" />
+        </svg>
+      )
+    },
 
-  {
-    title: 'Devoluciones',
-    path: '/dashboard/inventario/devolucion',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 9h16M4 9l4 4m-4-4l4-4m12 6v6a2 2 0 01-2 2h-6m6-8l-4 4m4-4l-4-4" />
-      </svg>
-    )
-},
+    {
+      title: 'Devoluciones',
+      path: '/dashboard/inventario/devolucion',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 9h16M4 9l4 4m-4-4l4-4m12 6v6a2 2 0 01-2 2h-6m6-8l-4 4m4-4l-4-4" />
+        </svg>
+      )
+    },
 
-  {
-    title: "Lotes",
-    path: '/dashboard/inventario/lote',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1.293-1.293a1 1 0 011.414 0L12 15.586l6.293-6.293a1 1 0 011.414 0L21 10M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-    )
-},
+    {
+      title: "Lotes",
+      path: '/dashboard/inventario/lote',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1.293-1.293a1 1 0 011.414 0L12 15.586l6.293-6.293a1 1 0 011.414 0L21 10M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      )
+    },
 
-{
-  title: "Lote Productos",
-  path: '/dashboard/inventario/loteProducto',
-  icon: (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h18M3 12h18m-9 5h9" />
-      <circle cx="6" cy="17" r="2" />
-      <circle cx="18" cy="17" r="2" />
-    </svg>
-  )
-},
+    {
+      title: "Lote Productos",
+      path: '/dashboard/inventario/loteProducto',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h18M3 12h18m-9 5h9" />
+          <circle cx="6" cy="17" r="2" />
+          <circle cx="18" cy="17" r="2" />
+        </svg>
+      )
+    },
 
-{
-  title: "Monedas",
-  path: '/dashboard/inventario/moneda',
-  icon: (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M12 8v4l2 2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-},
+    {
+      title: "Monedas",
+      path: '/dashboard/inventario/moneda',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12 8v4l2 2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )
+    },
 
-{
-  title: "Tipo de Cambio",
-  path: '/dashboard/inventario/tipoCambio',
-  icon: (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8V4m0 0L8 8m4-4l4 4m-4 8v4m0 0l4-4m-4 4l-4-4M4 12h16" />
-    </svg>
-  )
-}
+    {
+      title: "Tipo de Cambio",
+      path: '/dashboard/inventario/tipoCambio',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8V4m0 0L8 8m4-4l4 4m-4 8v4m0 0l4-4m-4 4l-4-4M4 12h16" />
+        </svg>
+      )
+    }
 
 
   ];
@@ -243,7 +243,7 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-16'
+        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out  ${isOpen ? 'w-64' : 'w-20'
           } z-40`}
       >
 
@@ -318,7 +318,7 @@ export default function Sidebar() {
 
       <style jsx global>{`
         main {
-          margin-left: ${isOpen ? '8rem' : '1rem'} !important;
+          margin-left: ${isOpen ? '8rem' : '2rem'} !important;
           transition: margin-left 0.3s ease-in-out;
         }
       `}</style>

@@ -41,44 +41,78 @@ export async function GET() {
   }
 }
 
-/** 🔹 Crear un nuevo movimiento de inventario */
+
 export async function POST(req) {
   try {
-
-    console.log(req)
-    const { 
-      Id_TipoMovimiento_MoI, 
-      Id_Producto_MoI, 
-      Id_MetodoValoracion_MoI, 
-      Id_Inventario_MoI,  // Aseguramos que el campo esté presente
-      Id_AlmacenOrigen_MoI, 
-      Id_AlmacenDestino_MoI, 
-      Cantidad_MoI, 
-      Debito_MoI, 
-      Estado_MoI = "AC" 
+    const {
+      Id_TipoMovimiento_MoI,
+      Id_Producto_MoI,
+      Id_MetodoValoracion_MoI,
+      Id_AlmacenOrigen_MoI,
+      Id_AlmacenDestino_MoI,
+      Cantidad_MoI,
+      Estado_MoI = "AC",
     } = await req.json();
 
-    // Validamos que los campos obligatorios estén presentes
-    if (!Id_TipoMovimiento_MoI || !Id_Producto_MoI || !Cantidad_MoI || !Id_MetodoValoracion_MoI || !Id_Inventario_MoI) {
-      return NextResponse.json(
-        { message: "Faltan campos obligatorios" },
-        { status: 400 }
-      );
+    // ✅ Validación de campos obligatorios
+    if (!Id_TipoMovimiento_MoI || !Id_Producto_MoI || !Cantidad_MoI || !Id_MetodoValoracion_MoI) {
+      return NextResponse.json({ message: "Faltan campos obligatorios" }, { status: 400 });
     }
 
+    // ✅ Cálculo automático de DEBITO según el tipo de movimiento
+    let Debito_MoI = 0;
+    if (Id_TipoMovimiento_MoI == 1) Debito_MoI = +Cantidad_MoI; // Entrada
+    if (Id_TipoMovimiento_MoI == 2) Debito_MoI = -Cantidad_MoI; // Salida
+    // Traslado: Origen (-), Destino (+)
+
+    // ✅ Buscar el ID de Inventario según el Producto y Almacén
+    const almacenId = Id_TipoMovimiento_MoI == 2 || Id_TipoMovimiento_MoI == 3 ? Id_AlmacenOrigen_MoI : Id_AlmacenDestino_MoI;
+
+    const [inventario] = await poolInventario.query(
+      `SELECT Id_Inventario FROM TbInv_Inventario WHERE Id_Producto_Inv = ? AND Id_Almacen_Inv = ?`,
+      [Id_Producto_MoI, almacenId]
+    );
+
+    if (inventario.length === 0) {
+      return NextResponse.json({ message: "No se encontró el inventario para este producto y almacén" }, { status: 404 });
+    }
+
+    const Id_Inventario_MoI = inventario[0].Id_Inventario;
+
+    // ✅ INSERT en la tabla TbInv_MovimientoInventario
     await poolInventario.query(
       `INSERT INTO TbInv_MovimientoInventario 
-      (Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, Id_AlmacenOrigen_MoI, Id_AlmacenDestino_MoI, Cantidad_MoI, Debito_MoI, Estado_MoI) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, Id_AlmacenOrigen_MoI || null, Id_AlmacenDestino_MoI || null, Cantidad_MoI, Debito_MoI || 0, Estado_MoI]
+       (Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, Id_AlmacenOrigen_MoI, Id_AlmacenDestino_MoI, Cantidad_MoI, Debito_MoI, Estado_MoI) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, Id_AlmacenOrigen_MoI || null, Id_AlmacenDestino_MoI || null, Cantidad_MoI, Debito_MoI, Estado_MoI]
     );
+
+    // ✅ Traslado: Crear el segundo registro para el almacén destino
+    if (Id_TipoMovimiento_MoI == 3) {
+      await poolInventario.query(
+        `INSERT INTO TbInv_MovimientoInventario 
+         (Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, Id_AlmacenOrigen_MoI, Id_AlmacenDestino_MoI, Cantidad_MoI, Debito_MoI, Estado_MoI) 
+         VALUES (?, ?, ?, 
+                 (SELECT Id_Inventario FROM TbInv_Inventario WHERE Id_Producto_Inv = ? AND Id_Almacen_Inv = ?), 
+                 ?, ?, ?, ?, ?)`,
+        [
+          Id_TipoMovimiento_MoI,
+          Id_Producto_MoI,
+          Id_MetodoValoracion_MoI,
+          Id_Producto_MoI,
+          Id_AlmacenDestino_MoI,
+          null,
+          Id_AlmacenDestino_MoI,
+          Cantidad_MoI,
+          +Cantidad_MoI, // Positivo para el destino
+          Estado_MoI,
+        ]
+      );
+    }
 
     return NextResponse.json({ message: "Movimiento de inventario creado correctamente" });
   } catch (error) {
     console.error("Error al crear movimiento de inventario:", error);
-    return NextResponse.json(
-      { message: "Error al crear movimiento de inventario", error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Error al crear movimiento de inventario", error: error.message }, { status: 500 });
   }
 }
