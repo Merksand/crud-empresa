@@ -165,6 +165,16 @@ export default function Sidebar() {
   },
 
   {
+    title: 'Devoluciones',
+    path: '/dashboard/inventario/devolucion',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 9h16M4 9l4 4m-4-4l4-4m12 6v6a2 2 0 01-2 2h-6m6-8l-4 4m4-4l-4-4" />
+      </svg>
+    )
+},
+
+  {
     title: "Lotes",
     path: '/dashboard/inventario/lote',
     icon: (
