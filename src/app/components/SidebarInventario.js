@@ -174,6 +174,16 @@ export default function Sidebar() {
     )
 },
 
+{
+  title: "Ajustes",
+  path: '/dashboard/inventario/ajuste',
+  icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6H6m6 0h6M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+  )
+},
+
   {
     title: "Lotes",
     path: '/dashboard/inventario/lote',
@@ -215,7 +225,18 @@ export default function Sidebar() {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8V4m0 0L8 8m4-4l4 4m-4 8v4m0 0l4-4m-4 4l-4-4M4 12h16" />
     </svg>
   )
+},
+
+{
+  title: "Órdenes de Compra",
+  path: '/dashboard/inventario/ordenCompra',
+  icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h18M3 12h18m-7 5h7M3 17h5m2 4h6a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16z" />
+    </svg>
+  )
 }
+
 
 
   ];
