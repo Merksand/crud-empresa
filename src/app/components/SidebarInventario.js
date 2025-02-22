@@ -243,7 +243,7 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out  ${isOpen ? 'w-64' : 'w-20'
+        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out overflow-y-auto overflow-x-hidden  ${isOpen ? 'w-64' : 'w-20'
           } z-40`}
       >
 
