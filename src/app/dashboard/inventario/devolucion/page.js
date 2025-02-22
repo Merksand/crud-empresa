@@ -108,7 +108,8 @@ export default function Devoluciones() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{devolucion.Nombre_Producto}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{devolucion.Motivo_Dev}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{devolucion.Autorizacion_Dev}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{devolucion.Fecha_Dev}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {new Date (devolucion.Fecha_Dev).toLocaleDateString()}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
                         onClick={() => {

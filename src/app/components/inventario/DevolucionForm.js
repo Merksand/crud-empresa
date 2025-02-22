@@ -60,7 +60,7 @@ export default function DevolucionForm({ devolucion = {}, onClose, onSubmit }) {
           <option value="">Seleccione un movimiento</option>
           {movimientos.map((movimiento) => (
             <option key={movimiento.Id_MovimientoInventario} value={movimiento.Id_MovimientoInventario}>
-              {movimiento.Nombre_Producto} - {movimiento.FechaMovimiento_MoI}
+              {movimiento.Nombre_Producto}
             </option>
           ))}
         </select>

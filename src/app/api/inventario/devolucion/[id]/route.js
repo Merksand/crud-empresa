@@ -54,17 +54,17 @@ export async function PUT(req, { params }) {
   const { id } = params;
 
   try {
-    const { Id_Movimiento_Dev, Motivo_Dev, Autorizacion_Dev } = await req.json();
+    const { Id_Movimiento_Dev, Motivo_Dev, Autorizacion_Dev, Fecha_Dev } = await req.json();
 
-    if (!Id_Movimiento_Dev || !Motivo_Dev || !Autorizacion_Dev) {
+    if (!Id_Movimiento_Dev || !Motivo_Dev || !Autorizacion_Dev || !Fecha_Dev) {
       return NextResponse.json({ message: 'Campos obligatorios faltantes' }, { status: 400 });
     }
 
     const [result] = await poolInventario.query(
       `UPDATE TbInv_Devoluciones 
-       SET Id_Movimiento_Dev = ?, Motivo_Dev = ?, Autorizacion_Dev = ? 
+       SET Id_Movimiento_Dev = ?, Motivo_Dev = ?, Autorizacion_Dev = ?, Fecha_Dev = ?
        WHERE Id_Dev = ? AND Estado_Dev = 'AC'`,
-      [Id_Movimiento_Dev, Motivo_Dev, Autorizacion_Dev, id]
+      [Id_Movimiento_Dev, Motivo_Dev, Autorizacion_Dev, Fecha_Dev, id]
     );
 
     if (result.affectedRows === 0) {
