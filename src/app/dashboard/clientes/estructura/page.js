@@ -157,9 +157,6 @@ function EstructuraPage() {
                   Resolución
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Estado
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Acciones
                 </th>
               </tr>
@@ -206,7 +203,7 @@ function EstructuraPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {estructura.Resolucion_Est}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    {/*<td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${estructura.Estado_Est === "Activo"
                           ? "bg-green-700 text-green-300"
@@ -216,6 +213,7 @@ function EstructuraPage() {
                         {estructura.Estado_Est}
                       </span>
                     </td>
+                    */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
                         onClick={() => {

@@ -31,13 +31,12 @@ export async function PUT(request, { params }) {
       Fecha_Creacion_Ar,  
       Nombre_Are,
       Resolucion_Are,
-      Estado_Are,
       Nivel_Are // Nuevo campo
     } = data;
 
     const [result] = await pool.query(
-      'UPDATE TbArea SET Id_Estructura_Ar = ?, Fecha_Creacion_Ar = ?, Nombre_Are = ?, Resolucion_Are = ?, Estado_Are = ?, Nivel_Are = ? WHERE Id_Area = ?',
-      [Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are, Nivel_Are, params.id]
+      'UPDATE TbArea SET Id_Estructura_Ar = ?, Fecha_Creacion_Ar = ?, Nombre_Are = ?, Resolucion_Are = ?, Nivel_Are = ? WHERE Id_Area = ?',
+      [Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Nivel_Are, params.id]
     );
 
     if (result.affectedRows === 0) {

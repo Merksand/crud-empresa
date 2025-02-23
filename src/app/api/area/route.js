@@ -22,6 +22,7 @@ export async function POST(request) {
       Fecha_Creacion_Ar,
       Nombre_Are,
       Resolucion_Are,
+      Estado_Are,
       Nivel_Are,  
     } = data;
 

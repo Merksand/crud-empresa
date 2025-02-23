@@ -14,6 +14,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
             Nombre_Are: formData.get("nombre"),
             Resolucion_Are: formData.get("resolucion"),
             Fecha_Creacion_Ar: fechaFormateada,
+            Nivel_Are:formData.get("nivel"),
             Estado_Are: formData.get("estado"),
             Id_Estructura_Ar: formData.get("estructura"), // Captura la estructura seleccionada
         };
@@ -98,7 +99,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                 />
             </div>
 
-            <div>
+            {/*<div>
                 <label className="block text-sm font-medium mb-1">Estado</label>
                 <select
                     name="estado"
@@ -109,7 +110,7 @@ export default function AreaForm({ area, onSubmit, onClose, estructuras = [] }) 
                     <option value="Activo">Activo</option>
                     <option value="Inactivo">Inactivo</option>
                 </select>
-            </div>
+            </div>*/}
 
             <div className="flex justify-end gap-2 mt-6">
                 <button

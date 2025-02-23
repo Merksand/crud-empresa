@@ -24,13 +24,12 @@ export async function PUT(request, { params }) {
       Id_Municipio_Suc, 
       Id_Geolocalizacion_Suc, 
       Nombre_Parametro_Suc, 
-      Nombre_Suc, 
-      Estado_Suc 
+      Nombre_Suc 
     } = data;
 
     const [result] = await pool.query(
-      'UPDATE TbSucursal SET Id_Municipio_Suc = ?, Id_Geolocalizacion_Suc = ?, Nombre_Parametro_Suc = ?, Nombre_Suc = ?, Estado_Suc = ? WHERE Id_Sucursal = ?',
-      [Id_Municipio_Suc, Id_Geolocalizacion_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc, params.id]
+      'UPDATE TbSucursal SET Id_Municipio_Suc = ?, Id_Geolocalizacion_Suc = ?, Nombre_Parametro_Suc = ?, Nombre_Suc = ? WHERE Id_Sucursal = ?',
+      [Id_Municipio_Suc, Id_Geolocalizacion_Suc, Nombre_Parametro_Suc, Nombre_Suc, params.id]
     );
 
     if (result.affectedRows === 0) {

@@ -123,9 +123,6 @@ export default function InformacionEmpresa() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Zona Horaria
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Estado
-                </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Acciones
                 </th>
@@ -173,7 +170,7 @@ export default function InformacionEmpresa() {
                         {info.Regimen_Impositivo_IE}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{info.Zona_Horaria_IE}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {/*<td className="px-6 py-4 whitespace-nowrap text-sm">
                         <span
                           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${info.Estado_IE === 'Activo'
                               ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
@@ -183,6 +180,7 @@ export default function InformacionEmpresa() {
                           {info.Estado_IE}
                         </span>
                       </td>
+                      */}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
                           onClick={() => {

@@ -111,3 +111,94 @@ VALUES
 ('Costo Específico', 'Método de Costo Específico', 'AC'),
 ('Valor Neto Realizable', 'Método de Valor Neto Realizable', 'AC');
 
+
+-- Tabla: TbInv_MovimientoInventario
+INSERT INTO TbInv_MovimientoInventario 
+  (Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, Debito_MoI, Id_AlmacenOrigen_MoI, Id_AlmacenDestino_MoI, Cantidad_MoI, FechaMovimiento_MoI, Estado_MoI)
+VALUES
+  (1, 1, 1, 1, 0, 1, 2, 10, '2025-02-20 10:00:00', 'AC'),
+  (2, 2, 2, 2, 1, 2, 3, 20, '2025-02-20 11:00:00', 'AC'),
+  (1, 3, 1, 3, 0, 3, 4, 15, '2025-02-20 12:00:00', 'AC'),
+  (3, 4, 3, 4, 1, 4, 5, 30, '2025-02-20 13:00:00', 'AC'),
+  (2, 5, 2, 5, 0, 5, 1, 25, '2025-02-20 14:00:00', 'AC');
+
+-- Tabla: TbInv_Bajas
+INSERT INTO TbInv_Bajas 
+  (Id_Movimiento_Baj, Motivo_Baj, Autorizacion_Baj, Fecha_Baj, Estado_Baj)
+VALUES
+  (1, 'Producto dañado', 'Autorizado por Jefe de Almacén', '2025-02-21 09:00:00', 'AC'),
+  (2, 'Caducidad de producto', 'Autorizado por Gerente', '2025-02-21 10:00:00', 'AC'),
+  (3, 'Exceso de inventario', 'Autorizado por Supervisor', '2025-02-21 11:00:00', 'AC'),
+  (4, 'Error en registro', 'Autorizado por Control de Calidad', '2025-02-21 12:00:00', 'AC'),
+  (5, 'Defecto en empaque', 'Autorizado por Jefe de Producción', '2025-02-21 13:00:00', 'AC');
+
+-- Tabla: TbInv_Devoluciones
+INSERT INTO TbInv_Devoluciones 
+  (Id_Movimiento_Dev, Motivo_Dev, Autorizacion_Dev, Fecha_Dev, Estado_Dev)
+VALUES
+  (1, 'Cliente devolvió producto', 'Autorizado por Ventas', '2025-02-22 09:30:00', 'AC'),
+  (2, 'Producto defectuoso', 'Autorizado por Servicio al Cliente', '2025-02-22 10:30:00', 'AC'),
+  (3, 'Cambio de modelo', 'Autorizado por Gerente', '2025-02-22 11:30:00', 'AC'),
+  (4, 'Error en pedido', 'Autorizado por Jefe de Ventas', '2025-02-22 12:30:00', 'AC'),
+  (5, 'Producto no solicitado', 'Autorizado por Soporte', '2025-02-22 13:30:00', 'AC');
+
+-- Tabla: TbInv_Ajustes
+INSERT INTO TbInv_Ajustes 
+  (Id_Movimiento_Aju, Motivo_Aju, FechaAju, Estado_Aju)
+VALUES
+  (1, 'Ajuste de inventario por conteo físico', '2025-02-23 09:00:00', 'AC'),
+  (2, 'Corrección de registro de entrada', '2025-02-23 10:00:00', 'AC'),
+  (3, 'Ajuste por diferencias de stock', '2025-02-23 11:00:00', 'AC'),
+  (4, 'Rectificación de inventario', '2025-02-23 12:00:00', 'AC'),
+  (5, 'Actualización de cantidades', '2025-02-23 13:00:00', 'AC');
+
+-- Tabla: TbInv_Lote
+INSERT INTO TbInv_Lote 
+  (NroLote_Lot, Descripcion_Lot, CodigoBarras_Lot, FechaVencimiento_Lot, Estado_Lot)
+VALUES
+  (1001, 'Lote de productos electrónicos', '1234567890123', '2025-12-31', 'AC'),
+  (1002, 'Lote de alimentos enlatados', '2345678901234', '2025-11-30', 'AC'),
+  (1003, 'Lote de productos de limpieza', '3456789012345', '2025-10-31', 'AC'),
+  (1004, 'Lote de bebidas', '4567890123456', '2026-01-15', 'AC'),
+  (1005, 'Lote de accesorios', '5678901234567', '2025-09-30', 'AC');
+
+-- Tabla: TbInv_LoteProductos
+INSERT INTO TbInv_LoteProductos 
+  (Id_Lote_LoP, Id_Producto_LoP, Cantidad_LoP, Estado_LoP)
+VALUES
+  (1, 1, 50, 'AC'),
+  (2, 2, 100, 'AC'),
+  (3, 3, 75, 'AC'),
+  (4, 4, 60, 'AC'),
+  (5, 5, 80, 'AC');
+
+-- Tabla: TbInv_Moneda
+INSERT INTO TbInv_Moneda 
+  (Codigo_Mon, Nombre_Mon, Estado_Mon)
+VALUES
+  ('USD', 'Dólar estadounidense', 'AC'),
+  ('EUR', 'Euro', 'AC'),
+  ('GBP', 'Libra esterlina', 'AC'),
+  ('JPY', 'Yen japonés', 'AC'),
+  ('MXN', 'Peso mexicano', 'AC');
+
+-- Tabla: TbInv_TipoCambio
+INSERT INTO TbInv_TipoCambio 
+  (Id_Moneda_TiC, Fecha_TiC, TasaCambio_TiC, Estado_TiC)
+VALUES
+  (1, '2025-02-20', 1.000000, 'AC'),
+  (2, '2025-02-20', 0.900000, 'AC'),
+  (3, '2025-02-20', 0.800000, 'AC'),
+  (4, '2025-02-20', 110.000000, 'AC'),
+  (5, '2025-02-20', 20.000000, 'AC');
+
+-- Tabla: TbInv_OrdenesCompra
+INSERT INTO TbInv_OrdenesCompra 
+  (Id_Sucursal_OdC, Id_Proveedor_OdC, Id_Moneda_Odc, FechaOrden_OdC, Monto_OdC, Impuestos_OdC, Descuento_OdC, Sub_Total_OdC, TotalPagado_OdC, Estado_OdC)
+VALUES
+  (1, 1, 1, '2025-02-19', 1500.00, 180.00, 50.00, 1630.00, 1630.00, 'AC'),
+  (2, 2, 2, '2025-02-18', 2000.00, 240.00, 100.00, 2140.00, 2140.00, 'AC'),
+  (3, 3, 3, '2025-02-17', 2500.00, 300.00, 150.00, 2650.00, 2650.00, 'AC'),
+  (4, 4, 4, '2025-02-16', 3000.00, 360.00, 200.00, 3160.00, 3160.00, 'AC'),
+  (5, 5, 5, '2025-02-15', 3500.00, 420.00, 250.00, 3670.00, 3670.00, 'AC');
+
