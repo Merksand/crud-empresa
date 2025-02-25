@@ -124,9 +124,6 @@ export default function Empleado() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Dirección
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Estado
-                </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Acciones
                 </th>
@@ -163,7 +160,7 @@ export default function Empleado() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{empleado.Nombre_Emp}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{empleado.CI_Emp}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{empleado.Direccion_Emp}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {/*<td className="px-6 py-4 whitespace-nowrap text-sm">
                         <span
                           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                             empleado.Estado_Emp === 'Activo'
@@ -173,7 +170,7 @@ export default function Empleado() {
                         >
                           {empleado.Estado_Emp}
                         </span>
-                      </td>
+                      </td>*/}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
                           onClick={() => {

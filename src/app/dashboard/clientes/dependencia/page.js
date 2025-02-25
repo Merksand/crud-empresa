@@ -119,9 +119,6 @@ export default function Dependencia() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Resolución
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Estado
-                </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Acciones
                 </th>
@@ -154,7 +151,7 @@ export default function Dependencia() {
                         : "-"}
                     </td>
                     <td className="px-6 py-4">{dep.Resolucion_Are_Dep}</td>
-                    <td className="px-6 py-4">
+                   {/* <td className="px-6 py-4">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                           dep.Estado_Dep === "Activo"
@@ -164,7 +161,7 @@ export default function Dependencia() {
                       >
                         {dep.Estado_Dep}
                       </span>
-                    </td>
+                    </td>*/}
                     <td className="px-6 py-4 text-right">
                       <button
                         onClick={() => {

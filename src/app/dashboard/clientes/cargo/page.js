@@ -95,7 +95,6 @@ export default function cargo() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Sueldo Local</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Sueldo USD</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Resolución</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
@@ -124,14 +123,14 @@ export default function cargo() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Sueldo_Car}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Sueldo_USD_Car}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Resolucion_Car}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {/*<td className="px-6 py-4 whitespace-nowrap text-sm">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${cargo.Estado_Dep === 'Activo'
                           ? 'bg-green-600'
                           : 'bg-red-600'
                           }`}>
                           {cargo.Estado_Dep}
                         </span>
-                      </td>
+                      </td>*/}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
                           onClick={() => {

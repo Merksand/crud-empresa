@@ -169,7 +169,7 @@ CREATE TABLE TbCargo (
     Sueldo_Car                           DECIMAL,
     Sueldo_USD_Car                       DECIMAL,
     Resolucion_Car                       VARCHAR(50),
-    Estado_Dep                           VARCHAR(10)
+    Estado_Car                           VARCHAR(10)
 );
 
 CREATE TABLE TbEmpleado (

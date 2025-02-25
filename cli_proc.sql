@@ -24,7 +24,7 @@ CREATE PROCEDURE InsertCargo (
 )
 BEGIN
     INSERT INTO TbCargo (Nombre_Car, Nivel_Car, Sueldo_Car, Sueldo_USD_Car, Resolucion_Car, Estado_Dep)
-    VALUES (p_Nombre_Car, p_Nivel_Car, p_Sueldo_Car, p_Sueldo_USD_Car, p_Resolucion_Car, 'Activo');
+    VALUES (p_Nombre_Car, p_Nivel_Car, p_Sueldo_Car, p_Sueldo_USD_Car, p_Resolucion_Car, 'AC');
 END //
 DELIMITER ;
 
@@ -33,7 +33,7 @@ DELIMITER //
 CREATE PROCEDURE GetActiveCargos()
 BEGIN
     SELECT * FROM TbCargo
-    WHERE Estado_Dep = 'Activo';
+    WHERE Estado_Dep = 'AC';
 END //
 DELIMITER ;
 
@@ -67,7 +67,7 @@ CREATE PROCEDURE DeleteCargo (
 )
 BEGIN
     UPDATE TbCargo
-    SET Estado_Dep = 'Inactivo'
+    SET Estado_Dep = 'BA'
     WHERE Id_Cargo = p_Id_Cargo;
 END //
 DELIMITER ;
