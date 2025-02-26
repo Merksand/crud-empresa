@@ -141,9 +141,6 @@ export default function Area() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Resolución
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Estado
-                </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Acciones
                 </th>
@@ -183,7 +180,7 @@ export default function Area() {
                       </td>
                       <td className="px-6 py-4 text-sm">{area.Nombre_Are}</td>
                       <td className="px-6 py-4 text-sm">{area.Resolucion_Are}</td>
-                      <td className="px-6 py-4 text-sm">
+                      {/*<td className="px-6 py-4 text-sm">
                         <span
                           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${area.Estado_Are === "Activo"
                               ? "bg-green-700 text-green-300"
@@ -193,6 +190,7 @@ export default function Area() {
                           {area.Estado_Are}
                         </span>
                       </td>
+                      */}
                       <td className="px-6 float-right py-4 whitespace-nowrap text-sm font-medium">
                         <button
                           onClick={() => {

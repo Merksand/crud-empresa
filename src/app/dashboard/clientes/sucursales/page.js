@@ -131,7 +131,6 @@ export default function Sucursales() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Municipio</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Geolocalización</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Parámetro</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
@@ -165,6 +164,7 @@ export default function Sucursales() {
                         : 'Sin Geolocalización'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{sucursal.Nombre_Parametro_Suc}</td>
+                    {/*
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${sucursal.Estado_Suc === 'Activo'
@@ -175,6 +175,7 @@ export default function Sucursales() {
                         {sucursal.Estado_Suc}
                       </span>
                     </td>
+                    */}
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
                         onClick={() => {

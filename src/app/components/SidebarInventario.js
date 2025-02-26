@@ -175,14 +175,32 @@ export default function Sidebar() {
     },
 
     {
-      title: "Lotes",
-      path: '/dashboard/inventario/lote',
+      title: "Ajustes",
+      path: '/dashboard/inventario/ajuste',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1.293-1.293a1 1 0 011.414 0L12 15.586l6.293-6.293a1 1 0 011.414 0L21 10M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          {/* Primer slider */}
+          <line x1="4" y1="6" x2="20" y2="6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="16" cy="6" r="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Segundo slider */}
+          <line x1="4" y1="12" x2="20" y2="12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="8" cy="12" r="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Tercer slider */}
+          <line x1="4" y1="18" x2="20" y2="18" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="12" cy="18" r="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       )
-    },
+    },    
+
+  {
+    title: "Lotes",
+    path: '/dashboard/inventario/lote',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1.293-1.293a1 1 0 011.414 0L12 15.586l6.293-6.293a1 1 0 011.414 0L21 10M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+    )
+},
 
     {
       title: "Lote Productos",
@@ -207,15 +225,33 @@ export default function Sidebar() {
       )
     },
 
-    {
-      title: "Tipo de Cambio",
-      path: '/dashboard/inventario/tipoCambio',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8V4m0 0L8 8m4-4l4 4m-4 8v4m0 0l4-4m-4 4l-4-4M4 12h16" />
-        </svg>
-      )
-    }
+{
+  title: "Tipo de Cambio",
+  path: '/dashboard/inventario/tipoCambio',
+  icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8V4m0 0L8 8m4-4l4 4m-4 8v4m0 0l4-4m-4 4l-4-4M4 12h16" />
+    </svg>
+  )
+},
+
+{
+  title: "Órdenes de Compra",
+  path: '/dashboard/inventario/ordenCompra',
+  icon: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+        strokeWidth="2" 
+        d="M9 12h6m-6 4h6m-7-8h8M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" 
+      />
+    </svg>
+  )
+}
+
+
+
 
 
   ];
