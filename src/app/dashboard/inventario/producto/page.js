@@ -125,7 +125,7 @@ export default function Producto() {
                       <td className="px-6 py-4 text-sm">{producto.Modelo_Pro}</td>
                       <td className="px-6 py-4 text-sm">{producto.Unidad_medida_Pro}</td>
                       <td className="px-6 py-4 text-sm">
-                        <img src={producto.Foto_Pro} width={100} ></img>
+                        <img src={producto.Foto_Pro} width={100} loading='lazy'  ></img>
                       </td>
                       <td className="px-6 py-4 text-left text-sm">
                         <button

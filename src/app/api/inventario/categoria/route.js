@@ -3,7 +3,7 @@ import { poolInventario } from '@/lib/db';
 
 export async function GET() {
   try {
-    const [rows] = await poolInventario.query('SELECT * FROM TbInv_Categoria WHERE Estado_Cat = "AC"');
+    const [rows] = await poolInventario.query('SELECT * FROM TbInv_Categoria WHERE Estado_Cat = "AC" ');
     return NextResponse.json(rows);
   } catch (error) {
     console.error(error);

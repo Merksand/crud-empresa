@@ -1,30 +1,18 @@
-use Bd_INVENTARIO_12022025_2;
-
--- Inserciones para TbInv_Sucursal
-INSERT INTO TbInv_Sucursal (Id_Sucursal, Id_Empresa_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc) 
-VALUES 
-(1, 1, 'SCZ-CENTRO', 'Sucursal Central', 'AC'),
-(2, 1, 'SCZ-NORTE', 'Sucursal Norte', 'AC'),
-(3, 2, 'LPZ-SUR', 'Sucursal Sur', 'AC'),
-(4, 2, 'CBBA-ESTE', 'Sucursal Este', 'AC'),
-(5, 3, 'ORU-OESTE', 'Sucursal Oeste', 'AC');
-
--- Inserciones para TbInv_Industria
 INSERT INTO TbInv_Industria (Nombre_Ind, Estado_Pai) VALUES
 ('Electrónica', 'AC'),
 ('Textil', 'AC'),
 ('Electrodomésticos', 'AC');
 
 
+INSERT INTO TbInv_Marca (Nombre_Mar, Estado_Mar) VALUES
+('Samsung', 'AC'),
+('Apple', 'AC'),
+('LG', 'AC'),
+('Sony', 'AC'),
+('Nike', 'AC'),
+('Adidas', 'AC'),
+('Puma', 'AC');
 
--- Inserciones para TbInv_Almacen
-INSERT INTO TbInv_Almacen (Id_Sucursal_Alm, Nombre_Alm, Ubicacion_Alm, Capacidad_maxima_Alm, Estado_Alm) 
-VALUES 
-(1, 'Almacén Central', 'Av. Principal #123', 1000, 'AC'),
-(2, 'Almacén Norte', 'Calle 45 #456', 800, 'AC'),
-(3, 'Almacén Sur', 'Zona Industrial #789', 600, 'AC'),
-(4, 'Almacén Este', 'Av. Colón #222', 500, 'AC'),
-(5, 'Almacén Oeste', 'Calle 10 #333', 700, 'AC');
 
 -- Categorías principales
 INSERT INTO TbInv_Categoria (Nombre_Cat, Id_Categoria_Padre_Cat, Estado_Cat) VALUES
@@ -52,26 +40,10 @@ INSERT INTO TbInv_Categoria (Nombre_Cat, Id_Categoria_Padre_Cat, Estado_Cat) VAL
 
 
 
--- Inserciones para TbInv_Marca
-INSERT INTO TbInv_Marca (Nombre_Mar, Estado_Mar) VALUES
-('Samsung', 'AC'),
-('Apple', 'AC'),
-('LG', 'AC'),
-('Sony', 'AC'),
-('Nike', 'AC'),
-('Adidas', 'AC'),
-('Puma', 'AC');
 
--- Inserciones para TbInv_Proveedor
-INSERT INTO TbInv_Proveedor (Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, Estado_Prov) 
-VALUES 
-('Distribuidora Bolivia', 'Av. Central #456', '78451236', 'contacto@distribo.com', 'AC'),
-('Importaciones LP', 'Calle Comercio #123', '78563421', 'ventas@importlp.com', 'AC'),
-('Mayoristas CBBA', 'Zona Industrial #222', '77451236', 'info@mayoristascbba.com', 'AC'),
-('Farmacias Unidos', 'Av. Blanco Galindo #999', '76543218', 'contacto@farmunidos.com', 'AC'),
-('Tienda Global', 'Calle 9 de Julio #333', '71234567', 'info@tiendaglobal.com', 'AC');
 
--- Inserciones para TbInv_Producto con URLs de imágenes
+
+
 
 
 
@@ -160,50 +132,30 @@ VALUES
 
 
 
--- Inserciones para TbInv_Funcionario
-INSERT INTO TbInv_Funcionario (Id_Persona_Fun, Nombre_Fun, Apellido_Fun, Cargo_Funcionario, Documento_Fun, Telefono_Fun, Correo_Fun, Estado_Fun)
-VALUES 
-(1, 'Juan', 'Perez', 'Gerente', '12345678', '78563214', 'juan.perez@email.com', 'AC'),
-(2, 'Maria', 'Lopez', 'Vendedora', '87654321', '71234567', 'maria.lopez@email.com', 'AC'),
-(3, 'Carlos', 'Gonzalez', 'Almacenero', '11223344', '75689123', 'carlos.gonzalez@email.com', 'AC'),
-(4, 'Lucia', 'Fernandez', 'Supervisora', '99887766', '74567812', 'lucia.fernandez@email.com', 'AC'),
-(5, 'Jose', 'Martinez', 'Repartidor', '55443322', '72123456', 'jose.martinez@email.com', 'AC');
 
--- Inserciones para TbInv_FuncionarioAlmacen
-INSERT INTO TbInv_FuncionarioAlmacen (Id_Funcionario_FA, Id_Almacen_FA, Fecha_Inicio_FA, Fecha_Fin_FA, Puesto_FA, Estado_FA)
-VALUES 
-(3, 1, '2024-01-01', '2025-01-01', 'Encargado de Almacén', 'AC'),
-(2, 2, '2023-12-01', '2024-12-01', 'Asistente de Almacén', 'AC'),
-(1, 3, '2023-11-15', '2024-11-15', 'Supervisor de Inventario', 'AC'),
-(4, 4, '2023-10-10', '2024-10-10', 'Gerente Logístico', 'AC'),
-(5, 5, '2023-09-05', '2024-09-05', 'Auxiliar de Depósito', 'AC');
 
--- Inserciones para TbInv_Inventario
-INSERT INTO TbInv_Inventario (Id_Producto_Inv, Id_Almacen_Inv, Cantidad_Inv, Estado_Inv)
-VALUES 
-(1, 1, 20, 'AC'),
-(2, 2, 15, 'AC'),
-(3, 3, 30, 'AC'),
-(4, 4, 25, 'AC'),
-(5, 5, 10, 'AC');
 
--- Inserciones para TbInv_TipoMovimiento
-INSERT INTO TbInv_TipoMovimiento (Nombre_TiM, Codigo_TiM, Estado_TiM)
-VALUES 
-('Entrada', 100, 'AC'),
-('Salida', 200, 'AC'),
-('Transferencia', 300, 'AC'),
-('Devolución', 400, 'AC'),
-('Ajuste positivo', 500, 'AC'),
-('Ajuste negativo', 600, 'AC'),
-('Baja', 700, 'AC');
 
--- Inserciones para TbInv_MetodoValoracion
-INSERT INTO TbInv_MetodoValoracion (Nombre_MeV, Descripcion_MeV, Estado_MeV)
-VALUES 
-('PEPS', 'Primeras Entradas, Primeras Salidas', 'AC'),
-('UEPS', 'Últimas Entradas, Primeras Salidas', 'AC'),
-('Promedio', 'Promedio Ponderado', 'AC'),
-('Costo Específico', 'Método de Costo Específico', 'AC'),
-('Valor Neto Realizable', 'Método de Valor Neto Realizable', 'AC');
+-- Tabla: TbInv_Almacen
+CREATE TABLE TbInv_Almacen (
+    Id_Almacen            INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Sucursal_Alm       INT NOT NULL,
+    Nombre_Alm            VARCHAR(100) NOT NULL,
+    Ubicacion_Alm         VARCHAR(200) NOT NULL,
+    Capacidad_maxima_Alm  INT,
+    Estado_Alm            VARCHAR(10),
+    FOREIGN KEY (Id_Sucursal_Alm) REFERENCES TbInv_Sucursal(Id_Sucursal)
+);
 
+
+
+-- Tabla: TbInv_Inventario
+CREATE TABLE TbInv_Inventario (
+    Id_Inventario         INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Producto_Inv       INT NOT NULL,
+    Id_Almacen_Inv        INT NOT NULL,
+    Cantidad_Inv          INT NOT NULL,
+    Estado_Inv            VARCHAR(10),
+    FOREIGN KEY (Id_Producto_Inv) REFERENCES TbInv_Producto(Id_Producto),
+    FOREIGN KEY (Id_Almacen_Inv) REFERENCES TbInv_Almacen(Id_Almacen)
+);

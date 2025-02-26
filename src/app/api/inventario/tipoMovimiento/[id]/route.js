@@ -28,7 +28,7 @@ export async function GET(req, { params }) {
 
 /** 🔹 Actualizar un tipo de movimiento */
 export async function PUT(req, { params }) {
-  const { id } = params;
+  const { id } = await params;
   const { Nombre_TiM, Codigo_TiM } = await req.json();
 
   try {
