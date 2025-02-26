@@ -78,6 +78,10 @@ CREATE TABLE TbInv_Producto (
     FOREIGN KEY (Id_Industria_Pro) REFERENCES TbInv_Industria(Id_Industria)
 );
 
+
+
+-- MIGUEL
+
 -- Tabla: TbInv_Funcionario
 CREATE TABLE TbInv_Funcionario (
     Id_Funcionario        INT PRIMARY KEY AUTO_INCREMENT,
@@ -120,6 +124,7 @@ CREATE TABLE TbInv_TipoMovimiento (
     Id_TipoMovimiento     INT PRIMARY KEY AUTO_INCREMENT,
     Nombre_TiM            VARCHAR(50) NOT NULL UNIQUE,
     Codigo_TiM            INT,
+    Color_TiM VARCHAR(20),
     Estado_TiM            VARCHAR(10)
 );
 
@@ -140,8 +145,8 @@ CREATE TABLE TbInv_MovimientoInventario (
     Id_MetodoValoracion_MoI INT NOT NULL,
     Id_Inventario_MoI     INT NOT NULL,
     Debito_MoI            INT NOT NULL,
-    Id_AlmacenOrigen_MoI  INT NULL,
-    Id_AlmacenDestino_MoI INT NULL,
+    Id_AlmacenOrigen_MoI  INT,
+    Id_AlmacenDestino_MoI INT,
     Cantidad_MoI          INT NOT NULL,
     FechaMovimiento_MoI   DATETIME DEFAULT CURRENT_TIMESTAMP,
     Estado_MoI            VARCHAR(10),
@@ -164,6 +169,8 @@ CREATE TABLE TbInv_Bajas (
     FOREIGN KEY (Id_Movimiento_Baj) REFERENCES TbInv_MovimientoInventario(Id_MovimientoInventario)
 );
 
+-- HASTA AQUI
+
 -- Tabla: TbInv_Devoluciones
 CREATE TABLE TbInv_Devoluciones (
     Id_Dev                INT PRIMARY KEY AUTO_INCREMENT,
@@ -171,7 +178,7 @@ CREATE TABLE TbInv_Devoluciones (
     Motivo_Dev            VARCHAR(255),
     Autorizacion_Dev      VARCHAR(100),
     Fecha_Dev             DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Estado_Dev            VARCHAR(10),
+    Estado_Baj            VARCHAR(10),
     FOREIGN KEY (Id_Movimiento_Dev) REFERENCES TbInv_MovimientoInventario(Id_MovimientoInventario)
 );
 
@@ -181,7 +188,6 @@ CREATE TABLE TbInv_Ajustes (
     Id_Movimiento_Aju     INT NOT NULL,
     Motivo_Aju            VARCHAR(255),
     FechaAju              DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Estado_Aju            VARCHAR(10),
     FOREIGN KEY (Id_Movimiento_Aju) REFERENCES TbInv_MovimientoInventario(Id_MovimientoInventario)
 );
 
@@ -189,7 +195,7 @@ CREATE TABLE TbInv_Ajustes (
 CREATE TABLE TbInv_Lote (
     Id_Lote               INT PRIMARY KEY AUTO_INCREMENT,
     NroLote_Lot           INT NOT NULL,
-    Descripcion_Lot       VARCHAR(255),
+    Descripcion_Lot       INT NOT NULL,
     CodigoBarras_Lot      TEXT,
     FechaVencimiento_Lot  DATE,
     Estado_Lot            VARCHAR(10)

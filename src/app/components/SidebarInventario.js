@@ -174,15 +174,15 @@ export default function Sidebar() {
       )
     },
 
-  {
-    title: "Lotes",
-    path: '/dashboard/inventario/lote',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1.293-1.293a1 1 0 011.414 0L12 15.586l6.293-6.293a1 1 0 011.414 0L21 10M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-    )
-},
+    {
+      title: "Lotes",
+      path: '/dashboard/inventario/lote',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1.293-1.293a1 1 0 011.414 0L12 15.586l6.293-6.293a1 1 0 011.414 0L21 10M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      )
+    },
 
     {
       title: "Lote Productos",
@@ -207,15 +207,15 @@ export default function Sidebar() {
       )
     },
 
-{
-  title: "Tipo de Cambio",
-  path: '/dashboard/inventario/tipoCambio',
-  icon: (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8V4m0 0L8 8m4-4l4 4m-4 8v4m0 0l4-4m-4 4l-4-4M4 12h16" />
-    </svg>
-  )
-}
+    {
+      title: "Tipo de Cambio",
+      path: '/dashboard/inventario/tipoCambio',
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8V4m0 0L8 8m4-4l4 4m-4 8v4m0 0l4-4m-4 4l-4-4M4 12h16" />
+        </svg>
+      )
+    }
 
 
   ];
@@ -247,73 +247,69 @@ export default function Sidebar() {
           } z-40`}
       >
 
-        <nav className={`flex flex-col h-full ${darkMode == true ? 'bg-gray-800 text-white' : 'bg-white text-black'} `}>
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-            <h1 className={`text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent transition-opacity ${!isOpen && 'opacity-0'}`}>
-              Gestión Empresarial
-              <button
-                onClick={toggleDarkMode}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700"
-                aria-label="Toggle dark mode"
-              >
-                {darkMode ? (
-                  <svg
-                    className="w-6 h-6 text-gray-800 dark:text-gray-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M20.354 15.354A9 9 0 118.646 3.646 7 7 0 0020.354 15.354z"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="w-6 h-6 text-gray-800 dark:text-gray-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 3v1m0 16v1m8-8h1m-16 0H3m15.364-6.364l.707-.707m-12.728 0l-.707-.707m12.728 12.728l.707.707m-12.728 0l-.707.707M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                )}
-              </button>
+<nav className={`flex flex-col h-full ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+  {/* Encabezado */}
+  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+    <h1 className={`text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent transition-opacity ${!isOpen && 'opacity-0'}`}>
+      Gestión Empresarial
+      <button
+        onClick={toggleDarkMode}
+        className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700"
+        aria-label="Toggle dark mode"
+      >
+        {darkMode ? (
+          <svg className="w-6 h-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 118.646 3.646 7 7 0 0020.354 15.354z"/>
+          </svg>
+        ) : (
+          <svg className="w-6 h-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m8-8h1m-16 0H3m15.364-6.364l.707-.707m-12.728 0l-.707-.707m12.728 12.728l.707.707m-12.728 0l-.707.707M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        )}
+      </button>
+    </h1>
+  </div>
 
-            </h1>
+  {/* Lista de Menús con Scroll */}
+  <ul className="flex-1 py-4 space-y-1 overflow-y-auto overflow-x-hidden">
+    {menuItems.map((item, index) => (
+      <li key={index} className="px-2 select-none">
+        <Link
+          href={item.path}
+          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === item.path ? 'bg-blue-500 text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+        >
+          <div className="min-w-[24px]">{item.icon}</div>
+          <span className={`transition-all duration-300 ${!isOpen ? 'opacity-0 w-0' : 'opacity-100'}`}>
+            {item.title}
+          </span>
+        </Link>
+      </li>
+    ))}
+  </ul>
 
-          </div>
+  {/* Sección inferior fija con perfil de usuario */}
+  <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+    <div className="flex items-center gap-3">
+      <img
+        src="/ruta-a-la-imagen-de-usuario.jpg"
+        alt="Usuario"
+        className="w-10 h-10 rounded-full"
+      />
+      <div className={`transition-all duration-300 ${!isOpen ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
+        <p className="text-sm font-medium">Nombre de Usuario</p>
+        <div className="flex gap-2 mt-1">
+          <Link href="/dashboard/menu" className="text-blue-500 hover:underline text-xs">
+            Menú
+          </Link>
+          <button onClick={() => console.log('Cerrar sesión')} className="text-red-500 hover:underline text-xs">
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
 
-
-          <ul className="flex-1 py-4 space-y-1  ">
-            {menuItems.map((item, index) => (
-              <li key={index} className="px-2 select-none">
-
-                <Link
-                  href={item.path}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === item.path
-                    ? 'bg-blue-500 text-white'
-                    : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
-                >
-                  <div className="min-w-[24px]">{item.icon}</div>
-                  <span className={`transition-all duration-300 ${!isOpen ? 'opacity-0 w-0' : 'opacity-100'}`}>
-                    {item.title}
-                  </span>
-                </Link>
-
-              </li>
-            ))}
-          </ul>
-
-        </nav>
       </aside>
 
       <style jsx global>{`

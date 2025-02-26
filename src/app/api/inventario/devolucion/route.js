@@ -13,11 +13,11 @@ export async function GET() {
         d.Motivo_Dev, 
         d.Autorizacion_Dev, 
         d.Fecha_Dev, 
-        d.Estado_Dev
+        d.Estado_Baj
       FROM TbInv_Devoluciones d
       JOIN TbInv_MovimientoInventario m ON d.Id_Movimiento_Dev = m.Id_MovimientoInventario
       JOIN TbInv_Producto p ON m.Id_Producto_MoI = p.Id_Producto
-      WHERE d.Estado_Dev = 'AC'
+      WHERE d.Estado_Baj = 'AC'
     `);
 
     return NextResponse.json(rows);

@@ -15,14 +15,14 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     const [almacenDestino, setAlmacenDestino] = useState("");
     const [metodoValoracion, setMetodoValoracion] = useState("");
     const [cantidad, setCantidad] = useState("");
-    // const [fechaMovimiento, setFechaMovimiento] = useState("");
+    const [fechaMovimiento, setFechaMovimiento] = useState("");
 
     useEffect(() => {
         fetch("/api/inventario/tipoMovimiento")
             .then((res) => res.json())
             .then(setTiposMovimiento);
 
-        fetch("/api/inventario/categoriasFuncionales")
+        fetch("/api/inventario/categoria")
             .then((res) => res.json())
             .then(setCategorias);
 
@@ -48,7 +48,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             setAlmacenDestino(movimiento.Id_AlmacenDestino_MoI || "");
             setMetodoValoracion(movimiento.Id_MetodoValoracion_MoI || "");
             setCantidad(movimiento.Cantidad_MoI || "");
-            // setFechaMovimiento(movimiento.FechaMovimiento_MoI ? movimiento.FechaMovimiento_MoI.split("T")[0] : "");
+            setFechaMovimiento(movimiento.FechaMovimiento_MoI ? movimiento.FechaMovimiento_MoI.split("T")[0] : "");
         }
     }, [movimiento]);
 
@@ -82,8 +82,8 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             return;
         }
 
-        if (tipoMovimiento === "1" && !almacenOrigen) {
-            alert("Debe seleccionar un almacén de origen para la salida.");
+        if (tipoMovimiento === "1" && !almacenDestino) {
+            alert("Debe seleccionar un almacén de destino para la entrada.");
             return;
         }
         if (tipoMovimiento === "2" && !almacenOrigen) {
@@ -100,18 +100,17 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
         }
 
         const data = {
-            Id_TipoMovimiento_MoI: Number(tipoMovimiento),
-            Id_Producto_MoI: Number(producto),
-            Id_MetodoValoracion_MoI: Number(metodoValoracion),
-            Id_AlmacenOrigen_MoI: almacenOrigen ? Number(almacenOrigen) : null,
-            Id_AlmacenDestino_MoI: almacenDestino ? Number(almacenDestino) : null,
-            Cantidad_MoI: Number(cantidad),
-            // FechaMovimiento_MoI: movimiento ? fechaMovimiento : undefined,
+            Id_TipoMovimiento_MoI: tipoMovimiento,
+            Id_Producto_MoI: producto,
+            Id_MetodoValoracion_MoI: metodoValoracion,
+            Id_AlmacenOrigen_MoI: almacenOrigen || null,
+            Id_AlmacenDestino_MoI: almacenDestino || null,
+            Cantidad_MoI: cantidad,
+            FechaMovimiento_MoI: movimiento ? fechaMovimiento : undefined,
             Estado_MoI: "AC",
         };
 
         console.log("🚀 Datos enviados al backend:", data);
-        console.log(typeof data.Cantidad_MoI)
         onSubmit(data);
     };
 
@@ -150,58 +149,3 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                     ))}
                 </select>
             </div>
-
-
-            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
-                <div>
-                    <label className="block text-sm font-medium mb-1">Almacén Origen</label>
-                    <select value={almacenOrigen} onChange={(e) => setAlmacenOrigen(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
-                        <option value="">Seleccione un almacén de origen</option>
-                        {almacenes.map((a) => (
-                            <option key={a.Id_Almacen} value={a.Id_Almacen}>{a.Nombre_Alm}</option>
-                        ))}
-                    </select>
-                </div>
-            ) : null}
-
-            {tipoMovimiento === "3" ? (
-                <div>
-                    <label className="block text-sm font-medium mb-1">Almacén Destino</label>
-                    <select value={almacenDestino} onChange={(e) => setAlmacenDestino(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
-                        <option value="">Seleccione un almacén de destino</option>
-                        {almacenes.map((a) => (
-                            <option key={a.Id_Almacen} value={a.Id_Almacen}>{a.Nombre_Alm}</option>
-                        ))}
-                    </select>
-                </div>
-            ) : null}
-
-            <div>
-                <label className="block text-sm font-medium mb-1">Método de Valoración</label>
-                <select value={metodoValoracion} onChange={(e) => setMetodoValoracion(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
-                    <option value="">Seleccione un método de valoración</option>
-                    {metodosValoracion.map((mv) => (
-                        <option key={mv.Id_MetodoValoracion} value={mv.Id_MetodoValoracion}>{mv.Nombre_MeV}</option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <label className="block text-sm font-medium mb-1">Cantidad</label>
-                <input type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
-            </div>
-
-            {/* {movimiento && (
-                <div>
-                    <label className="block text-sm font-medium mb-1">Fecha de Movimiento</label>
-                    <input type="date" value={fechaMovimiento} onChange={(e) => setFechaMovimiento(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" />
-                </div>
-            )} */}
-
-            <div className="flex justify-end gap-2 mt-6">
-                <button type="button" onClick={onClose} className="px-4 py-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">Cancelar</button>
-                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">{movimiento ? "Actualizar" : "Agregar"}</button>
-            </div>
-        </form>
-    );
-}

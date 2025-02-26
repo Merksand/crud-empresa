@@ -1,30 +1,18 @@
-use Bd_INVENTARIO_12022025_2;
-
--- Inserciones para TbInv_Sucursal
-INSERT INTO TbInv_Sucursal (Id_Sucursal, Id_Empresa_Suc, Nombre_Parametro_Suc, Nombre_Suc, Estado_Suc) 
-VALUES 
-(1, 1, 'SCZ-CENTRO', 'Sucursal Central', 'AC'),
-(2, 1, 'SCZ-NORTE', 'Sucursal Norte', 'AC'),
-(3, 2, 'LPZ-SUR', 'Sucursal Sur', 'AC'),
-(4, 2, 'CBBA-ESTE', 'Sucursal Este', 'AC'),
-(5, 3, 'ORU-OESTE', 'Sucursal Oeste', 'AC');
-
--- Inserciones para TbInv_Industria
 INSERT INTO TbInv_Industria (Nombre_Ind, Estado_Pai) VALUES
 ('Electrónica', 'AC'),
 ('Textil', 'AC'),
 ('Electrodomésticos', 'AC');
 
 
+INSERT INTO TbInv_Marca (Nombre_Mar, Estado_Mar) VALUES
+('Samsung', 'AC'),
+('Apple', 'AC'),
+('LG', 'AC'),
+('Sony', 'AC'),
+('Nike', 'AC'),
+('Adidas', 'AC'),
+('Puma', 'AC');
 
--- Inserciones para TbInv_Almacen
-INSERT INTO TbInv_Almacen (Id_Sucursal_Alm, Nombre_Alm, Ubicacion_Alm, Capacidad_maxima_Alm, Estado_Alm) 
-VALUES 
-(1, 'Almacén Central', 'Av. Principal #123', 1000, 'AC'),
-(2, 'Almacén Norte', 'Calle 45 #456', 800, 'AC'),
-(3, 'Almacén Sur', 'Zona Industrial #789', 600, 'AC'),
-(4, 'Almacén Este', 'Av. Colón #222', 500, 'AC'),
-(5, 'Almacén Oeste', 'Calle 10 #333', 700, 'AC');
 
 -- Categorías principales
 INSERT INTO TbInv_Categoria (Nombre_Cat, Id_Categoria_Padre_Cat, Estado_Cat) VALUES
@@ -52,26 +40,10 @@ INSERT INTO TbInv_Categoria (Nombre_Cat, Id_Categoria_Padre_Cat, Estado_Cat) VAL
 
 
 
--- Inserciones para TbInv_Marca
-INSERT INTO TbInv_Marca (Nombre_Mar, Estado_Mar) VALUES
-('Samsung', 'AC'),
-('Apple', 'AC'),
-('LG', 'AC'),
-('Sony', 'AC'),
-('Nike', 'AC'),
-('Adidas', 'AC'),
-('Puma', 'AC');
 
--- Inserciones para TbInv_Proveedor
-INSERT INTO TbInv_Proveedor (Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, Estado_Prov) 
-VALUES 
-('Distribuidora Bolivia', 'Av. Central #456', '78451236', 'contacto@distribo.com', 'AC'),
-('Importaciones LP', 'Calle Comercio #123', '78563421', 'ventas@importlp.com', 'AC'),
-('Mayoristas CBBA', 'Zona Industrial #222', '77451236', 'info@mayoristascbba.com', 'AC'),
-('Farmacias Unidos', 'Av. Blanco Galindo #999', '76543218', 'contacto@farmunidos.com', 'AC'),
-('Tienda Global', 'Calle 9 de Julio #333', '71234567', 'info@tiendaglobal.com', 'AC');
 
--- Inserciones para TbInv_Producto con URLs de imágenes
+
+
 
 
 
@@ -160,131 +132,30 @@ VALUES
 
 
 
--- Inserciones para TbInv_Funcionario
-INSERT INTO TbInv_Funcionario (Id_Persona_Fun, Nombre_Fun, Apellido_Fun, Cargo_Funcionario, Documento_Fun, Telefono_Fun, Correo_Fun, Estado_Fun)
-VALUES 
-(1, 'Juan', 'Perez', 'Gerente', '12345678', '78563214', 'juan.perez@email.com', 'AC'),
-(2, 'Maria', 'Lopez', 'Vendedora', '87654321', '71234567', 'maria.lopez@email.com', 'AC'),
-(3, 'Carlos', 'Gonzalez', 'Almacenero', '11223344', '75689123', 'carlos.gonzalez@email.com', 'AC'),
-(4, 'Lucia', 'Fernandez', 'Supervisora', '99887766', '74567812', 'lucia.fernandez@email.com', 'AC'),
-(5, 'Jose', 'Martinez', 'Repartidor', '55443322', '72123456', 'jose.martinez@email.com', 'AC');
-
--- Inserciones para TbInv_FuncionarioAlmacen
-INSERT INTO TbInv_FuncionarioAlmacen (Id_Funcionario_FA, Id_Almacen_FA, Fecha_Inicio_FA, Fecha_Fin_FA, Puesto_FA, Estado_FA)
-VALUES 
-(3, 1, '2024-01-01', '2025-01-01', 'Encargado de Almacén', 'AC'),
-(2, 2, '2023-12-01', '2024-12-01', 'Asistente de Almacén', 'AC'),
-(1, 3, '2023-11-15', '2024-11-15', 'Supervisor de Inventario', 'AC'),
-(4, 4, '2023-10-10', '2024-10-10', 'Gerente Logístico', 'AC'),
-(5, 5, '2023-09-05', '2024-09-05', 'Auxiliar de Depósito', 'AC');
-
--- Inserciones para TbInv_Inventario
-INSERT INTO TbInv_Inventario (Id_Producto_Inv, Id_Almacen_Inv, Cantidad_Inv, Estado_Inv)
-VALUES 
-(1, 1, 20, 'AC'),
-(2, 2, 15, 'AC'),
-(3, 3, 30, 'AC'),
-(4, 4, 25, 'AC'),
-(5, 5, 10, 'AC');
-
--- Inserciones para TbInv_TipoMovimiento
-INSERT INTO TbInv_TipoMovimiento (Nombre_TiM, Codigo_TiM, Estado_TiM)
-VALUES 
-('Entrada', 100, 'AC'),
-('Salida', 200, 'AC'),
-('Transferencia', 300, 'AC'),
-('Devolución', 400, 'AC'),
-('Ajuste positivo', 500, 'AC'),
-('Ajuste negativo', 600, 'AC'),
-('Baja', 700, 'AC');
-
--- Inserciones para TbInv_MetodoValoracion
-INSERT INTO TbInv_MetodoValoracion (Nombre_MeV, Descripcion_MeV, Estado_MeV)
-VALUES 
-('PEPS', 'Primeras Entradas, Primeras Salidas', 'AC'),
-('UEPS', 'Últimas Entradas, Primeras Salidas', 'AC'),
-('Promedio', 'Promedio Ponderado', 'AC'),
-('Costo Específico', 'Método de Costo Específico', 'AC'),
-('Valor Neto Realizable', 'Método de Valor Neto Realizable', 'AC');
 
 
--- Inserciones para TbInv_MovimientoInventario
-INSERT INTO TbInv_MovimientoInventario (Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, Debito_MoI, Id_AlmacenOrigen_MoI, Id_AlmacenDestino_MoI, Cantidad_MoI, FechaMovimiento_MoI, Estado_MoI)
-VALUES 
-(1, 1, 1, 1, 0, 1, 1, 20, '2025-02-17 08:00:00', 'AC'),
-(2, 2, 2, 2, 1, 2, 1, 10, '2025-02-17 09:00:00', 'AC'),
-(3, 3, 3, 3, 0, 3, 4, 5, '2025-02-17 10:00:00', 'AC'),
-(4, 4, 1, 4, 0, 1, 4, 3, '2025-02-17 11:00:00', 'AC'),
-(5, 5, 2, 5, 1, 1, 5, 8, '2025-02-17 12:00:00', 'AC');
 
--- Inserciones para TbInv_Bajas
-INSERT INTO TbInv_Bajas (Id_Movimiento_Baj, Motivo_Baj, Autorizacion_Baj, Fecha_Baj, Estado_Baj)
-VALUES 
-(1, 'Producto defectuoso', 'Gerente de Logística', '2025-02-17 13:00:00', 'AC'),
-(2, 'Producto vencido', 'Supervisor de Almacén', '2025-02-17 14:00:00', 'AC'),
-(3, 'Error de registro', 'Auditor Interno', '2025-02-17 15:00:00', 'AC'),
-(4, 'Daño por transporte', 'Jefe de Operaciones', '2025-02-17 16:00:00', 'AC'),
-(5, 'Baja programada', 'Gerente General', '2025-02-17 17:00:00', 'AC');
 
--- Inserciones para TbInv_Devoluciones
-INSERT INTO TbInv_Devoluciones (Id_Movimiento_Dev, Motivo_Dev, Autorizacion_Dev, Fecha_Dev, Estado_Baj)
-VALUES 
-(1, 'Cliente insatisfecho', 'Atención al Cliente', '2025-02-17 10:00:00', 'AC'),
-(2, 'Producto defectuoso', 'Control de Calidad', '2025-02-17 11:00:00', 'AC'),
-(3, 'Error en pedido', 'Gerente de Ventas', '2025-02-17 12:00:00', 'AC'),
-(4, 'Rechazo de entrega', 'Coordinador de Envíos', '2025-02-17 13:00:00', 'AC'),
-(5, 'Cambio de producto', 'Supervisor de Tienda', '2025-02-17 14:00:00', 'AC');
+-- Tabla: TbInv_Almacen
+CREATE TABLE TbInv_Almacen (
+    Id_Almacen            INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Sucursal_Alm       INT NOT NULL,
+    Nombre_Alm            VARCHAR(100) NOT NULL,
+    Ubicacion_Alm         VARCHAR(200) NOT NULL,
+    Capacidad_maxima_Alm  INT,
+    Estado_Alm            VARCHAR(10),
+    FOREIGN KEY (Id_Sucursal_Alm) REFERENCES TbInv_Sucursal(Id_Sucursal)
+);
 
--- Inserciones para TbInv_Ajustes
-INSERT INTO TbInv_Ajustes (Id_Movimiento_Aju, Motivo_Aju, FechaAju)
-VALUES 
-(1, 'Corrección de inventario', '2025-02-17 15:30:00'),
-(2, 'Pérdida de productos', '2025-02-17 16:00:00'),
-(3, 'Ingreso no registrado', '2025-02-17 16:30:00'),
-(4, 'Cambio de ubicación', '2025-02-17 17:00:00'),
-(5, 'Revisión contable', '2025-02-17 17:30:00');
 
--- Inserciones para TbInv_Lote
-INSERT INTO TbInv_Lote (NroLote_Lot, Descripcion_Lot, CodigoBarras_Lot, FechaVencimiento_Lot, Estado_Lot)
-VALUES 
-(101, 12345, '1234567890123', '2026-01-01', 'AC'),
-(102, 67890, '7894561230123', '2026-02-01', 'AC'),
-(103, 54321, '3216549870123', '2026-03-01', 'AC'),
-(104, 98765, '9876543210123', '2026-04-01', 'AC'),
-(105, 19283, '1237896540123', '2026-05-01', 'AC');
 
--- Inserciones para TbInv_LoteProductos
-INSERT INTO TbInv_LoteProductos (Id_Lote_LoP, Id_Producto_LoP, Cantidad_LoP, Estado_LoP)
-VALUES 
-(1, 1, 50, 'AC'),
-(2, 2, 30, 'AC'),
-(3, 3, 40, 'AC'),
-(4, 4, 20, 'AC'),
-(5, 5, 10, 'AC');
-
--- Inserciones para TbInv_Moneda
-INSERT INTO TbInv_Moneda (Codigo_Mon, Nombre_Mon, Estado_Mon)
-VALUES 
-('BOB', 'Boliviano', 'AC'),
-('USD', 'Dólar Americano', 'AC'),
-('EUR', 'Euro', 'AC'),
-('ARS', 'Peso Argentino', 'AC'),
-('BRL', 'Real Brasileño', 'AC');
-
--- Inserciones para TbInv_TipoCambio
-INSERT INTO TbInv_TipoCambio (Id_Moneda_TiC, Fecha_TiC, TasaCambio_TiC, Estado_TiC)
-VALUES 
-(1, '2025-02-17', 6.95, 'AC'),
-(2, '2025-02-17', 1.00, 'AC'),
-(3, '2025-02-17', 1.10, 'AC'),
-(4, '2025-02-17', 0.009, 'AC'),
-(5, '2025-02-17', 0.20, 'AC');
-
--- Inserciones para TbInv_OrdenesCompra
-INSERT INTO TbInv_OrdenesCompra (Id_Sucursal_OdC, Id_Proveedor_OdC, Id_Moneda_Odc, FechaOrden_OdC, Monto_OdC, Impuestos_OdC, Descuento_OdC, Sub_Total_OdC, TotalPagado_OdC, Estado_OdC)
-VALUES 
-(1, 1, 1, '2025-02-17', 1500.00, 150.00, 50.00, 1400.00, 1400.00, 'AC'),
-(2, 2, 2, '2025-02-17', 2500.00, 250.00, 100.00, 2400.00, 2400.00, 'AC'),
-(3, 3, 3, '2025-02-17', 3500.00, 350.00, 150.00, 3350.00, 3350.00, 'AC'),
-(4, 4, 4, '2025-02-17', 4500.00, 450.00, 200.00, 4300.00, 4300.00, 'AC'),
-(5, 5, 5, '2025-02-17', 5500.00, 550.00, 250.00, 5250.00, 5250.00, 'AC');
+-- Tabla: TbInv_Inventario
+CREATE TABLE TbInv_Inventario (
+    Id_Inventario         INT PRIMARY KEY AUTO_INCREMENT,
+    Id_Producto_Inv       INT NOT NULL,
+    Id_Almacen_Inv        INT NOT NULL,
+    Cantidad_Inv          INT NOT NULL,
+    Estado_Inv            VARCHAR(10),
+    FOREIGN KEY (Id_Producto_Inv) REFERENCES TbInv_Producto(Id_Producto),
+    FOREIGN KEY (Id_Almacen_Inv) REFERENCES TbInv_Almacen(Id_Almacen)
+);
