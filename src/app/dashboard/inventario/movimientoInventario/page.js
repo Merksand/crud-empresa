@@ -103,7 +103,7 @@ export default function MovimientoInventario() {
       {/* Notificaciones */}
       {notification.show && (
         <Notification
-          message={notification.message}
+          message={notification.message.toString()} // Asegúrate de que el mensaje sea una cadena de texto
           type={notification.type}
           onClose={() => showNotification({ show: false, message: "", type: "" })}
         />

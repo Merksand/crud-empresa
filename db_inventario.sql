@@ -247,3 +247,16 @@ CREATE TABLE TbInv_OrdenesCompra (
     FOREIGN KEY (Id_Proveedor_OdC) REFERENCES TbInv_Proveedor(Id_Proveedor),
     FOREIGN KEY (Id_Moneda_Odc) REFERENCES TbInv_Moneda(Id_Moneda)
 );
+
+
+
+
+
+
+Entrada,
+Salida,
+Transferencia,
+Devolución,
+Ajuste positivo,
+Ajuste negativo,
+Baja

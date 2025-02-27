@@ -3,8 +3,8 @@ import { poolInventario } from "@/lib/db"; // Usamos la BD correcta
 
 /** 🔹 Obtener todos los movimientos de inventario con detalles */
 export async function GET() {
-  try {
-    const [rows] = await poolInventario.query(`
+    try {
+        const [rows] = await poolInventario.query(`
       SELECT 
           mi.Id_MovimientoInventario, 
           mi.Id_TipoMovimiento_MoI, 
@@ -31,134 +31,170 @@ export async function GET() {
         WHERE mi.Estado_MoI = 'AC'
     `);
 
-    return NextResponse.json(rows);
-  } catch (error) {
-    console.error("Error al obtener los movimientos de inventario:", error);
-    return NextResponse.json(
-      { message: "Error al obtener los movimientos de inventario", error },
-      { status: 500 }
-    );
-  }
+        return NextResponse.json(rows);
+    } catch (error) {
+        console.error("Error al obtener los movimientos de inventario:", error);
+        return NextResponse.json(
+            { message: "Error al obtener los movimientos de inventario", error },
+            { status: 500 }
+        );
+    }
 }
 
 
 
 
 
-export async function POST(req) {
-  try {
-    const {
-      Id_TipoMovimiento_MoI,
-      Id_Producto_MoI,
-      Id_MetodoValoracion_MoI,
-      Id_AlmacenOrigen_MoI,
-      Id_AlmacenDestino_MoI,
-      Cantidad_MoI,
-      Estado_MoI = "AC",
-    } = await req.json();
 
-    // ✅ Validar que los campos obligatorios estén presentes
-    if (!Id_TipoMovimiento_MoI || !Id_Producto_MoI || !Cantidad_MoI || !Id_MetodoValoracion_MoI) {
-      return NextResponse.json({ message: "Faltan campos obligatorios" }, { status: 400 });
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+/** 🔹 Función para actualizar stock en un almacén */
+async function actualizarStock(Id_Producto, Id_Almacen, cantidad, connection) {
+    if (!Id_Almacen) {
+        throw new Error("Id_Almacen no puede ser NULL.");
     }
 
-    // ✅ Determinar el almacén afectado (usando Almacén Origen en todas las operaciones)
-    const almacenId = Id_AlmacenOrigen_MoI; 
-
-    // ✅ Buscar el inventario en el almacén origen
-    const [inventario] = await poolInventario.query(
-      `SELECT Id_Inventario, Cantidad_Inv FROM TbInv_Inventario WHERE Id_Producto_Inv = ? AND Id_Almacen_Inv = ?`,
-      [Id_Producto_MoI, almacenId]
+    const [inventario] = await connection.query(
+        `SELECT Id_Inventario, Cantidad_Inv FROM TbInv_Inventario WHERE Id_Producto_Inv = ? AND Id_Almacen_Inv = ? FOR UPDATE`,
+        [Id_Producto, Id_Almacen]
     );
 
-    let Id_Inventario_MoI;
-    let stockActual = 0;
-
+    let Id_Inventario;
     if (inventario.length === 0) {
-      // ✅ Si no existe el inventario en ese almacén, lo creamos con stock 0
-      const [newInventario] = await poolInventario.query(
-        `INSERT INTO TbInv_Inventario (Id_Producto_Inv, Id_Almacen_Inv, Cantidad_Inv, Estado_Inv) 
-         VALUES (?, ?, 0, 'AC')`,
-        [Id_Producto_MoI, almacenId]
-      );
-      Id_Inventario_MoI = newInventario.insertId;
+        const [newInventario] = await connection.query(
+            `INSERT INTO TbInv_Inventario (Id_Producto_Inv, Id_Almacen_Inv, Cantidad_Inv, Estado_Inv) 
+            VALUES (?, ?, ?, 'AC')`,
+            [Id_Producto, Id_Almacen, cantidad > 0 ? cantidad : 0]
+        );
+        Id_Inventario = newInventario.insertId;
     } else {
-      Id_Inventario_MoI = inventario[0].Id_Inventario;
-      stockActual = inventario[0].Cantidad_Inv;
-    }
+        Id_Inventario = inventario[0].Id_Inventario;
+        const stockActual = inventario[0].Cantidad_Inv;
 
-    // ✅ Validar stock antes de una salida o traslado
-    if ((Id_TipoMovimiento_MoI == 2 || Id_TipoMovimiento_MoI == 3) && stockActual < Cantidad_MoI) {
-      return NextResponse.json({ message: "Stock insuficiente en el almacén origen" }, { status: 400 });
-    }
+        if (stockActual + cantidad < 0) {
+            throw new Error("Stock insuficiente en el almacén.");
+        }
 
-    // ✅ Calcular el Debito según el tipo de movimiento
-    let Debito_MoI = 0;
-    if (Id_TipoMovimiento_MoI == 1) Debito_MoI = +Cantidad_MoI; // Entrada
-    if (Id_TipoMovimiento_MoI == 2) Debito_MoI = -Cantidad_MoI; // Salida
-
-    // ✅ Insertar el movimiento en `TbInv_MovimientoInventario`
-    await poolInventario.query(
-      `INSERT INTO TbInv_MovimientoInventario 
-       (Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, Id_AlmacenOrigen_MoI, Id_AlmacenDestino_MoI, Cantidad_MoI, Debito_MoI, Estado_MoI) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, Id_AlmacenOrigen_MoI, Id_AlmacenDestino_MoI || null, Cantidad_MoI, Debito_MoI, Estado_MoI]
-    );
-
-    // ✅ Actualizar el stock en el almacén origen
-    await poolInventario.query(
-      `UPDATE TbInv_Inventario SET Cantidad_Inv = Cantidad_Inv + ? WHERE Id_Inventario = ?`,
-      [Debito_MoI, Id_Inventario_MoI]
-    );
-
-    // ✅ Si es un traslado (Id_TipoMovimiento_MoI == 3), crear un registro en el almacén destino
-    if (Id_TipoMovimiento_MoI == 3) {
-      // Buscar si el producto ya está en el almacén destino
-      const [inventarioDestino] = await poolInventario.query(
-        `SELECT Id_Inventario FROM TbInv_Inventario WHERE Id_Producto_Inv = ? AND Id_Almacen_Inv = ?`,
-        [Id_Producto_MoI, Id_AlmacenDestino_MoI]
-      );
-
-      let Id_Inventario_Destino;
-      if (inventarioDestino.length > 0) {
-        Id_Inventario_Destino = inventarioDestino[0].Id_Inventario;
-        // ✅ Actualizar stock en el almacén destino
-        await poolInventario.query(
-          `UPDATE TbInv_Inventario SET Cantidad_Inv = Cantidad_Inv + ? WHERE Id_Inventario = ?`,
-          [Cantidad_MoI, Id_Inventario_Destino]
+        await connection.query(
+            `UPDATE TbInv_Inventario SET Cantidad_Inv = Cantidad_Inv + ? WHERE Id_Inventario = ?`,
+            [cantidad, Id_Inventario]
         );
-      } else {
-        // ✅ Crear un nuevo inventario si no existe en el destino
-        const [insertResult] = await poolInventario.query(
-          `INSERT INTO TbInv_Inventario (Id_Producto_Inv, Id_Almacen_Inv, Cantidad_Inv, Estado_Inv)
-           VALUES (?, ?, ?, 'AC')`,
-          [Id_Producto_MoI, Id_AlmacenDestino_MoI, Cantidad_MoI]
-        );
-        Id_Inventario_Destino = insertResult.insertId;
-      }
-
-      // ✅ Insertar el movimiento de entrada en el almacén destino
-      await poolInventario.query(
-        `INSERT INTO TbInv_MovimientoInventario 
-         (Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, Id_AlmacenOrigen_MoI, Id_AlmacenDestino_MoI, Cantidad_MoI, Debito_MoI, Estado_MoI) 
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          Id_TipoMovimiento_MoI,
-          Id_Producto_MoI,
-          Id_MetodoValoracion_MoI,
-          Id_Inventario_Destino,
-          null,
-          Id_AlmacenDestino_MoI,
-          Cantidad_MoI,
-          +Cantidad_MoI, // Entrada positiva en destino
-          Estado_MoI,
-        ]
-      );
     }
+    return Id_Inventario;
+}
 
-    return NextResponse.json({ message: "Movimiento de inventario creado correctamente y stock actualizado" });
-  } catch (error) {
-    console.error("Error al crear movimiento de inventario:", error);
-    return NextResponse.json({ message: "Error al crear movimiento de inventario", error: error.message }, { status: 500 });
-  }
+/** 🔹 Endpoint POST */
+export async function POST(req) {
+    const connection = await poolInventario.getConnection();
+    await connection.beginTransaction();
+
+    try {
+        const {
+            Id_TipoMovimiento_MoI,
+            Id_Producto_MoI,
+            Id_MetodoValoracion_MoI,
+            Id_AlmacenOrigen_MoI,
+            Id_AlmacenDestino_MoI,
+            Cantidad_MoI,
+            Motivo_Dev,
+            Autorizacion_Dev,
+            Estado_MoI = "AC",
+        } = await req.json();
+
+        // ✅ Convertir valores a número
+        const tipoMovimiento = Number(Id_TipoMovimiento_MoI);
+        const producto = Number(Id_Producto_MoI);
+        const metodoValoracion = Number(Id_MetodoValoracion_MoI);
+        const almacenOrigen = Id_AlmacenOrigen_MoI ? Number(Id_AlmacenOrigen_MoI) : null;
+        const almacenDestino = Id_AlmacenDestino_MoI ? Number(Id_AlmacenDestino_MoI) : null;
+        const cantidad = Number(Cantidad_MoI);
+
+        // ✅ Validaciones básicas
+        if (isNaN(tipoMovimiento) || isNaN(producto) || isNaN(metodoValoracion) || isNaN(cantidad) || cantidad <= 0) {
+            throw new Error("Datos inválidos o faltantes.");
+        }
+
+        let Id_Inventario_MoI;
+        let Debito_MoI = 0;
+
+        switch (tipoMovimiento) {
+            case 1: // Entrada
+            case 5: // Ajuste Positivo
+                Debito_MoI = cantidad;
+                Id_Inventario_MoI = await actualizarStock(producto, almacenOrigen, cantidad, connection);
+                break;
+            case 2: // Salida
+            case 6: // Ajuste Negativo
+            case 7: // Baja
+                Debito_MoI = -cantidad;
+                Id_Inventario_MoI = await actualizarStock(producto, almacenOrigen, -cantidad, connection);
+                break;
+            case 3: // Transferencia
+                // Verificar que hay stock suficiente antes de hacer la transferencia
+                Id_Inventario_MoI = await actualizarStock(producto, almacenOrigen, -cantidad, connection);
+                const Id_Inventario_Destino = await actualizarStock(producto, almacenDestino, cantidad, connection);
+                break;
+            case 4: // Devolución
+                Debito_MoI = cantidad;
+                Id_Inventario_MoI = await actualizarStock(producto, almacenOrigen, cantidad, connection);
+
+                if (!Motivo_Dev || !Autorizacion_Dev) {
+                    throw new Error("Motivo y autorización son requeridos para devoluciones.");
+                }
+
+                break;
+            default:
+                throw new Error("Tipo de movimiento inválido.");
+        }
+
+        // 🔹 Insertar el movimiento en `TbInv_MovimientoInventario`
+        const [result] = await connection.query(
+            `INSERT INTO TbInv_MovimientoInventario 
+            (Id_TipoMovimiento_MoI, Id_Producto_MoI, Id_MetodoValoracion_MoI, Id_Inventario_MoI, 
+            Id_AlmacenOrigen_MoI, Id_AlmacenDestino_MoI, Cantidad_MoI, Debito_MoI, Estado_MoI) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [tipoMovimiento, producto, metodoValoracion, Id_Inventario_MoI, almacenOrigen, almacenDestino, cantidad, Debito_MoI, Estado_MoI]
+        );
+
+        const Id_Movimiento_Dev = result.insertId;
+
+        // 🔹 Manejo de devoluciones
+        if (tipoMovimiento === 4) {
+            await connection.query(
+                `INSERT INTO TbInv_Devoluciones (Id_Movimiento_Dev, Motivo_Dev, Autorizacion_Dev, Estado_Baj) 
+                VALUES (?, ?, ?, 'AC')`,
+                [Id_Movimiento_Dev, Motivo_Dev, Autorizacion_Dev]
+            );
+        }
+
+        await connection.commit();
+
+        // 🔹 Mensaje de respuesta según el tipo de movimiento
+        let mensaje = "Movimiento registrado correctamente.";
+        if (tipoMovimiento === 1) mensaje = "Entrada de inventario registrada correctamente.";
+        if (tipoMovimiento === 2) mensaje = "Salida de inventario registrada correctamente.";
+        if (tipoMovimiento === 3) mensaje = "Traslado de inventario registrado correctamente.";
+        if (tipoMovimiento === 4) mensaje = "Devolución registrada correctamente.";
+
+        return NextResponse.json({ message: mensaje });
+
+    } catch (error) {
+        await connection.rollback();
+        console.error("Error al crear movimiento de inventario:", error);
+        return NextResponse.json({ message: "Error en el servidor", error: error.message }, { status: 500 });
+    } finally {
+        connection.release();
+    }
 }

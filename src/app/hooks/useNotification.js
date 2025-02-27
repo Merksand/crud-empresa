@@ -8,7 +8,7 @@ export default function useNotification() {
   });
 
   const showNotification = (message, type = 'success', duration = 6000) => {
-    setNotification({ show: true, message, type });
+    setNotification({ show: true, message: message.toString(), type }); // Asegúrate de que el mensaje sea una cadena de texto
     setTimeout(() => {
       setNotification({ show: false, message: '', type: '' });
     }, duration);
