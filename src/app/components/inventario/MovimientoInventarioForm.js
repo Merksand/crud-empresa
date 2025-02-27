@@ -15,7 +15,14 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     const [almacenDestino, setAlmacenDestino] = useState("");
     const [metodoValoracion, setMetodoValoracion] = useState("");
     const [cantidad, setCantidad] = useState("");
+
+    const [almacenesDisponibles, setAlmacenesDisponibles] = useState([]);
     // const [fechaMovimiento, setFechaMovimiento] = useState("");
+
+
+    // 🔹 Campos exclusivos para devoluciones
+    const [motivo, setMotivo] = useState("");
+    const [autorizacion, setAutorizacion] = useState("");
 
     useEffect(() => {
         fetch("/api/inventario/tipoMovimiento")
@@ -30,14 +37,25 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             .then((res) => res.json())
             .then(setProductos);
 
-        fetch("/api/inventario/almacen")
-            .then((res) => res.json())
-            .then(setAlmacenes);
+        // fetch("/api/inventario/almacen")
+        //     .then((res) => res.json())
+        //     .then(setAlmacenes);
 
         fetch("/api/inventario/metodoValoracion")
             .then((res) => res.json())
             .then(setMetodosValoracion);
     }, []);
+
+    useEffect(() => {
+        if (producto) {
+            fetch(`/api/inventario/movimientoInventario/almacenesPorProducto?idProducto=${producto}`)
+                .then((res) => res.json())
+                .then(setAlmacenesDisponibles)
+                .catch((error) => console.error("Error al cargar almacenes con stock:", error));
+        } else {
+            setAlmacenesDisponibles([]);
+        }
+    }, [producto]);
 
     useEffect(() => {
         if (movimiento) {
@@ -49,6 +67,9 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             setMetodoValoracion(movimiento.Id_MetodoValoracion_MoI || "");
             setCantidad(movimiento.Cantidad_MoI || "");
             // setFechaMovimiento(movimiento.FechaMovimiento_MoI ? movimiento.FechaMovimiento_MoI.split("T")[0] : "");
+            setMotivo(movimiento.Motivo_Dev || "");
+            setAutorizacion(movimiento.Autorizacion_Dev || "");
+
         }
     }, [movimiento]);
 
@@ -59,9 +80,9 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     }, [categoria, productos]);
 
     useEffect(() => {
-        if (!movimiento) {  
-            if (tipoMovimiento === "1") setAlmacenOrigen("");  
-            if (tipoMovimiento === "2") setAlmacenDestino("");  
+        if (!movimiento) {
+            if (tipoMovimiento === "1") setAlmacenOrigen("");
+            if (tipoMovimiento === "2") setAlmacenDestino("");
             if (tipoMovimiento !== "3") {
                 setAlmacenOrigen("");
                 setAlmacenDestino("");
@@ -108,6 +129,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             Cantidad_MoI: Number(cantidad),
             // FechaMovimiento_MoI: movimiento ? fechaMovimiento : undefined,
             Estado_MoI: "AC",
+            ...(tipoMovimiento === "4" && { Motivo_Dev: motivo, Autorizacion_Dev: autorizacion }) // Solo si es devolución
         };
 
         console.log("🚀 Datos enviados al backend:", data);
@@ -152,7 +174,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             </div>
 
 
-            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
+            {/* {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
                 <div>
                     <label className="block text-sm font-medium mb-1">Almacén Origen</label>
                     <select value={almacenOrigen} onChange={(e) => setAlmacenOrigen(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
@@ -162,7 +184,34 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                         ))}
                     </select>
                 </div>
+            ) : null} */}
+
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
+                <div>
+                    <label className="block text-sm font-medium mb-1">Almacén Origen</label>
+                    <select
+                        value={almacenOrigen}
+                        onChange={(e) => setAlmacenOrigen(e.target.value)}
+                        className="w-full p-2 border rounded-lg dark:bg-gray-700"
+                        required
+                        disabled={almacenesDisponibles.length === 0}
+                    >
+                        {almacenesDisponibles.length === 0 ? (
+                            <option value="">⚠️ No hay almacenes con stock disponible</option>
+                        ) : (
+                            <>
+                                <option value="">Seleccione un almacén de origen</option>
+                                {almacenesDisponibles.map((a) => (
+                                    <option key={a.Id_Almacen} value={a.Id_Almacen}>
+                                        {a.Nombre_Alm} (Stock: {a.Cantidad_Inv})
+                                    </option>
+                                ))}
+                            </>
+                        )}
+                    </select>
+                </div>
             ) : null}
+
 
             {tipoMovimiento === "3" ? (
                 <div>
@@ -175,6 +224,23 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                     </select>
                 </div>
             ) : null}
+
+
+            {/* Inputs adicionales para devolución */}
+            {tipoMovimiento === "4" && (
+                <>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Motivo de Devolución</label>
+                        <textarea value={motivo} onChange={(e) => setMotivo(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Autorización</label>
+                        <input type="text" value={autorizacion} onChange={(e) => setAutorizacion(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
+                    </div>
+                </>
+            )}
+
+
 
             <div>
                 <label className="block text-sm font-medium mb-1">Método de Valoración</label>
@@ -190,13 +256,6 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                 <label className="block text-sm font-medium mb-1">Cantidad</label>
                 <input type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
             </div>
-
-            {/* {movimiento && (
-                <div>
-                    <label className="block text-sm font-medium mb-1">Fecha de Movimiento</label>
-                    <input type="date" value={fechaMovimiento} onChange={(e) => setFechaMovimiento(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" />
-                </div>
-            )} */}
 
             <div className="flex justify-end gap-2 mt-6">
                 <button type="button" onClick={onClose} className="px-4 py-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">Cancelar</button>
