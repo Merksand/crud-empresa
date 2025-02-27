@@ -11,10 +11,12 @@ import useSocket from "@/app/hooks/useSocket";
 export default function Inventario() {
   const { notification, showNotification } = useNotification();
   const [inventario, setInventario] = useState([]);
+  const [filteredInventario, setFilteredInventario] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inventarioEditar, setInventarioEditar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ show: false, item: null });
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Cargar inventario al inicializar
   useEffect(() => {
@@ -27,6 +29,7 @@ export default function Inventario() {
       const response = await fetch("/api/inventario/inventario");
       const data = await response.json();
       setInventario(data);
+      setFilteredInventario(data);
     } catch (error) {
       showNotification("Error al cargar el inventario", "error");
     } finally {
@@ -34,44 +37,46 @@ export default function Inventario() {
     }
   };
 
-
+  useEffect(() => {
+    const filteredData = inventario.filter(item =>
+      item.Nombre_Producto.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.Nombre_Almacen.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredInventario(filteredData);
+  }, [searchTerm, inventario]);
 
   useSocket({
     "inventario-actualizado": (productoActualizado) => {
-        console.log("🔔 Evento recibido: inventario-actualizado", productoActualizado);
+      console.log("🔔 Evento recibido: inventario-actualizado", productoActualizado);
 
-        setInventario((prev) => {
-            const index = prev.findIndex(
-                (item) => String(item.Id_Inventario) === String(productoActualizado.Id_Inventario)
-            );
+      setInventario((prev) => {
+        const index = prev.findIndex(
+          (item) => String(item.Id_Inventario) === String(productoActualizado.Id_Inventario)
+        );
 
-            if (index !== -1) {
-                // ✅ Actualiza solo la fila correspondiente sin agregar nuevas
-                return prev.map((item, i) =>
-                    i === index ? { ...item, ...productoActualizado } : item
-                );
-            } else {
-                return prev; // ✅ No agrega una nueva fila si no se encuentra
-            }
-        });
+        if (index !== -1) {
+          // ✅ Actualiza solo la fila correspondiente sin agregar nuevas
+          return prev.map((item, i) =>
+            i === index ? { ...item, ...productoActualizado } : item
+          );
+        } else {
+          return prev; // ✅ No agrega una nueva fila si no se encuentra
+        }
+      });
     },
 
     "inventario-agregado": (nuevoProducto) => {
-        console.log("🔔 Evento recibido: inventario-agregado", nuevoProducto);
-        setInventario((prev) => [...prev, nuevoProducto]); // ✅ Agrega un nuevo producto
+      console.log("🔔 Evento recibido: inventario-agregado", nuevoProducto);
+      setInventario((prev) => [...prev, nuevoProducto]); // ✅ Agrega un nuevo producto
     },
 
     "inventario-eliminado": (idProducto) => {
-        console.log("🔔 Evento recibido: inventario-eliminado", idProducto);
-        setInventario((prev) =>
-            prev.filter((item) => String(item.Id_Inventario) !== String(idProducto))
-        ); // ✅ Elimina la fila correspondiente
+      console.log("🔔 Evento recibido: inventario-eliminado", idProducto);
+      setInventario((prev) =>
+        prev.filter((item) => String(item.Id_Inventario) !== String(idProducto))
+      ); // ✅ Elimina la fila correspondiente
     }
-});
-
-
-
-
+  });
 
   const handleSubmit = async (data) => {
     try {
@@ -135,19 +140,28 @@ export default function Inventario() {
       {/* Encabezado */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Gestión de Inventario</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path
-              fillRule="evenodd"
-              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-              clipRule="evenodd"
-            />
-          </svg>
-          Nuevo Registro
-        </button>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Buscar producto o almacén..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-64 px-4 py-2 border rounded-lg outline-none dark:text-black"
+          />
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                fillRule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Nuevo Registro
+          </button>
+        </div>
       </div>
       {/* Tabla */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
@@ -174,12 +188,12 @@ export default function Inventario() {
                 <tr>
                   <td colSpan="4" className="px-6 py-4 text-center text-gray-500">Cargando...</td>
                 </tr>
-              ) : inventario.length === 0 ? (
+              ) : filteredInventario.length === 0 ? (
                 <tr>
                   <td colSpan="4" className="px-6 py-4 text-center text-gray-500">No hay registros en el inventario</td>
                 </tr>
               ) : (
-                inventario.map((item) => (
+                filteredInventario.map((item) => (
                   <tr key={item.Id_Inventario} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{item.Nombre_Producto}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{item.Nombre_Almacen}</td>

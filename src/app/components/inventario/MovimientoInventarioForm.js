@@ -15,6 +15,8 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     const [almacenDestino, setAlmacenDestino] = useState("");
     const [metodoValoracion, setMetodoValoracion] = useState("");
     const [cantidad, setCantidad] = useState("");
+
+    const [almacenesDisponibles, setAlmacenesDisponibles] = useState([]);
     // const [fechaMovimiento, setFechaMovimiento] = useState("");
 
 
@@ -35,14 +37,25 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             .then((res) => res.json())
             .then(setProductos);
 
-        fetch("/api/inventario/almacen")
-            .then((res) => res.json())
-            .then(setAlmacenes);
+        // fetch("/api/inventario/almacen")
+        //     .then((res) => res.json())
+        //     .then(setAlmacenes);
 
         fetch("/api/inventario/metodoValoracion")
             .then((res) => res.json())
             .then(setMetodosValoracion);
     }, []);
+
+    useEffect(() => {
+        if (producto) {
+            fetch(`/api/inventario/movimientoInventario/almacenesPorProducto?idProducto=${producto}`)
+                .then((res) => res.json())
+                .then(setAlmacenesDisponibles)
+                .catch((error) => console.error("Error al cargar almacenes con stock:", error));
+        } else {
+            setAlmacenesDisponibles([]);
+        }
+    }, [producto]);
 
     useEffect(() => {
         if (movimiento) {
@@ -161,7 +174,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             </div>
 
 
-            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
+            {/* {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
                 <div>
                     <label className="block text-sm font-medium mb-1">Almacén Origen</label>
                     <select value={almacenOrigen} onChange={(e) => setAlmacenOrigen(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
@@ -171,7 +184,34 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                         ))}
                     </select>
                 </div>
+            ) : null} */}
+
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
+                <div>
+                    <label className="block text-sm font-medium mb-1">Almacén Origen</label>
+                    <select
+                        value={almacenOrigen}
+                        onChange={(e) => setAlmacenOrigen(e.target.value)}
+                        className="w-full p-2 border rounded-lg dark:bg-gray-700"
+                        required
+                        disabled={almacenesDisponibles.length === 0}
+                    >
+                        {almacenesDisponibles.length === 0 ? (
+                            <option value="">⚠️ No hay almacenes con stock disponible</option>
+                        ) : (
+                            <>
+                                <option value="">Seleccione un almacén de origen</option>
+                                {almacenesDisponibles.map((a) => (
+                                    <option key={a.Id_Almacen} value={a.Id_Almacen}>
+                                        {a.Nombre_Alm} (Stock: {a.Cantidad_Inv})
+                                    </option>
+                                ))}
+                            </>
+                        )}
+                    </select>
+                </div>
             ) : null}
+
 
             {tipoMovimiento === "3" ? (
                 <div>
@@ -199,6 +239,8 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                     </div>
                 </>
             )}
+
+
 
             <div>
                 <label className="block text-sm font-medium mb-1">Método de Valoración</label>
