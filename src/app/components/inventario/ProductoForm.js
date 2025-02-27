@@ -44,8 +44,10 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
       Id_Categoria_Pro: parseInt(formData.get('categoria')),
       Id_Marca_Pro: parseInt(formData.get('marca')),
       Id_Industria_Pro: parseInt(formData.get('industria')),
+      Id_Codigo_Pro: parseInt(formData.get('codigo')),
       Nombre_Pro: formData.get('nombre'),
       Modelo_Pro: formData.get('modelo'),
+      Codigo_Barras_Pro : formData.get('codigo_barras'),
       Descripcion_Pro: formData.get('descripcion'),
       Unidad_medida_Pro: formData.get('unidad_medida'),
       Stock_minimo_Pro: parseInt(formData.get('stock_minimo')) || 0,
@@ -119,6 +121,34 @@ export default function ProductoForm({ producto, categorias, marcas, industrias,
                 </option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Codigo del Producto</label>
+            <input
+              type="number"
+              name="codigo"
+              defaultValue={producto?.Id_Codigo_Pro}
+              className="w-full p-1.5 border rounded-lg dark:bg-gray-700"
+              required
+              placeholder="Ingrese el codigo del producto"
+            />
+          </div>
+
+        </div>
+
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm font-medium mb-1">Codigo barras del Producto</label>
+            <input
+              type="text"
+              name="codigo_barras"
+              defaultValue={producto?.Codigo_Barras_Pro}
+              className="w-full p-1.5 border rounded-lg dark:bg-gray-700"
+              required
+              placeholder="Ingrese el codigo del producto"
+            />
           </div>
 
           <div>
