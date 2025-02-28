@@ -187,7 +187,8 @@ CREATE TABLE TbInv_Ajustes (
     Id_Ajuste             INT PRIMARY KEY AUTO_INCREMENT,
     Id_Movimiento_Aju     INT NOT NULL,
     Motivo_Aju            VARCHAR(255),
-    FechaAju              DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Fecha_Aju              DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Estado_Aju            VARCHAR(10),
     FOREIGN KEY (Id_Movimiento_Aju) REFERENCES TbInv_MovimientoInventario(Id_MovimientoInventario)
 );
 

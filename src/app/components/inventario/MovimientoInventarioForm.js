@@ -24,7 +24,11 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     const [motivo, setMotivo] = useState("");
     const [autorizacion, setAutorizacion] = useState("");
 
-    const [categoriasConSalida, setCategoriasConSalida] = useState([]);
+    // 🔹 Campos exclusivos para bajas
+    const [motivo2, setMotivo2] = useState("");
+    const [autorizacion2, setAutorizacion2] = useState("");
+
+const [categoriasConSalida, setCategoriasConSalida] = useState([]);
 
     useEffect(() => {
         fetch("/api/inventario/movimientoInventario/categoriasConSalida")
@@ -95,7 +99,8 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             // setFechaMovimiento(movimiento.FechaMovimiento_MoI ? movimiento.FechaMovimiento_MoI.split("T")[0] : "");
             setMotivo(movimiento.Motivo_Dev || "");
             setAutorizacion(movimiento.Autorizacion_Dev || "");
-
+            setMotivo2(movimiento.Motivo_Baj || "");
+            setAutorizacion2(movimiento.Autorizacion_Baj || "");
         }
     }, [movimiento]);
 
@@ -155,7 +160,8 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             Cantidad_MoI: Number(cantidad),
             // FechaMovimiento_MoI: movimiento ? fechaMovimiento : undefined,
             Estado_MoI: "AC",
-            ...(tipoMovimiento === "4" && { Motivo_Dev: motivo, Autorizacion_Dev: autorizacion }) // Solo si es devolución
+            ...(tipoMovimiento === "4" ? { Motivo_Dev: motivo, Autorizacion_Dev: autorizacion } : {}),
+            ...(tipoMovimiento === "7" ? { Motivo_Baj: motivo2, Autorizacion_Baj: autorizacion2 } : {})
         };
 
         console.log("🚀 Datos enviados al backend:", data);
@@ -175,7 +181,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                 </select>
             </div>
 
-            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "7" ? (
                 <div>
                     <label className="block text-sm font-medium mb-1">Categoría</label>
                     <select value={categoria} onChange={(e) => setCategoria(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700">
@@ -216,7 +222,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             ) : null}
 
 
-            {tipoMovimiento === "4" ? (
+            {tipoMovimiento === "4"?  (
                 <div>
                     <label className="block text-sm font-medium mb-1">Producto</label>
                     <select
@@ -243,7 +249,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             ) : null}
 
 
-            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "7" ? (
                 <div>
                     <label className="block text-sm font-medium mb-1">Producto</label>
                     <select value={producto} onChange={(e) => setProducto(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
@@ -270,7 +276,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                 </div>
             ) : null} */}
 
-            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "4" ? (
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "4" || tipoMovimiento === "7" ? (
                 <div>
                     <label className="block text-sm font-medium mb-1">Almacén Origen</label>
                     <select
@@ -324,6 +330,22 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                 </>
             )}
 
+
+
+
+            {/* Inputs adicionales para bajas */}
+            {tipoMovimiento === "7" && (
+                <>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Motivo de Baja</label>
+                        <textarea value={motivo2} onChange={(e) => setMotivo2(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Autorización</label>
+                        <input type="text" value={autorizacion2} onChange={(e) => setAutorizacion2(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
+                    </div>
+                </>
+            )}
 
 
             <div>
