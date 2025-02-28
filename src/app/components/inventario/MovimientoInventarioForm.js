@@ -63,9 +63,9 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
             .then((res) => res.json())
             .then(setProductos);
 
-        // fetch("/api/inventario/almacen")
-        //     .then((res) => res.json())
-        //     .then(setAlmacenes);
+        fetch("/api/inventario/almacen")
+            .then((res) => res.json())
+            .then(setAlmacenes);
 
         fetch("/api/inventario/metodoValoracion")
             .then((res) => res.json())
@@ -162,7 +162,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
         console.log(typeof data.Cantidad_MoI)
         onSubmit(data);
     };
-
+    console.log("🚀 Almacenes destino disponibles:", almacenDestino);
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>

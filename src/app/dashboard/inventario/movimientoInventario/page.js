@@ -162,7 +162,7 @@ export default function MovimientoInventario() {
               {loading ? (
                 <tr>
                   <td
-                    colSpan="4"
+                    colSpan="6"
                     className="px-6 py-4 text-center text-gray-500"
                   >
                     Cargando...
@@ -171,7 +171,7 @@ export default function MovimientoInventario() {
               ) : movimientos.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="4"
+                    colSpan="6"
                     className="px-6 py-4 text-center text-gray-500"
                   >
                     No hay movimientos de inventario registrados
