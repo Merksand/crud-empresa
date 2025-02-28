@@ -144,7 +144,7 @@ CREATE TABLE TbInv_MovimientoInventario (
     Id_Producto_MoI       INT NOT NULL,
     Id_MetodoValoracion_MoI INT NOT NULL,
     Id_Inventario_MoI     INT NOT NULL,
-    Debito_MoI            INT NOT NULL,
+    Debito_MoI            VARCHAR(10) NOT NULL,
     Id_AlmacenOrigen_MoI  INT,
     Id_AlmacenDestino_MoI INT,
     Cantidad_MoI          INT NOT NULL,
