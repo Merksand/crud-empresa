@@ -24,6 +24,32 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     const [motivo, setMotivo] = useState("");
     const [autorizacion, setAutorizacion] = useState("");
 
+    const [categoriasConSalida, setCategoriasConSalida] = useState([]);
+
+    useEffect(() => {
+        fetch("/api/inventario/movimientoInventario/categoriasConSalida")
+            .then((res) => res.json())
+            .then(setCategoriasConSalida)
+            .catch((error) => console.error("Error al cargar categorías con salida:", error));
+    }, []);
+
+
+
+    const [productosConSalida, setProductosConSalida] = useState([]);
+
+    useEffect(() => {
+        if (categoria) {
+            fetch(`/api/inventario/movimientoInventario/productosConSalida?categoria=${categoria}`)
+                .then((res) => res.json())
+                .then(setProductosConSalida)
+                .catch((error) => console.error("Error al cargar productos con salida:", error));
+        } else {
+            setProductosConSalida([]);
+        }
+    }, [categoria]);
+
+
+
     useEffect(() => {
         fetch("/api/inventario/tipoMovimiento")
             .then((res) => res.json())
@@ -149,29 +175,87 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                 </select>
             </div>
 
-            <div>
-                <label className="block text-sm font-medium mb-1">Categoría</label>
-                <select value={categoria} onChange={(e) => setCategoria(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700">
-                    <option value="">Seleccione una categoría</option>
-                    {categorias.map((cat) => (
-                        <option key={cat.Id_Categoria} value={cat.Id_Categoria}>
-                            {cat.Nombre_Cat}
-                        </option>
-                    ))}
-                </select>
-            </div>
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
+                <div>
+                    <label className="block text-sm font-medium mb-1">Categoría</label>
+                    <select value={categoria} onChange={(e) => setCategoria(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700">
+                        <option value="">Seleccione una categoría</option>
+                        {categorias.map((cat) => (
+                            <option key={cat.Id_Categoria} value={cat.Id_Categoria}>
+                                {cat.Nombre_Cat}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            ) : null}
 
-            <div>
-                <label className="block text-sm font-medium mb-1">Producto</label>
-                <select value={producto} onChange={(e) => setProducto(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
-                    <option value="">Seleccione un producto</option>
-                    {productosFiltrados.map((p) => (
-                        <option key={p.Id_Producto} value={p.Id_Producto}>
-                            {p.Nombre_Pro}
-                        </option>
-                    ))}
-                </select>
-            </div>
+            {tipoMovimiento === "4" ? (
+                <div>
+                    <label className="block text-sm font-medium mb-1">Categoría</label>
+                    <select
+                        value={categoria}
+                        onChange={(e) => setCategoria(e.target.value)}
+                        className="w-full p-2 border rounded-lg dark:bg-gray-700"
+                        required
+                        disabled={categoriasConSalida.length === 0}
+                    >
+                        {categoriasConSalida.length === 0 ? (
+                            <option value="">⚠️ No hay categorías con salida previa</option>
+                        ) : (
+                            <>
+                                <option value="">Seleccione una categoría</option>
+                                {categoriasConSalida.map((c) => (
+                                    <option key={c.Id_Categoria} value={c.Id_Categoria}>
+                                        {c.Nombre_Cat}
+                                    </option>
+                                ))}
+                            </>
+                        )}
+                    </select>
+                </div>
+            ) : null}
+
+
+            {tipoMovimiento === "4" ? (
+                <div>
+                    <label className="block text-sm font-medium mb-1">Producto</label>
+                    <select
+                        value={producto}
+                        onChange={(e) => setProducto(e.target.value)}
+                        className="w-full p-2 border rounded-lg dark:bg-gray-700"
+                        required
+                        disabled={productosConSalida.length === 0}
+                    >
+                        {productosConSalida.length === 0 ? (
+                            <option value="">⚠️ No hay productos con salida previa</option>
+                        ) : (
+                            <>
+                                <option value="">Seleccione un producto</option>
+                                {productosConSalida.map((p) => (
+                                    <option key={p.Id_Producto} value={p.Id_Producto}>
+                                        {p.Nombre_Pro}
+                                    </option>
+                                ))}
+                            </>
+                        )}
+                    </select>
+                </div>
+            ) : null}
+
+
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
+                <div>
+                    <label className="block text-sm font-medium mb-1">Producto</label>
+                    <select value={producto} onChange={(e) => setProducto(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
+                        <option value="">Seleccione un producto</option>
+                        {productosFiltrados.map((p) => (
+                            <option key={p.Id_Producto} value={p.Id_Producto}>
+                                {p.Nombre_Pro}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            ) : null}
 
 
             {/* {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
@@ -186,7 +270,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
                 </div>
             ) : null} */}
 
-            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" ? (
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "4" ? (
                 <div>
                     <label className="block text-sm font-medium mb-1">Almacén Origen</label>
                     <select
@@ -254,7 +338,7 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
 
             <div>
                 <label className="block text-sm font-medium mb-1">Cantidad</label>
-                <input type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
+                <input type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" min="1" required />
             </div>
 
             <div className="flex justify-end gap-2 mt-6">

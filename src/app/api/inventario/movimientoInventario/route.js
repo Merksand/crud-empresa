@@ -127,18 +127,18 @@ export async function POST(req) {
         }
 
         let Id_Inventario_MoI;
-        let Debito_MoI = 0;
+        let Debito_MoI = '';
 
         switch (tipoMovimiento) {
             case 1: // Entrada
             case 5: // Ajuste Positivo
-                Debito_MoI = cantidad;
+                Debito_MoI = 'Entrada';
                 Id_Inventario_MoI = await actualizarStock(producto, almacenOrigen, cantidad, connection);
                 break;
             case 2: // Salida
             case 6: // Ajuste Negativo
             case 7: // Baja
-                Debito_MoI = -cantidad;
+                Debito_MoI = 'Salida';
                 Id_Inventario_MoI = await actualizarStock(producto, almacenOrigen, -cantidad, connection);
                 break;
             case 3: // Transferencia
@@ -147,7 +147,7 @@ export async function POST(req) {
                 const Id_Inventario_Destino = await actualizarStock(producto, almacenDestino, cantidad, connection);
                 break;
             case 4: // Devolución
-                Debito_MoI = cantidad;
+                Debito_MoI = 'Entrada';
                 Id_Inventario_MoI = await actualizarStock(producto, almacenOrigen, cantidad, connection);
 
                 if (!Motivo_Dev || !Autorizacion_Dev) {
