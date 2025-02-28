@@ -110,6 +110,8 @@ export async function POST(req) {
             Cantidad_MoI,
             Motivo_Dev,
             Autorizacion_Dev,
+            Motivo_Baj,
+            Autorizacion_Baj,
             Estado_MoI = "AC",
         } = await req.json();
 
@@ -179,6 +181,21 @@ export async function POST(req) {
             );
         }
 
+
+        const Id_Movimiento_Baj = result.insertId;
+                // 🔹 Manejo de bajas
+        if (tipoMovimiento === 7) {
+            if (!Motivo_Baj || !Autorizacion_Baj) {
+                throw new Error("Motivo y autorización son requeridos para bajas.");
+            }
+
+            await connection.query(
+                `INSERT INTO TbInv_Bajas (Id_Movimiento_Baj, Motivo_Baj, Autorizacion_Baj, Estado_Baj) 
+                VALUES (?, ?, ?, 'AC')`,
+                [Id_Movimiento_Baj, Motivo_Baj, Autorizacion_Baj]
+            );
+        }
+
         await connection.commit();
 
         // 🔹 Mensaje de respuesta según el tipo de movimiento
@@ -187,6 +204,7 @@ export async function POST(req) {
         if (tipoMovimiento === 2) mensaje = "Salida de inventario registrada correctamente.";
         if (tipoMovimiento === 3) mensaje = "Traslado de inventario registrado correctamente.";
         if (tipoMovimiento === 4) mensaje = "Devolución registrada correctamente.";
+        if (tipoMovimiento === 7) mensaje = "Baja registrada correctamente.";
 
         return NextResponse.json({ message: mensaje });
 
