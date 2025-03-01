@@ -14,6 +14,7 @@ export default function MovimientoInventario() {
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ show: false, item: null });
   const { notification, showNotification } = useNotification();
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Cargar movimientos de inventario al inicializar
   useEffect(() => {
@@ -98,6 +99,12 @@ export default function MovimientoInventario() {
     }
   };
 
+  // Filtrar movimientos basados en el término de búsqueda
+  const filteredMovimientos = movimientos.filter((movimiento) =>
+    movimiento.Nombre_Producto.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    movimiento.Nombre_TipoMovimiento.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="p-4">
       {/* Notificaciones */}
@@ -113,24 +120,33 @@ export default function MovimientoInventario() {
         <h1 className="text-2xl font-bold">
           Gestión de Movimientos de Inventario
         </h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Buscar por producto o tipo"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border border-gray-300 rounded-lg px-4 py-2"
+          />
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
           >
-            <path
-              fillRule="evenodd"
-              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-              clipRule="evenodd"
-            />
-          </svg>
-          Nuevo Movimiento
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Nuevo Movimiento
+          </button>
+        </div>
       </div>
       {/* Tabla */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
@@ -168,7 +184,7 @@ export default function MovimientoInventario() {
                     Cargando...
                   </td>
                 </tr>
-              ) : movimientos.length === 0 ? (
+              ) : filteredMovimientos.length === 0 ? (
                 <tr>
                   <td
                     colSpan="6"
@@ -178,7 +194,7 @@ export default function MovimientoInventario() {
                   </td>
                 </tr>
               ) : (
-                movimientos.map((item) => {
+                filteredMovimientos.map((item) => {
                   // console.log("PAGE: ",item)
                   return (
                     <tr
