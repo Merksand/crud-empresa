@@ -108,7 +108,7 @@ export default function Ajustes() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{ajuste.Nombre_Producto}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{ajuste.Motivo_Aju}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {new Date(ajuste.FechaAju).toLocaleDateString()}
+                      {new Date(ajuste.Fecha_Aju).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button

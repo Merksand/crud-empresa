@@ -112,6 +112,7 @@ export async function POST(req) {
             Autorizacion_Dev,
             Motivo_Baj,
             Autorizacion_Baj,
+            Motivo_Aju,
             Estado_MoI = "AC",
         } = await req.json();
 
@@ -139,6 +140,9 @@ export async function POST(req) {
                 break;
             case 2: // Salida
             case 6: // Ajuste Negativo
+                Debito_MoI = 'Salida';
+                Id_Inventario_MoI = await actualizarStock(producto, almacenOrigen, -cantidad, connection);
+                break;
             case 7: // Baja
                 Debito_MoI = 'Salida';
                 Id_Inventario_MoI = await actualizarStock(producto, almacenOrigen, -cantidad, connection);
@@ -196,6 +200,22 @@ export async function POST(req) {
             );
         }
 
+
+        const Id_Movimiento_Aju = result.insertId;
+                // 🔹 Manejo de bajas
+        if (tipoMovimiento === 5 || tipoMovimiento === 6 ) {
+            if (!Motivo_Aju) {
+                throw new Error("Motivo son requeridos para Ajustes.");
+            }
+
+            await connection.query(
+                `INSERT INTO TbInv_Ajustes (Id_Movimiento_Aju, Motivo_Aju, Estado_Aju) 
+                VALUES (?, ?, 'AC')`,
+                [Id_Movimiento_Aju, Motivo_Aju]
+            );
+        }
+
+
         await connection.commit();
 
         // 🔹 Mensaje de respuesta según el tipo de movimiento
@@ -204,6 +224,7 @@ export async function POST(req) {
         if (tipoMovimiento === 2) mensaje = "Salida de inventario registrada correctamente.";
         if (tipoMovimiento === 3) mensaje = "Traslado de inventario registrado correctamente.";
         if (tipoMovimiento === 4) mensaje = "Devolución registrada correctamente.";
+        if (tipoMovimiento === 5) mensaje = "Ajuste Positivo registrado correctamente.";
         if (tipoMovimiento === 7) mensaje = "Baja registrada correctamente.";
 
         return NextResponse.json({ message: mensaje });

@@ -28,6 +28,9 @@ export default function MovimientoInventarioForm({ movimiento, onSubmit, onClose
     const [motivo2, setMotivo2] = useState("");
     const [autorizacion2, setAutorizacion2] = useState("");
 
+    // 🔹 Campos exclusivos para Ajustes
+    const [motivo3, setMotivo3] = useState("");
+
 const [categoriasConSalida, setCategoriasConSalida] = useState([]);
 
     useEffect(() => {
@@ -101,6 +104,7 @@ const [categoriasConSalida, setCategoriasConSalida] = useState([]);
             setAutorizacion(movimiento.Autorizacion_Dev || "");
             setMotivo2(movimiento.Motivo_Baj || "");
             setAutorizacion2(movimiento.Autorizacion_Baj || "");
+            setMotivo3(movimiento.Motivo_Aju || "");
         }
     }, [movimiento]);
 
@@ -161,7 +165,9 @@ const [categoriasConSalida, setCategoriasConSalida] = useState([]);
             // FechaMovimiento_MoI: movimiento ? fechaMovimiento : undefined,
             Estado_MoI: "AC",
             ...(tipoMovimiento === "4" ? { Motivo_Dev: motivo, Autorizacion_Dev: autorizacion } : {}),
-            ...(tipoMovimiento === "7" ? { Motivo_Baj: motivo2, Autorizacion_Baj: autorizacion2 } : {})
+            ...(tipoMovimiento === "7" ? { Motivo_Baj: motivo2, Autorizacion_Baj: autorizacion2 } : {}),
+            ...(tipoMovimiento === "5" ? { Motivo_Aju: motivo3} : {}),
+            ...(tipoMovimiento === "6" ? { Motivo_Aju: motivo3} : {}),
         };
 
         console.log("🚀 Datos enviados al backend:", data);
@@ -181,7 +187,7 @@ const [categoriasConSalida, setCategoriasConSalida] = useState([]);
                 </select>
             </div>
 
-            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "7" ? (
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "7" || tipoMovimiento === "5" || tipoMovimiento === "6" ? (
                 <div>
                     <label className="block text-sm font-medium mb-1">Categoría</label>
                     <select value={categoria} onChange={(e) => setCategoria(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700">
@@ -249,7 +255,7 @@ const [categoriasConSalida, setCategoriasConSalida] = useState([]);
             ) : null}
 
 
-            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "7" ? (
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "7" || tipoMovimiento === "5" || tipoMovimiento === "6" ? (
                 <div>
                     <label className="block text-sm font-medium mb-1">Producto</label>
                     <select value={producto} onChange={(e) => setProducto(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required>
@@ -276,7 +282,7 @@ const [categoriasConSalida, setCategoriasConSalida] = useState([]);
                 </div>
             ) : null} */}
 
-            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "4" || tipoMovimiento === "7" ? (
+            {tipoMovimiento === "1" || tipoMovimiento === "2" || tipoMovimiento === "3" || tipoMovimiento === "4" || tipoMovimiento === "7" || tipoMovimiento === "5" || tipoMovimiento === "6" ? (
                 <div>
                     <label className="block text-sm font-medium mb-1">Almacén Origen</label>
                     <select
@@ -346,6 +352,17 @@ const [categoriasConSalida, setCategoriasConSalida] = useState([]);
                     </div>
                 </>
             )}
+
+            {/* Inputs adicionales para Ajustes */}
+            {tipoMovimiento === "5" || tipoMovimiento === "6" && (
+                <>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Motivo de Ajuste</label>
+                        <textarea value={motivo3} onChange={(e) => setMotivo3(e.target.value)} className="w-full p-2 border rounded-lg dark:bg-gray-700" required />
+                    </div>
+                </>
+            )}
+
 
 
             <div>
