@@ -1,5 +1,6 @@
 import '@/app/globals.css';
 import SidebarInventario from '@/app/components/SidebarInventario';
+import Sidebar from '@/app/components/Sidebar-nuevo';
 import Link from 'next/link';
 
 export const metadata = {
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
   return (
     <>
       <SidebarInventario />
+      {/* <Sidebar  user={"Miguel"}/> */}
       <main className={`flex-1 transition-all duration-300 p-4`}>
         <nav className="mb-4 ml-5 bg-blue-600 inline-block p-2 rounded-lg active:bg-blue-800"><Link href="/dashboard">
           <button>Dashboard</button></Link>

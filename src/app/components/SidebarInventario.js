@@ -1,22 +1,60 @@
-'use client';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+"use client";
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+} from "@/components/ui/dropdown-menu";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const [darkMode, setDarkMode] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const [language, setLanguage] = useState("es"); // es para español, en para inglés
+  const userMenuRef = useRef(null);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
       setDarkMode(true);
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add("dark");
     } else {
       setDarkMode(false);
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
+
+    // Cargar idioma guardado
+    const savedLanguage = localStorage.getItem("language");
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    }
+
+    // Cerrar el menú de usuario cuando se hace clic fuera de él
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setUserMenuOpen(false);
+        setThemeMenuOpen(false);
+        setLanguageMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const toggleDarkMode = () => {
@@ -24,333 +62,367 @@ export default function Sidebar() {
     setDarkMode(newMode);
 
     if (newMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
+
+  const setTheme = (theme) => {
+    if (theme === "dark") {
+      setDarkMode(true);
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else if (theme === "light") {
+      setDarkMode(false);
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    } else if (theme === "system") {
+      // Implementar lógica para seguir el tema del sistema
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      setDarkMode(prefersDark);
+      if (prefersDark) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+      localStorage.setItem("theme", "system");
+    }
+  };
+
+  const changeLanguage = (lang) => {
+    setLanguage(lang);
+    localStorage.setItem("language", lang);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Redirigir al usuario a la página de inicio de sesión
+        router.push('/dashboard/login');
+      } else {
+        console.error('Error al cerrar sesión:', data.error);
+      }
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
     }
   };
 
   const menuItems = [
     {
-      title: 'Inv. Sucursal',
-      path: '/dashboard/inventario/sucursal',
+      title: "Inv. Sucursal",
+      path: "/dashboard/inventario/sucursal",
       icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-3-3H2a3 3 0 00-3 3v2h5v4h14v-4z" />
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M17 20h5v-2a3 3 0 00-3-3H2a3 3 0 00-3 3v2h5v4h14v-4z"
+          />
         </svg>
-      )
+      ),
     },
     {
-      title: 'Inv. Industria',
-      path: '/dashboard/inventario/industria',
+      title: "Inv. Industria",
+      path: "/dashboard/inventario/industria",
       icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+          />
         </svg>
-      )
+      ),
     },
     {
-      title: 'Inv. Almacen',
-      path: '/dashboard/inventario/almacen',
+      title: "Reportes",
+      path: "/dashboard/reportes",
       icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h10a8 8 0 018 8v2M3 10a2 2 0 002 2h14a2 2 0 002-2M3 10V8a2 2 0 012-2h4a2 2 0 012 2v2M3 10h4v2-2z" />
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
         </svg>
-      )
+      ),
     },
-    {
-      title: 'Inv. Categoria',
-      path: '/dashboard/inventario/categoria',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-        </svg>
-      )
-    },
-
-    {
-      title: 'Marca',
-      path: '/dashboard/inventario/marca',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-        </svg>
-      )
-    },
-    {
-
-      title: 'Proveedor',
-      path: '/dashboard/inventario/proveedor',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h18M9 3h6m-7 8h8m-9 4h10m-11 4h12" />
-        </svg>
-      )
-    },
-
-    {
-      title: 'Producto',
-      path: '/dashboard/inventario/producto',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1-2a2 2 0 012-1h12a2 2 0 012 1l1 2m-18 0h18m-18 0l2 9a2 2 0 002 2h8a2 2 0 002-2l2-9M5 19h14" />
-        </svg>
-      )
-    },
-    {
-      title: 'Funcionario',
-      path: '/dashboard/inventario/funcionario',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-      )
-    },
-    {
-      title: 'funcionarioAlmacen',
-      path: '/dashboard/inventario/funcionarioAlmacen',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-        </svg>
-      )
-    },
-    {
-      title: 'Inventario',
-      path: '/dashboard/inventario/inventario',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-        </svg>
-      )
-    },
-    {
-      title: 'Tipo movimiento',
-      path: '/dashboard/inventario/tipoMovimiento',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-        </svg>
-      )
-
-    },
-    {
-      title: 'Metodo Valoracion',
-      path: '/dashboard/inventario/metodoValoracion',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10H9m3-3v6m0-6V4" />
-        </svg>
-      )
-    },
-    {
-      title: 'Movimiento Inventario',
-      path: '/dashboard/inventario/movimientoInventario',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-        </svg>
-      )
-    },
-    {
-      title: "Inventario Bajas",
-      path: '/dashboard/inventario/bajas',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M10 14h4M4 18h16" />
-        </svg>
-      )
-    },
-
-    {
-      title: 'Devoluciones',
-      path: '/dashboard/inventario/devolucion',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 9h16M4 9l4 4m-4-4l4-4m12 6v6a2 2 0 01-2 2h-6m6-8l-4 4m4-4l-4-4" />
-        </svg>
-      )
-    },
-
-    {
-      title: "Ajustes",
-      path: '/dashboard/inventario/ajuste',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          {/* Primer slider */}
-          <line x1="4" y1="6" x2="20" y2="6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="16" cy="6" r="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          {/* Segundo slider */}
-          <line x1="4" y1="12" x2="20" y2="12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="8" cy="12" r="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          {/* Tercer slider */}
-          <line x1="4" y1="18" x2="20" y2="18" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="12" cy="18" r="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      )
-    },    
-
-  {
-    title: "Lotes",
-    path: '/dashboard/inventario/lote',
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10l1.293-1.293a1 1 0 011.414 0L12 15.586l6.293-6.293a1 1 0 011.414 0L21 10M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-    )
-},
-
-    {
-      title: "Lote Productos",
-      path: '/dashboard/inventario/loteProducto',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h18M3 12h18m-9 5h9" />
-          <circle cx="6" cy="17" r="2" />
-          <circle cx="18" cy="17" r="2" />
-        </svg>
-      )
-    },
-
-    {
-      title: "Monedas",
-      path: '/dashboard/inventario/moneda',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M12 8v4l2 2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      )
-    },
-
-{
-  title: "Tipo de Cambio",
-  path: '/dashboard/inventario/tipoCambio',
-  icon: (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8V4m0 0L8 8m4-4l4 4m-4 8v4m0 0l4-4m-4 4l-4-4M4 12h16" />
-    </svg>
-  )
-},
-
-{
-  title: "Órdenes de Compra",
-  path: '/dashboard/inventario/ordenCompra',
-  icon: (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path 
-        strokeLinecap="round" 
-        strokeLinejoin="round" 
-        strokeWidth="2" 
-        d="M9 12h6m-6 4h6m-7-8h8M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" 
-      />
-    </svg>
-  )
-}
-
-
-
-
-
   ];
 
   return (
     <>
-
       {/* Botón de toggle */}
-
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed top-4 z-50 transition-all duration-300 ${isOpen ? 'left-60' : 'left-4'
-          } lg:hover:bg-gray-100 dark:bg-gray-800 dark:lg:hover:bg-gray-700 p-2 rounded-lg `}
+        className={`fixed top-4 z-50 transition-all duration-300 ${
+          isOpen ? "left-60" : "left-4"
+        } lg:hover:bg-gray-100 dark:bg-gray-800 dark:lg:hover:bg-gray-700 p-2 rounded-lg `}
       >
         {isOpen ? (
-          <svg className="w-6 h-6 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+          <svg
+            className="w-6 h-6 "
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+            />
           </svg>
         ) : (
-          <svg className="w-6 h-6 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+          <svg
+            className="w-6 h-6 "
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 5l7 7-7 7M5 5l7 7-7 7"
+            />
           </svg>
         )}
       </button>
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out overflow-y-auto overflow-x-hidden  ${isOpen ? 'w-64' : 'w-20'
-          } z-40`}
+        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out overflow-y-auto overflow-x-hidden  ${
+          isOpen ? "w-64" : "w-[4.4rem]"
+        } z-40`}
       >
-
-<nav className={`flex flex-col h-full ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
-  {/* Encabezado */}
-  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-    <h1 className={`text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent transition-opacity ${!isOpen && 'opacity-0'}`}>
-      Gestión Empresarial
-      <button
-        onClick={toggleDarkMode}
-        className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700"
-        aria-label="Toggle dark mode"
-      >
-        {darkMode ? (
-          <svg className="w-6 h-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 118.646 3.646 7 7 0 0020.354 15.354z"/>
-          </svg>
-        ) : (
-          <svg className="w-6 h-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m8-8h1m-16 0H3m15.364-6.364l.707-.707m-12.728 0l-.707-.707m12.728 12.728l.707.707m-12.728 0l-.707.707M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
-        )}
-      </button>
-    </h1>
-  </div>
-
-  {/* Lista de Menús con Scroll */}
-  <ul className="flex-1 py-4 space-y-1 overflow-y-auto overflow-x-hidden">
-    {menuItems.map((item, index) => (
-      <li key={index} className="px-2 select-none">
-        <Link
-          href={item.path}
-          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === item.path ? 'bg-blue-500 text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+        <nav
+          className={`flex flex-col h-full ${
+            darkMode ? "bg-gray-800 text-white" : "bg-white text-black"
+          }`}
         >
-          <div className="min-w-[24px]">{item.icon}</div>
-          <span className={`transition-all duration-300 ${!isOpen ? 'opacity-0 w-0' : 'opacity-100'}`}>
-            {item.title}
-          </span>
-        </Link>
-      </li>
-    ))}
-  </ul>
+          {/* Encabezado */}
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h1
+              className={`text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent transition-opacity ${
+                !isOpen && "opacity-0"
+              }`}
+            >
+              Gestión Empresarial
+            </h1>
+          </div>
 
-  {/* Sección inferior fija con perfil de usuario */}
-  <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-    <div className="flex items-center gap-3">
-      <img
-        src="/ruta-a-la-imagen-de-usuario.jpg"
-        alt="Usuario"
-        className="w-10 h-10 rounded-full"
-      />
-      <div className={`transition-all duration-300 ${!isOpen ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
-        <p className="text-sm font-medium">Nombre de Usuario</p>
-        <div className="flex gap-2 mt-1">
-          <Link href="/dashboard/menu" className="text-blue-500 hover:underline text-xs">
-            Menú
-          </Link>
-          <button onClick={() => console.log('Cerrar sesión')} className="text-red-500 hover:underline text-xs">
-            Cerrar sesión
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
+          {/* Lista de Menús con Scroll */}
+          <ul className="flex-1 py-4 space-y-1 overflow-y-auto overflow-x-hidden">
+            {menuItems.map((item, index) => (
+              <li key={index} className="px-2 select-none">
+                <Link
+                  href={item.path}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                    pathname === item.path
+                      ? "bg-blue-500 text-white"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`}
+                >
+                  <div className="min-w-[24px]">{item.icon}</div>
+                  <span
+                    className={`transition-all duration-300 ${
+                      !isOpen ? "opacity-0 w-0" : "opacity-100"
+                    }`}
+                  >
+                    {item.title}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
 
+          {/* Menú de usuario con Shadcn/UI DropdownMenu */}
+          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+            {isOpen ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="flex items-center gap-3 cursor-pointer">
+                    <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600">
+                      <span className="text-lg font-semibold">CR</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">Miguel Angel</p>
+                      {/* <p className="text-xs text-gray-500 dark:text-gray-400">carlos.rodriguez@ejemplo.com</p> */}
+                    </div>
+                    <svg 
+                      className="w-5 h-5" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth="2" 
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" 
+                      />
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth="2" 
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" 
+                      />
+                    </svg>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="start" side="top" sideOffset={5}>
+                  {/* Información del usuario */}
+                  <DropdownMenuLabel className="font-medium ">Miguel Angel</DropdownMenuLabel>
+                  <DropdownMenuItem className="flex items-center cursor-default">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">admin@ejemplo.com</span>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  
+                  {/* Submenú de Tema */}
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="flex items-center">
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                      <span>Tema</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent className="min-w-[8rem]">
+                        <DropdownMenuItem onClick={() => setTheme("light")} className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <svg className="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                            </svg>
+                            <span>Claro</span>
+                          </div>
+                          {!darkMode && (
+                            <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setTheme("dark")} className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                            </svg>
+                            <span>Oscuro</span>
+                          </div>
+                          {darkMode && (
+                            <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setTheme("system")} className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <svg className="w-4 h-4 mr-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clipRule="evenodd" />
+                            </svg>
+                            <span>Sistema</span>
+                          </div>
+                        </DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+
+                  {/* Submenú de Idioma */}
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="flex items-center">
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                      </svg>
+                      <span>Idioma</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent className="min-w-[8rem]">
+                        <DropdownMenuItem onClick={() => changeLanguage("es")} className="flex items-center justify-between">
+                          <span>Español</span>
+                          {language === "es" && (
+                            <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => changeLanguage("en")} className="flex items-center justify-between">
+                          <span>Inglés</span>
+                          {language === "en" && (
+                            <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                  
+                  {/* Ir al menú */}
+                  <DropdownMenuItem className="flex items-center">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                    <span>Ir al menú</span>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  
+                  {/* Cerrar sesión */}
+                  <DropdownMenuItem onClick={handleLogout} className="flex items-center text-red-500">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span>Cerrar sesión</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex justify-center">
+                <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600">
+                  <span className="text-lg font-semibold">CR</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </nav>
       </aside>
 
       <style jsx global>{`
         main {
-          margin-left: ${isOpen ? '8rem' : '2rem'} !important;
+          margin-left: ${isOpen ? "7rem" : "2rem"} !important;
           transition: margin-left 0.3s ease-in-out;
         }
       `}</style>
