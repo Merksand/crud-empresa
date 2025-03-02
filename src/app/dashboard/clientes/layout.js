@@ -12,12 +12,7 @@ export default function RootLayout({ children }) {
   return (
     <>
       <Sidebar />
-      <main className={`flex-1  transition-all duration-300 p-4 `}>
-        <span className="mb-4 ml-5 bg-blue-600 inline-block p-2 rounded-lg active:bg-blue-800">
-          <Link href="/dashboard">
-            <button>Dashboard</button>
-          </Link>
-        </span>
+      <main className={`flex-1  transition-all duration-300 p-4  `}>
         {children}
       </main>
     </>

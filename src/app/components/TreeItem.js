@@ -1,41 +1,29 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-const TreeItem = ({ item, isOpenSidebar }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const hasChildren = item.children && item.children.length > 0;
-
+const TreeItem = ({ isOpen, pathname, title, icon, href }) => {
   return (
-    <div className="ml-4">
-      <div
-        onClick={() => hasChildren && setIsExpanded(!isExpanded)}
-        className="flex items-center gap-2 cursor-pointer"
+    <li className="px-2 select-none">
+      <Link
+        href={href}
+        className={`relative flex items-center gap-3 px-3 py-3 h-10 rounded-lg transition-colors ${
+          pathname === href
+            ? "bg-blue-500 text-white"
+            : "hover:bg-gray-100 dark:hover:bg-gray-700"
+        }`}
       >
-        {hasChildren && (
-          <span>
-            {isExpanded ? '▼' : '►'}
-          </span>
-        )}
-        {item.path ? (
-          <Link
-            href={item.path}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${isOpenSidebar ? 'opacity-100' : 'opacity-0'} `}
-          >
-            {item.title}
-          </Link>
-        ) : (
-          <span className="px-3 py-2">{item.title}</span>
-        )}
-      </div>
-      {isExpanded && hasChildren && (
-        <div className="ml-4">
-          {item.children.map((child, index) => (
-            <TreeItem key={index} item={child} isOpenSidebar={isOpenSidebar} />
-          ))}
+        <div className="min-w-[24px] w-6 h-6 flex justify-center items-center">
+          {icon}
         </div>
-      )}
-    </div>
+        <span
+          className={`transition-all duration-300 ${
+            !isOpen ? "opacity-0 w-0" : "opacity-100"
+          }`}
+        >
+          {title}
+        </span>
+      </Link>
+    </li>
   );
 };
 
