@@ -22,7 +22,7 @@ export async function POST(request) {
 
         const [result] = await poolInventario.query(
             'INSERT INTO TbInv_Proveedor (Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, Estado_Prov) VALUES (?, ?, ?, ?, ?)',
-            [Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, 'Activo']
+            [Nombre_Prov, Direccion_Prov, Telefono_Prov, Correo_Prov, 'AC']
         );
 
         return NextResponse.json({ 
