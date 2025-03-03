@@ -152,173 +152,204 @@ async function generarExcel(tipo, datos, nombreEmpresa, nombreSucursal = '') {
 // Función para generar PDF
 async function generarPDF(tipo, datos, nombreEmpresa, nombreSucursal = '') {
   return new Promise((resolve) => {
-    // Crear documento PDF con configuración para evitar problemas de fuentes
-    const doc = new PDFDocument({
-      margin: 50,
-      autoFirstPage: true,
-      size: 'A4',
-      layout: 'portrait',
-      info: {
-        Title: `Reporte de ${tipo}`,
-        Author: 'Sistema de Reportes',
-      }
-    });
-    
-    // Recopilar chunks para crear el buffer
-    const chunks = [];
-    doc.on('data', (chunk) => chunks.push(chunk));
-    doc.on('end', () => {
-      const buffer = Buffer.concat(chunks);
-      const headers = new Headers();
-      headers.append('Content-Type', 'application/pdf');
-      headers.append('Content-Disposition', `attachment; filename=reporte-${tipo}-${new Date().toISOString().split('T')[0]}.pdf`);
+    try {
+      // Crear documento PDF con configuración básica
+      const doc = new PDFDocument({
+        margin: 50,
+        bufferPages: true,
+        font: null
+        // No especificamos font: null aquí para evitar el error de lineHeight
+      });
       
-      resolve(new NextResponse(buffer, {
-        status: 200,
-        headers
-      }));
-    });
-    
-    // Configurar título según el tipo de reporte
-    let titulo = '';
-    let columnas = [];
-    
-    switch (tipo) {
-      case 'sucursales':
-        titulo = `Sucursales de ${nombreEmpresa}`;
-        columnas = ['Nombre', 'Municipio'];
-        break;
-        
-      case 'estructuras':
-        titulo = `Estructuras de ${nombreEmpresa}`;
-        columnas = ['Fecha de Creación', 'Resolución'];
-        break;
-        
-      case 'empleados':
-        titulo = `Empleados de ${nombreEmpresa}`;
-        columnas = ['Nombre', 'Apellido Paterno', 'Apellido Materno', 'CI', 'Cargo', 'Sucursal'];
-        break;
-        
-      case 'empleados-sucursal':
-        titulo = `Empleados de la Sucursal ${nombreSucursal} - ${nombreEmpresa}`;
-        columnas = ['Nombre', 'Apellido Paterno', 'Apellido Materno', 'CI', 'Cargo'];
-        break;
-    }
-    
-    // Agregar título
-    doc.fontSize(16).text(titulo, { align: 'center' });
-    doc.moveDown();
-    
-    // Agregar fecha de generación
-    doc.fontSize(10).text(`Generado el: ${new Date().toLocaleString()}`, { align: 'center' });
-    doc.moveDown(2);
-    
-    // Calcular ancho de columnas
-    const pageWidth = doc.page.width - 100;
-    const columnWidth = pageWidth / columnas.length;
-    
-    // Dibujar encabezados
-    doc.fontSize(10);
-    let y = doc.y;
-    doc.rect(50, y, pageWidth, 20).fill('#D3D3D3').stroke('#000000');
-    
-    columnas.forEach((columna, i) => {
-      doc.fillColor('#000000').text(
-        columna,
-        50 + (i * columnWidth),
-        y + 5,
-        { width: columnWidth, align: 'center' }
-      );
-    });
-    
-    doc.moveDown();
-    y = doc.y;
-    
-    // Dibujar datos
-    doc.fontSize(9);
-    
-    datos.forEach((fila, index) => {
-      // Alternar color de fondo para las filas
-      if (index % 2 === 0) {
-        doc.rect(50, y, pageWidth, 20).fill('#F9F9F9').stroke('#000000');
-      } else {
-        doc.rect(50, y, pageWidth, 20).fill('#FFFFFF').stroke('#000000');
-      }
+      // Manejar errores en la creación del documento
+      doc.on('error', (err) => {
+        console.error('Error en la generación del PDF:', err);
+        resolve(new NextResponse(JSON.stringify({ error: 'Error al generar PDF' }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        }));
+      });
       
-      // Verificar si necesitamos una nueva página
-      if (y > doc.page.height - 100) {
-        doc.addPage();
-        y = 50;
-        
-        // Repetir encabezados en la nueva página
-        doc.fontSize(10);
-        doc.rect(50, y, pageWidth, 20).fill('#D3D3D3').stroke('#000000');
-        
-        columnas.forEach((columna, i) => {
-          doc.fillColor('#000000').text(
-            columna,
-            50 + (i * columnWidth),
-            y + 5,
-            { width: columnWidth, align: 'center' }
-          );
-        });
-        
-        doc.moveDown();
-        y = doc.y;
-        doc.fontSize(9);
-      }
+      // Recopilar chunks para crear el buffer
+      const chunks = [];
+      doc.on('data', (chunk) => chunks.push(chunk));
+      doc.on('end', () => {
+        try {
+          const buffer = Buffer.concat(chunks);
+          const headers = new Headers();
+          headers.append('Content-Type', 'application/pdf');
+          headers.append('Content-Disposition', `attachment; filename=reporte-${tipo}-${new Date().toISOString().split('T')[0]}.pdf`);
+          
+          resolve(new NextResponse(buffer, {
+            status: 200,
+            headers
+          }));
+        } catch (error) {
+          console.error('Error al finalizar el PDF:', error);
+          resolve(new NextResponse(JSON.stringify({ error: 'Error al finalizar el PDF' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+          }));
+        }
+      });
       
-      // Dibujar datos según el tipo de reporte
+      // Configurar título según el tipo de reporte
+      let titulo = '';
+      let columnas = [];
+      
       switch (tipo) {
         case 'sucursales':
-          doc.fillColor('#000000')
-            .text(fila.Nombre_Suc, 50, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.municipioNombre || 'N/A', 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' });
+          titulo = `Sucursales de ${nombreEmpresa}`;
+          columnas = ['Nombre', 'Municipio'];
           break;
           
         case 'estructuras':
-          doc.fillColor('#000000')
-            .text(fila.Fecha_Creacion_Est ? new Date(fila.Fecha_Creacion_Est).toLocaleDateString() : 'N/A', 50, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.Resolucion_Est || 'N/A', 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' });
+          titulo = `Estructuras de ${nombreEmpresa}`;
+          columnas = ['Fecha de Creación', 'Resolución'];
           break;
           
         case 'empleados':
-          doc.fillColor('#000000')
-            .text(fila.Nombre_Emp, 50, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.Paterno_Emp, 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.Materno_Emp, 50 + (2 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.CI_Emp, 50 + (3 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.cargo || 'N/A', 50 + (4 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.sucursal, 50 + (5 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+          titulo = `Empleados de ${nombreEmpresa}`;
+          columnas = ['Nombre', 'Apellido Paterno', 'Apellido Materno', 'CI', 'Cargo', 'Sucursal'];
           break;
           
         case 'empleados-sucursal':
-          doc.fillColor('#000000')
-            .text(fila.Nombre_Emp, 50, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.Paterno_Emp, 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.Materno_Emp, 50 + (2 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.CI_Emp, 50 + (3 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.cargo || 'N/A', 50 + (4 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+          titulo = `Empleados de la Sucursal ${nombreSucursal} - ${nombreEmpresa}`;
+          columnas = ['Nombre', 'Apellido Paterno', 'Apellido Materno', 'CI', 'Cargo'];
           break;
       }
+
+      // Agregar título
+      doc.font('Helvetica');
+      doc.fontSize(16);
+      doc.text(titulo, {
+        align: 'center'
+      });
+      doc.moveDown();
       
-      y += 20;
-    });
-    
-    // Agregar numeración de páginas
-    const totalPaginas = doc.bufferedPageRange().count;
-    for (let i = 0; i < totalPaginas; i++) {
-      doc.switchToPage(i);
-      doc.fontSize(8).text(
-        `Página ${i + 1} de ${totalPaginas}`,
-        50,
-        doc.page.height - 50,
-        { align: 'center', width: doc.page.width - 100 }
-      );
+      // Agregar fecha de generación
+      doc.fontSize(10);
+      doc.text(`Generado el: ${new Date().toLocaleString()}`, {
+        align: 'center'
+      });
+      doc.moveDown(2);
+      
+      // Calcular ancho de columnas
+      const pageWidth = doc.page.width - 100;
+      const columnWidth = pageWidth / columnas.length;
+      
+      // Dibujar encabezados
+      doc.fontSize(10);
+      let y = doc.y;
+      doc.rect(50, y, pageWidth, 20).fill('#D3D3D3').stroke('#000000');
+      
+      columnas.forEach((columna, i) => {
+        doc.fillColor('#000000');
+        doc.text(
+          columna,
+          50 + (i * columnWidth),
+          y + 5,
+          { width: columnWidth, align: 'center' }
+        );
+      });
+      
+      doc.moveDown();
+      y = doc.y;
+      
+      // Dibujar datos
+      doc.fontSize(9);
+      
+      datos.forEach((fila, index) => {
+        // Alternar color de fondo para las filas
+        if (index % 2 === 0) {
+          doc.rect(50, y, pageWidth, 20).fill('#F9F9F9').stroke('#000000');
+        } else {
+          doc.rect(50, y, pageWidth, 20).fill('#FFFFFF').stroke('#000000');
+        }
+        
+        // Verificar si necesitamos una nueva página
+        if (y > doc.page.height - 100) {
+          doc.addPage();
+          y = 50;
+          
+          // Repetir encabezados en la nueva página
+          doc.fontSize(10);
+          doc.rect(50, y, pageWidth, 20).fill('#D3D3D3').stroke('#000000');
+          
+          columnas.forEach((columna, i) => {
+            doc.fillColor('#000000');
+            doc.text(
+              columna,
+              50 + (i * columnWidth),
+              y + 5,
+              { width: columnWidth, align: 'center' }
+            );
+          });
+          
+          doc.moveDown();
+          y = doc.y;
+          doc.fontSize(9);
+        }
+        
+        // Dibujar datos según el tipo de reporte
+        switch (tipo) {
+          case 'sucursales':
+            doc.fillColor('#000000');
+            doc.text(fila.Nombre_Suc || 'N/A', 50, y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.municipioNombre || 'N/A', 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' });
+            break;
+            
+          case 'estructuras':
+            doc.fillColor('#000000');
+            doc.text(fila.Fecha_Creacion_Est ? new Date(fila.Fecha_Creacion_Est).toLocaleDateString() : 'N/A', 50, y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.Resolucion_Est || 'N/A', 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' });
+            break;
+            
+          case 'empleados':
+            doc.fillColor('#000000');
+            doc.text(fila.Nombre_Emp || 'N/A', 50, y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.Paterno_Emp || 'N/A', 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.Materno_Emp || 'N/A', 50 + (2 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.CI_Emp || 'N/A', 50 + (3 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.cargo || 'N/A', 50 + (4 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.sucursal || 'N/A', 50 + (5 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            break;
+            
+          case 'empleados-sucursal':
+            doc.fillColor('#000000');
+            doc.text(fila.Nombre_Emp || 'N/A', 50, y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.Paterno_Emp || 'N/A', 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.Materno_Emp || 'N/A', 50 + (2 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.CI_Emp || 'N/A', 50 + (3 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            doc.text(fila.cargo || 'N/A', 50 + (4 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            break;
+        }
+        
+        y += 20;
+      });
+      
+      // Agregar numeración de páginas
+      const totalPaginas = doc.bufferedPageRange().count;
+      for (let i = 0; i < totalPaginas; i++) {
+        doc.switchToPage(i);
+        doc.fontSize(8);
+        doc.text(
+          `Página ${i + 1} de ${totalPaginas}`,
+          50,
+          doc.page.height - 50,
+          { align: 'center', width: doc.page.width - 100 }
+        );
+      }
+      
+      // Finalizar documento
+      doc.end();
+    } catch (error) {
+      console.error('Error al iniciar la generación del PDF:', error);
+      resolve(new NextResponse(JSON.stringify({ error: 'Error al iniciar la generación del PDF' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }));
     }
-    
-    // Finalizar documento
-    doc.end();
   });
 }
 

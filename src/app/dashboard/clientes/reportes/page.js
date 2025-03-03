@@ -19,6 +19,11 @@ export default function ReportesPage() {
   const [loading, setLoading] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
 
+  // Separar los estados de carga para cada tipo de exportación
+  const [cargandoDatos, setCargandoDatos] = useState(false);
+  const [cargandoExcel, setCargandoExcel] = useState(false);
+  const [cargandoPDF, setCargandoPDF] = useState(false);
+
   useEffect(() => {
     fetchEmpresas();
   }, []);
@@ -117,85 +122,86 @@ export default function ReportesPage() {
   };
 
   const exportarExcel = async (tipo) => {
+    if (!selectedEmpresa) {
+      console.error('Debe seleccionar una empresa');
+      return;
+    }
+    
+    // Usar el estado de carga específico para Excel
+    setCargandoExcel(true);
+    
     try {
-      setExportLoading(true);
-      let url = '';
+      let url = `/api/reportes/exportar?tipo=${tipo || selectedSucursal}&empresaId=${selectedEmpresa}&formato=excel`;
       
-      switch (tipo) {
-        case 'sucursales':
-          url = `/api/reportes/exportar?tipo=sucursales&empresaId=${selectedEmpresa}&formato=excel`;
-          break;
-        case 'estructuras':
-          url = `/api/reportes/exportar?tipo=estructuras&empresaId=${selectedEmpresa}&formato=excel`;
-          break;
-        case 'empleados':
-          url = `/api/reportes/exportar?tipo=empleados&empresaId=${selectedEmpresa}&formato=excel`;
-          break;
-        case 'empleados-sucursal':
-          url = `/api/reportes/exportar?tipo=empleados-sucursal&empresaId=${selectedEmpresa}&sucursalId=${selectedSucursal}&formato=excel`;
-          break;
-        default:
-          throw new Error('Tipo de reporte no válido');
+      if ((tipo || selectedSucursal) === 'empleados-sucursal' && selectedSucursal) {
+        url += `&sucursalId=${selectedSucursal}`;
       }
       
       const response = await fetch(url);
-      if (!response.ok) throw new Error('Error al exportar a Excel');
       
+      if (!response.ok) {
+        throw new Error(`Error al exportar: ${response.statusText}`);
+      }
+      
+      // Obtener el blob del archivo
       const blob = await response.blob();
+      
+      // Crear URL para descargar
       const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = downloadUrl;
-      a.download = `reporte-${tipo}-${new Date().toISOString().split('T')[0]}.xlsx`;
+      a.download = `reporte-${tipo || selectedSucursal}-${new Date().toISOString().split('T')[0]}.xlsx`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(downloadUrl);
       document.body.removeChild(a);
-      
     } catch (error) {
-      console.error('Error:', error);
-      alert("Error: No se pudo exportar el reporte");
+      console.error('Error al exportar a Excel:', error);
     } finally {
-      setExportLoading(false);
+      // Asegurarse de que solo se actualiza el estado de carga de Excel
+      setCargandoExcel(false);
     }
   };
 
   const imprimirPDF = async (tipo) => {
+    if (!selectedEmpresa) {
+      console.error('Debe seleccionar una empresa');
+      return;
+    }
+    
+    // Usar el estado de carga específico para PDF
+    setCargandoPDF(true);
+    
     try {
-      setExportLoading(true);
-      let url = '';
+      let url = `/api/reportes/exportar?tipo=${tipo || selectedSucursal}&empresaId=${selectedEmpresa}&formato=pdf`;
       
-      switch (tipo) {
-        case 'sucursales':
-          url = `/api/reportes/exportar?tipo=sucursales&empresaId=${selectedEmpresa}&formato=pdf`;
-          break;
-        case 'estructuras':
-          url = `/api/reportes/exportar?tipo=estructuras&empresaId=${selectedEmpresa}&formato=pdf`;
-          break;
-        case 'empleados':
-          url = `/api/reportes/exportar?tipo=empleados&empresaId=${selectedEmpresa}&formato=pdf`;
-          break;
-        case 'empleados-sucursal':
-          url = `/api/reportes/exportar?tipo=empleados-sucursal&empresaId=${selectedEmpresa}&sucursalId=${selectedSucursal}&formato=pdf`;
-          break;
-        default:
-          throw new Error('Tipo de reporte no válido');
+      if ((tipo || selectedSucursal) === 'empleados-sucursal' && selectedSucursal) {
+        url += `&sucursalId=${selectedSucursal}`;
       }
       
       const response = await fetch(url);
-      if (!response.ok) throw new Error('Error al generar PDF');
       
+      if (!response.ok) {
+        throw new Error(`Error al exportar: ${response.statusText}`);
+      }
+      
+      // Obtener el blob del archivo
       const blob = await response.blob();
+      
+      // Crear URL para descargar
       const downloadUrl = window.URL.createObjectURL(blob);
-      
-      // Abrir en nueva pestaña
-      window.open(downloadUrl, '_blank');
-      
-      alert("Éxito: PDF generado correctamente");
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = `reporte-${tipo || selectedSucursal}-${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(downloadUrl);
+      document.body.removeChild(a);
     } catch (error) {
-      console.error('Error:', error);
-      alert("Error: No se pudo generar el PDF");
+      console.error('Error al exportar a PDF:', error);
     } finally {
-      setExportLoading(false);
+      // Asegurarse de que solo se actualiza el estado de carga de PDF
+      setCargandoPDF(false);
     }
   };
 
