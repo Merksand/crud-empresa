@@ -151,7 +151,6 @@ export default function ReportesPage() {
       window.URL.revokeObjectURL(downloadUrl);
       document.body.removeChild(a);
       
-      alert("Éxito: Reporte exportado correctamente");
     } catch (error) {
       console.error('Error:', error);
       alert("Error: No se pudo exportar el reporte");

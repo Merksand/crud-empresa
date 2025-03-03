@@ -335,8 +335,8 @@ export async function GET(request) {
       return NextResponse.json({ error: 'Parámetros incompletos' }, { status: 400 });
     }
     
-    // Obtener nombre de la empresa
-    const empresaQuery = 'SELECT Nombre_Emp FROM Empresa WHERE Id_Emp = ?';
+    // Obtener nombre de la empresa - Nombre correcto de tabla y columna
+    const empresaQuery = 'SELECT Nombre_Emp FROM TbEmpresa WHERE Id_Empresa = ?';
     const [empresaResult] = await pool.query(empresaQuery, [empresaId]);
     
     if (empresaResult.length === 0) {
@@ -346,9 +346,9 @@ export async function GET(request) {
     const nombreEmpresa = empresaResult[0].Nombre_Emp;
     let nombreSucursal = '';
     
-    // Si es reporte de empleados por sucursal, obtener nombre de la sucursal
+    // Si es reporte de empleados por sucursal, obtener nombre de la sucursal - Nombre correcto de tabla y columna
     if (tipo === 'empleados-sucursal' && sucursalId) {
-      const sucursalQuery = 'SELECT Nombre_Suc FROM Sucursal WHERE Id_Suc = ?';
+      const sucursalQuery = 'SELECT Nombre_Suc FROM TbSucursal WHERE Id_Sucursal = ?';
       const [sucursalResult] = await pool.query(sucursalQuery, [sucursalId]);
       
       if (sucursalResult.length === 0) {
@@ -358,32 +358,39 @@ export async function GET(request) {
       nombreSucursal = sucursalResult[0].Nombre_Suc;
     }
     
-    // Obtener datos según el tipo de reporte
+    // Obtener datos según el tipo de reporte - Nombres correctos de tablas y columnas
     let datos = [];
     
     switch (tipo) {
       case 'sucursales':
+        // Consulta para obtener sucursales de una empresa
         const sucursalesQuery = `
           SELECT s.*, m.Nombre_Mun as municipioNombre
-          FROM Sucursal s
-          LEFT JOIN Municipio m ON s.Id_Mun = m.Id_Mun
-          WHERE s.Id_Emp = ?
+          FROM TbSucursal s
+          LEFT JOIN TbMunicipio m ON s.Id_Municipio_Suc = m.Id_Municipio
+          JOIN TbEmpresaSucursal es ON s.Id_Sucursal = es.Id_Sucursal_ES
+          WHERE es.Id_Empresa_ES = ?
         `;
         [datos] = await pool.query(sucursalesQuery, [empresaId]);
         break;
         
       case 'estructuras':
-        const estructurasQuery = 'SELECT * FROM Estructura WHERE Id_Emp = ?';
+        // Consulta para obtener estructuras de una empresa
+        const estructurasQuery = 'SELECT * FROM TbEstructura WHERE Id_Empresa_Est = ?';
         [datos] = await pool.query(estructurasQuery, [empresaId]);
         break;
         
       case 'empleados':
+        // Consulta para obtener empleados de una empresa con sus cargos y sucursales
         const empleadosQuery = `
           SELECT e.*, c.Nombre_Car as cargo, s.Nombre_Suc as sucursal
-          FROM Empleado e
-          LEFT JOIN Cargo c ON e.Id_Car = c.Id_Car
-          LEFT JOIN Sucursal s ON e.Id_Suc = s.Id_Suc
-          WHERE e.Id_Emp = ?
+          FROM TbEmpleado e
+          JOIN TbEmpleadoCargo ec ON e.Id_Empleado = ec.Id_Empleado_EC
+          LEFT JOIN TbCargo c ON ec.Id_Cargo_EC = c.Id_Cargo
+          JOIN TbEmpresaSucursal es ON es.Id_Empresa_ES = ?
+          JOIN TbSucursal s ON es.Id_Sucursal_ES = s.Id_Sucursal
+          WHERE ec.Estado_EC = 'Activo'
+          GROUP BY e.Id_Empleado
         `;
         [datos] = await pool.query(empleadosQuery, [empresaId]);
         break;
@@ -393,11 +400,15 @@ export async function GET(request) {
           return NextResponse.json({ error: 'ID de sucursal requerido para este reporte' }, { status: 400 });
         }
         
+        // Consulta para obtener empleados de una sucursal específica con sus cargos
         const empleadosSucursalQuery = `
           SELECT e.*, c.Nombre_Car as cargo
-          FROM Empleado e
-          LEFT JOIN Cargo c ON e.Id_Car = c.Id_Car
-          WHERE e.Id_Suc = ?
+          FROM TbEmpleado e
+          JOIN TbEmpleadoCargo ec ON e.Id_Empleado = ec.Id_Empleado_EC
+          LEFT JOIN TbCargo c ON ec.Id_Cargo_EC = c.Id_Cargo
+          JOIN TbEmpresaSucursal es ON es.Id_Sucursal_ES = ?
+          WHERE ec.Estado_EC = 'Activo'
+          GROUP BY e.Id_Empleado
         `;
         [datos] = await pool.query(empleadosSucursalQuery, [sucursalId]);
         break;
