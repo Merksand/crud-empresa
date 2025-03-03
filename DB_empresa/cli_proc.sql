@@ -38,7 +38,7 @@ END //
 DELIMITER ;
 
 
---PUT - ACTUALIZAR
+-- PUT - ACTUALIZAR
 DELIMITER //
 CREATE PROCEDURE UpdateCargo (
     IN p_Id_Cargo INT,
@@ -60,14 +60,14 @@ END //
 DELIMITER ;
 
 
----DELETE - ELIMINAR
+-- DELETE - ELIMINAR
 DELIMITER //
 CREATE PROCEDURE DeleteCargo (
     IN p_Id_Cargo INT
 )
 BEGIN
     UPDATE TbCargo
-    SET Estado_Dep = 'BA'
+    SET Estado_Dep = 'InAC'
     WHERE Id_Cargo = p_Id_Cargo;
 END //
 DELIMITER ;
@@ -75,7 +75,7 @@ DELIMITER ;
 
 
 
---ESTRUCTURA
+-- ESTRUCTURA
 -- Procedimiento para insertar una nueva estructura
 DELIMITER //
 CREATE PROCEDURE InsertEstructura (
@@ -85,7 +85,7 @@ CREATE PROCEDURE InsertEstructura (
 )
 BEGIN
     INSERT INTO TbEstructura (Id_Empresa, Fecha_Creacion_Est, Resolucion_Est, Estado_Est)
-    VALUES (p_Id_Empresa, p_Fecha_Creacion_Est, p_Resolucion_Est, 'Activo');
+    VALUES (p_Id_Empresa, p_Fecha_Creacion_Est, p_Resolucion_Est, 'AC');
 END //
 DELIMITER ;
 
@@ -106,14 +106,14 @@ BEGIN
 END //
 DELIMITER ;
 
--- Procedimiento para eliminar una estructura (cambio lógico a inactivo)
+-- Procedimiento para eliminar una estructura (cambio lógico a inAC)
 DELIMITER //
 CREATE PROCEDURE DeleteEstructura (
     IN p_Id_Estructura INT
 )
 BEGIN
     UPDATE TbEstructura
-    SET Estado_Est = 'Inactivo'
+    SET Estado_Est = 'InAC'
     WHERE Id_Estructura = p_Id_Estructura;
 END //
 DELIMITER ;
@@ -123,7 +123,7 @@ DELIMITER //
 CREATE PROCEDURE GetActiveEstructuras ()
 BEGIN
     SELECT * FROM TbEstructura
-    WHERE Estado_Est = 'Activo';
+    WHERE Estado_Est = 'AC';
 END //
 DELIMITER ;
 
@@ -151,7 +151,7 @@ CREATE PROCEDURE InsertArea (
 )
 BEGIN
     INSERT INTO TbArea (Id_Estructura_Ar, Fecha_Creacion_Ar, Nombre_Are, Resolucion_Are, Estado_Are)
-    VALUES (p_Id_Estructura_Ar, p_Fecha_Creacion_Ar, p_Nombre_Are, p_Resolucion_Are, 'Activo');
+    VALUES (p_Id_Estructura_Ar, p_Fecha_Creacion_Ar, p_Nombre_Are, p_Resolucion_Are, 'AC');
 END //
 DELIMITER ;
 
@@ -174,14 +174,14 @@ BEGIN
 END //
 DELIMITER ;
 
--- Procedimiento para eliminar un área (cambio lógico a inactivo)
+-- Procedimiento para eliminar un área (cambio lógico a inAC)
 DELIMITER //
 CREATE PROCEDURE DeleteArea (
     IN p_Id_Area INT
 )
 BEGIN
     UPDATE TbArea
-    SET Estado_Are = 'Inactivo'
+    SET Estado_Are = 'InAC'
     WHERE Id_Area = p_Id_Area;
 END //
 DELIMITER ;
@@ -191,7 +191,7 @@ DELIMITER //
 CREATE PROCEDURE GetActiveAreas ()
 BEGIN
     SELECT * FROM TbArea
-    WHERE Estado_Are = 'Activo';
+    WHERE Estado_Are = 'AC';
 END //
 DELIMITER ;
 

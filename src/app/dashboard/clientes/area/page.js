@@ -167,7 +167,7 @@ export default function Area() {
                 </tr>
               ) : (
                 areas.map((area) => {
-                  console.log(area)
+                  // console.log(area)
                   return (
                     <tr key={area.Id_Area} className="hover:bg-slate-500">
                       <td className="px-6 py-4 text-sm">{area.Resolucion_Est}</td>

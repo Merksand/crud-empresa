@@ -3,143 +3,10 @@ import { pool } from '@/lib/db';
 import ExcelJS from 'exceljs';
 import PDFDocument from 'pdfkit';
 
-export async function GET(request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const tipo = searchParams.get('tipo');
-    const formato = searchParams.get('formato');
-    const empresaId = searchParams.get('empresaId');
-    const sucursalId = searchParams.get('sucursalId');
-
-    if (!tipo || !formato || !empresaId) {
-      return NextResponse.json({ error: 'Parámetros incompletos' }, { status: 400 });
-    }
-
-    // Verificar si necesitamos sucursalId para el tipo de reporte
-    if (tipo === 'empleados-sucursal' && !sucursalId) {
-      return NextResponse.json({ error: 'ID de sucursal no proporcionado' }, { status: 400 });
-    }
-
-    // Obtener el nombre de la empresa para el título del reporte
-    const [empresas] = await pool.query('SELECT nombre FROM TbEmpresa WHERE id = ?', [empresaId]);
-    
-    if (empresas.length === 0) {
-      return NextResponse.json({ error: 'Empresa no encontrada' }, { status: 404 });
-    }
-    
-    const nombreEmpresa = empresas[0].nombre;
-    
-    // Obtener datos según el tipo de reporte
-    let datos = [];
-    let nombreSucursal = '';
-    
-    switch (tipo) {
-      case 'sucursales':
-        const [sucursales] = await pool.query(`
-          SELECT s.id, s.nombre, s.direccion, s.telefono, m.nombre as municipioNombre
-          FROM TbSucursal s
-          JOIN TbEmpresaSucursal es ON s.id = es.sucursalId
-          LEFT JOIN TbMunicipio m ON s.municipioId = m.id
-          WHERE es.empresaId = ?
-        `, [empresaId]);
-        datos = sucursales;
-        break;
-        
-      case 'estructuras':
-        const [estructuras] = await pool.query(`
-          SELECT id, nombre, descripcion, nivel
-          FROM TbEstructura
-          WHERE empresaId = ?
-          ORDER BY nivel ASC
-        `, [empresaId]);
-        datos = estructuras;
-        break;
-        
-      case 'empleados':
-        const [empleados] = await pool.query(`
-          SELECT e.id, e.nombre, e.apellido, e.email, e.telefono, 
-                c.nombre as cargo, s.nombre as sucursal
-          FROM TbEmpleado e
-          JOIN TbSucursal s ON e.sucursalId = s.id
-          JOIN TbEmpresaSucursal es ON s.id = es.sucursalId
-          LEFT JOIN TbEmpleadoCargo ec ON e.id = ec.empleadoId
-          LEFT JOIN TbCargo c ON ec.cargoId = c.id
-          WHERE es.empresaId = ?
-        `, [empresaId]);
-        datos = empleados;
-        break;
-        
-      case 'empleados-sucursal':
-        // Obtener el nombre de la sucursal
-        const [sucursalInfo] = await pool.query('SELECT nombre FROM TbSucursal WHERE id = ?', [sucursalId]);
-        if (sucursalInfo.length > 0) {
-          nombreSucursal = sucursalInfo[0].nombre;
-        }
-        
-        const [empleadosSucursal] = await pool.query(`
-          SELECT e.id, e.nombre, e.apellido, e.email, e.telefono, 
-                c.nombre as cargo, s.nombre as sucursal
-          FROM TbEmpleado e
-          JOIN TbSucursal s ON e.sucursalId = s.id
-          LEFT JOIN TbEmpleadoCargo ec ON e.id = ec.empleadoId
-          LEFT JOIN TbCargo c ON ec.cargoId = c.id
-          WHERE e.sucursalId = ?
-        `, [sucursalId]);
-        datos = empleadosSucursal;
-        break;
-        
-      default:
-        return NextResponse.json({ error: 'Tipo de reporte no válido' }, { status: 400 });
-    }
-    
-    // Generar el reporte según el formato solicitado
-    if (formato === 'excel') {
-      return await generarExcel(tipo, datos, nombreEmpresa, nombreSucursal);
-    } else if (formato === 'pdf') {
-      return await generarPDF(tipo, datos, nombreEmpresa, nombreSucursal);
-    } else {
-      return NextResponse.json({ error: 'Formato no válido' }, { status: 400 });
-    }
-    
-  } catch (error) {
-    console.error('Error al exportar reporte:', error);
-    return NextResponse.json({ error: 'Error al exportar reporte' }, { status: 500 });
-  }
-}
-
+// Función para generar Excel
 async function generarExcel(tipo, datos, nombreEmpresa, nombreSucursal = '') {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Reporte');
-  
-  // Configurar estilos
-  const titleStyle = {
-    font: { bold: true, size: 16 },
-    alignment: { horizontal: 'center' }
-  };
-  
-  const headerStyle = {
-    font: { bold: true },
-    fill: {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FFD3D3D3' }
-    },
-    border: {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' }
-    }
-  };
-  
-  const cellStyle = {
-    border: {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' }
-    }
-  };
   
   // Configurar título según el tipo de reporte
   let titulo = '';
@@ -149,84 +16,129 @@ async function generarExcel(tipo, datos, nombreEmpresa, nombreSucursal = '') {
     case 'sucursales':
       titulo = `Sucursales de ${nombreEmpresa}`;
       columnas = [
-        { header: 'ID', key: 'id', width: 10 },
-        { header: 'Nombre', key: 'nombre', width: 30 },
-        { header: 'Dirección', key: 'direccion', width: 40 },
-        { header: 'Teléfono', key: 'telefono', width: 20 },
-        { header: 'Municipio', key: 'municipioNombre', width: 30 }
+        { header: 'Nombre', key: 'nombre' },
+        { header: 'Municipio', key: 'municipio' }
       ];
       break;
       
     case 'estructuras':
       titulo = `Estructuras de ${nombreEmpresa}`;
       columnas = [
-        { header: 'ID', key: 'id', width: 10 },
-        { header: 'Nombre', key: 'nombre', width: 30 },
-        { header: 'Descripción', key: 'descripcion', width: 40 },
-        { header: 'Nivel', key: 'nivel', width: 10 }
+        { header: 'Fecha de Creación', key: 'fechaCreacion' },
+        { header: 'Resolución', key: 'resolucion' }
       ];
       break;
       
     case 'empleados':
       titulo = `Empleados de ${nombreEmpresa}`;
       columnas = [
-        { header: 'ID', key: 'id', width: 10 },
-        { header: 'Nombre', key: 'nombre', width: 20 },
-        { header: 'Apellido', key: 'apellido', width: 20 },
-        { header: 'Email', key: 'email', width: 30 },
-        { header: 'Teléfono', key: 'telefono', width: 20 },
-        { header: 'Cargo', key: 'cargo', width: 20 },
-        { header: 'Sucursal', key: 'sucursal', width: 30 }
+        { header: 'Nombre', key: 'nombre' },
+        { header: 'Apellido Paterno', key: 'paterno' },
+        { header: 'Apellido Materno', key: 'materno' },
+        { header: 'CI', key: 'ci' },
+        { header: 'Cargo', key: 'cargo' },
+        { header: 'Sucursal', key: 'sucursal' }
       ];
       break;
       
     case 'empleados-sucursal':
       titulo = `Empleados de la Sucursal ${nombreSucursal} - ${nombreEmpresa}`;
       columnas = [
-        { header: 'ID', key: 'id', width: 10 },
-        { header: 'Nombre', key: 'nombre', width: 20 },
-        { header: 'Apellido', key: 'apellido', width: 20 },
-        { header: 'Email', key: 'email', width: 30 },
-        { header: 'Teléfono', key: 'telefono', width: 20 },
-        { header: 'Cargo', key: 'cargo', width: 20 }
+        { header: 'Nombre', key: 'nombre' },
+        { header: 'Apellido Paterno', key: 'paterno' },
+        { header: 'Apellido Materno', key: 'materno' },
+        { header: 'CI', key: 'ci' },
+        { header: 'Cargo', key: 'cargo' }
       ];
       break;
   }
   
   // Agregar título
   worksheet.mergeCells('A1:' + String.fromCharCode(65 + columnas.length - 1) + '1');
-  const titleCell = worksheet.getCell('A1');
-  titleCell.value = titulo;
-  titleCell.style = titleStyle;
+  worksheet.getCell('A1').value = titulo;
+  worksheet.getCell('A1').font = { bold: true, size: 16 };
+  worksheet.getCell('A1').alignment = { horizontal: 'center' };
   
   // Agregar fecha de generación
   worksheet.mergeCells('A2:' + String.fromCharCode(65 + columnas.length - 1) + '2');
-  const dateCell = worksheet.getCell('A2');
-  dateCell.value = `Generado el: ${new Date().toLocaleString()}`;
-  dateCell.style = { alignment: { horizontal: 'center' } };
+  worksheet.getCell('A2').value = `Generado el: ${new Date().toLocaleString()}`;
+  worksheet.getCell('A2').font = { size: 10 };
+  worksheet.getCell('A2').alignment = { horizontal: 'center' };
   
   // Agregar encabezados
+  worksheet.addRow([]);
   worksheet.columns = columnas;
   
-  // Aplicar estilo a los encabezados
-  worksheet.getRow(3).eachCell((cell) => {
-    cell.style = headerStyle;
-  });
+  // Estilo para encabezados
+  worksheet.getRow(4).font = { bold: true };
+  worksheet.getRow(4).fill = {
+    type: 'pattern',
+    pattern: 'solid',
+    fgColor: { argb: 'FFD3D3D3' }
+  };
   
   // Agregar datos
-  worksheet.addRows(datos);
-  
-  // Aplicar estilo a las celdas de datos
-  for (let i = 4; i <= datos.length + 3; i++) {
-    worksheet.getRow(i).eachCell((cell) => {
-      cell.style = cellStyle;
-    });
+  switch (tipo) {
+    case 'sucursales':
+      datos.forEach(fila => {
+        worksheet.addRow({
+          nombre: fila.Nombre_Suc,
+          municipio: fila.municipioNombre || 'N/A'
+        });
+      });
+      break;
+      
+    case 'estructuras':
+      datos.forEach(fila => {
+        worksheet.addRow({
+          fechaCreacion: fila.Fecha_Creacion_Est ? new Date(fila.Fecha_Creacion_Est).toLocaleDateString() : 'N/A',
+          resolucion: fila.Resolucion_Est || 'N/A'
+        });
+      });
+      break;
+      
+    case 'empleados':
+      datos.forEach(fila => {
+        worksheet.addRow({
+          nombre: fila.Nombre_Emp,
+          paterno: fila.Paterno_Emp,
+          materno: fila.Materno_Emp,
+          ci: fila.CI_Emp,
+          cargo: fila.cargo || 'N/A',
+          sucursal: fila.sucursal
+        });
+      });
+      break;
+      
+    case 'empleados-sucursal':
+      datos.forEach(fila => {
+        worksheet.addRow({
+          nombre: fila.Nombre_Emp,
+          paterno: fila.Paterno_Emp,
+          materno: fila.Materno_Emp,
+          ci: fila.CI_Emp,
+          cargo: fila.cargo || 'N/A'
+        });
+      });
+      break;
   }
   
-  // Generar el archivo
+  // Ajustar ancho de columnas
+  worksheet.columns.forEach(column => {
+    let maxLength = 0;
+    column.eachCell({ includeEmpty: true }, (cell) => {
+      const columnLength = cell.value ? cell.value.toString().length : 10;
+      if (columnLength > maxLength) {
+        maxLength = columnLength;
+      }
+    });
+    column.width = maxLength < 10 ? 10 : maxLength + 2;
+  });
+  
+  // Generar buffer
   const buffer = await workbook.xlsx.writeBuffer();
   
-  // Crear respuesta
+  // Configurar respuesta
   const headers = new Headers();
   headers.append('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   headers.append('Content-Disposition', `attachment; filename=reporte-${tipo}-${new Date().toISOString().split('T')[0]}.xlsx`);
@@ -237,10 +149,20 @@ async function generarExcel(tipo, datos, nombreEmpresa, nombreSucursal = '') {
   });
 }
 
+// Función para generar PDF
 async function generarPDF(tipo, datos, nombreEmpresa, nombreSucursal = '') {
   return new Promise((resolve) => {
-    // Crear documento PDF
-    const doc = new PDFDocument({ margin: 50 });
+    // Crear documento PDF con configuración para evitar problemas de fuentes
+    const doc = new PDFDocument({
+      margin: 50,
+      autoFirstPage: true,
+      size: 'A4',
+      layout: 'portrait',
+      info: {
+        Title: `Reporte de ${tipo}`,
+        Author: 'Sistema de Reportes',
+      }
+    });
     
     // Recopilar chunks para crear el buffer
     const chunks = [];
@@ -264,31 +186,31 @@ async function generarPDF(tipo, datos, nombreEmpresa, nombreSucursal = '') {
     switch (tipo) {
       case 'sucursales':
         titulo = `Sucursales de ${nombreEmpresa}`;
-        columnas = ['ID', 'Nombre', 'Dirección', 'Teléfono', 'Municipio'];
+        columnas = ['Nombre', 'Municipio'];
         break;
         
       case 'estructuras':
         titulo = `Estructuras de ${nombreEmpresa}`;
-        columnas = ['ID', 'Nombre', 'Descripción', 'Nivel'];
+        columnas = ['Fecha de Creación', 'Resolución'];
         break;
         
       case 'empleados':
         titulo = `Empleados de ${nombreEmpresa}`;
-        columnas = ['ID', 'Nombre', 'Apellido', 'Email', 'Teléfono', 'Cargo', 'Sucursal'];
+        columnas = ['Nombre', 'Apellido Paterno', 'Apellido Materno', 'CI', 'Cargo', 'Sucursal'];
         break;
         
       case 'empleados-sucursal':
         titulo = `Empleados de la Sucursal ${nombreSucursal} - ${nombreEmpresa}`;
-        columnas = ['ID', 'Nombre', 'Apellido', 'Email', 'Teléfono', 'Cargo'];
+        columnas = ['Nombre', 'Apellido Paterno', 'Apellido Materno', 'CI', 'Cargo'];
         break;
     }
     
     // Agregar título
-    doc.fontSize(16).font('Helvetica-Bold').text(titulo, { align: 'center' });
+    doc.fontSize(16).text(titulo, { align: 'center' });
     doc.moveDown();
     
     // Agregar fecha de generación
-    doc.fontSize(10).font('Helvetica').text(`Generado el: ${new Date().toLocaleString()}`, { align: 'center' });
+    doc.fontSize(10).text(`Generado el: ${new Date().toLocaleString()}`, { align: 'center' });
     doc.moveDown(2);
     
     // Calcular ancho de columnas
@@ -296,7 +218,7 @@ async function generarPDF(tipo, datos, nombreEmpresa, nombreSucursal = '') {
     const columnWidth = pageWidth / columnas.length;
     
     // Dibujar encabezados
-    doc.fontSize(10).font('Helvetica-Bold');
+    doc.fontSize(10);
     let y = doc.y;
     doc.rect(50, y, pageWidth, 20).fill('#D3D3D3').stroke('#000000');
     
@@ -313,7 +235,7 @@ async function generarPDF(tipo, datos, nombreEmpresa, nombreSucursal = '') {
     y = doc.y;
     
     // Dibujar datos
-    doc.fontSize(9).font('Helvetica');
+    doc.fontSize(9);
     
     datos.forEach((fila, index) => {
       // Alternar color de fondo para las filas
@@ -329,7 +251,7 @@ async function generarPDF(tipo, datos, nombreEmpresa, nombreSucursal = '') {
         y = 50;
         
         // Repetir encabezados en la nueva página
-        doc.fontSize(10).font('Helvetica-Bold');
+        doc.fontSize(10);
         doc.rect(50, y, pageWidth, 20).fill('#D3D3D3').stroke('#000000');
         
         columnas.forEach((columna, i) => {
@@ -343,47 +265,40 @@ async function generarPDF(tipo, datos, nombreEmpresa, nombreSucursal = '') {
         
         doc.moveDown();
         y = doc.y;
-        doc.fontSize(9).font('Helvetica');
+        doc.fontSize(9);
       }
       
       // Dibujar datos según el tipo de reporte
       switch (tipo) {
         case 'sucursales':
           doc.fillColor('#000000')
-            .text(fila.id.toString(), 50, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.nombre, 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.direccion, 50 + (2 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.telefono, 50 + (3 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.municipioNombre || 'N/A', 50 + (4 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            .text(fila.Nombre_Suc, 50, y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.municipioNombre || 'N/A', 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' });
           break;
           
         case 'estructuras':
           doc.fillColor('#000000')
-            .text(fila.id.toString(), 50, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.nombre, 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.descripcion, 50 + (2 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.nivel.toString(), 50 + (3 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            .text(fila.Fecha_Creacion_Est ? new Date(fila.Fecha_Creacion_Est).toLocaleDateString() : 'N/A', 50, y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.Resolucion_Est || 'N/A', 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' });
           break;
           
         case 'empleados':
           doc.fillColor('#000000')
-            .text(fila.id.toString(), 50, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.nombre, 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.apellido, 50 + (2 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.email, 50 + (3 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.telefono, 50 + (4 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.cargo || 'N/A', 50 + (5 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.sucursal, 50 + (6 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            .text(fila.Nombre_Emp, 50, y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.Paterno_Emp, 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.Materno_Emp, 50 + (2 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.CI_Emp, 50 + (3 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.cargo || 'N/A', 50 + (4 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.sucursal, 50 + (5 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
           break;
           
         case 'empleados-sucursal':
           doc.fillColor('#000000')
-            .text(fila.id.toString(), 50, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.nombre, 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.apellido, 50 + (2 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.email, 50 + (3 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.telefono, 50 + (4 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
-            .text(fila.cargo || 'N/A', 50 + (5 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
+            .text(fila.Nombre_Emp, 50, y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.Paterno_Emp, 50 + columnWidth, y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.Materno_Emp, 50 + (2 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.CI_Emp, 50 + (3 * columnWidth), y + 5, { width: columnWidth, align: 'center' })
+            .text(fila.cargo || 'N/A', 50 + (4 * columnWidth), y + 5, { width: columnWidth, align: 'center' });
           break;
       }
       
@@ -405,4 +320,103 @@ async function generarPDF(tipo, datos, nombreEmpresa, nombreSucursal = '') {
     // Finalizar documento
     doc.end();
   });
+}
+
+// Función principal para manejar la solicitud
+export async function GET(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const tipo = searchParams.get('tipo');
+    const empresaId = searchParams.get('empresaId');
+    const sucursalId = searchParams.get('sucursalId');
+    const formato = searchParams.get('formato');
+    
+    if (!tipo || !empresaId || !formato) {
+      return NextResponse.json({ error: 'Parámetros incompletos' }, { status: 400 });
+    }
+    
+    // Obtener nombre de la empresa
+    const empresaQuery = 'SELECT Nombre_Emp FROM Empresa WHERE Id_Emp = ?';
+    const [empresaResult] = await pool.query(empresaQuery, [empresaId]);
+    
+    if (empresaResult.length === 0) {
+      return NextResponse.json({ error: 'Empresa no encontrada' }, { status: 404 });
+    }
+    
+    const nombreEmpresa = empresaResult[0].Nombre_Emp;
+    let nombreSucursal = '';
+    
+    // Si es reporte de empleados por sucursal, obtener nombre de la sucursal
+    if (tipo === 'empleados-sucursal' && sucursalId) {
+      const sucursalQuery = 'SELECT Nombre_Suc FROM Sucursal WHERE Id_Suc = ?';
+      const [sucursalResult] = await pool.query(sucursalQuery, [sucursalId]);
+      
+      if (sucursalResult.length === 0) {
+        return NextResponse.json({ error: 'Sucursal no encontrada' }, { status: 404 });
+      }
+      
+      nombreSucursal = sucursalResult[0].Nombre_Suc;
+    }
+    
+    // Obtener datos según el tipo de reporte
+    let datos = [];
+    
+    switch (tipo) {
+      case 'sucursales':
+        const sucursalesQuery = `
+          SELECT s.*, m.Nombre_Mun as municipioNombre
+          FROM Sucursal s
+          LEFT JOIN Municipio m ON s.Id_Mun = m.Id_Mun
+          WHERE s.Id_Emp = ?
+        `;
+        [datos] = await pool.query(sucursalesQuery, [empresaId]);
+        break;
+        
+      case 'estructuras':
+        const estructurasQuery = 'SELECT * FROM Estructura WHERE Id_Emp = ?';
+        [datos] = await pool.query(estructurasQuery, [empresaId]);
+        break;
+        
+      case 'empleados':
+        const empleadosQuery = `
+          SELECT e.*, c.Nombre_Car as cargo, s.Nombre_Suc as sucursal
+          FROM Empleado e
+          LEFT JOIN Cargo c ON e.Id_Car = c.Id_Car
+          LEFT JOIN Sucursal s ON e.Id_Suc = s.Id_Suc
+          WHERE e.Id_Emp = ?
+        `;
+        [datos] = await pool.query(empleadosQuery, [empresaId]);
+        break;
+        
+      case 'empleados-sucursal':
+        if (!sucursalId) {
+          return NextResponse.json({ error: 'ID de sucursal requerido para este reporte' }, { status: 400 });
+        }
+        
+        const empleadosSucursalQuery = `
+          SELECT e.*, c.Nombre_Car as cargo
+          FROM Empleado e
+          LEFT JOIN Cargo c ON e.Id_Car = c.Id_Car
+          WHERE e.Id_Suc = ?
+        `;
+        [datos] = await pool.query(empleadosSucursalQuery, [sucursalId]);
+        break;
+        
+      default:
+        return NextResponse.json({ error: 'Tipo de reporte no válido' }, { status: 400 });
+    }
+    
+    // Generar el reporte según el formato solicitado
+    if (formato === 'excel') {
+      return await generarExcel(tipo, datos, nombreEmpresa, nombreSucursal);
+    } else if (formato === 'pdf') {
+      return await generarPDF(tipo, datos, nombreEmpresa, nombreSucursal);
+    } else {
+      return NextResponse.json({ error: 'Formato no válido' }, { status: 400 });
+    }
+    
+  } catch (error) {
+    console.error('Error al exportar reporte:', error);
+    return NextResponse.json({ error: 'Error al exportar reporte' }, { status: 500 });
+  }
 } 

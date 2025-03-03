@@ -10,12 +10,12 @@ export async function GET(request) {
       return NextResponse.json({ error: 'ID de empresa no proporcionado' }, { status: 400 });
     }
 
-    // Obtener las estructuras para la empresa seleccionada
+    // Consulta corregida con los nombres exactos de las columnas según la BD
     const [estructuras] = await pool.query(`
-      SELECT Id_Estructura as id, nombre, descripcion, nivel
+      SELECT Id_Estructura, Id_Empresa, Fecha_Creacion_Est, Resolucion_Est, Estado_Est
       FROM TbEstructura
-      WHERE empresaId = ?
-      ORDER BY nivel ASC
+      WHERE Id_Empresa = ?
+      ORDER BY Id_Estructura ASC
     `, [empresaId]);
 
     return NextResponse.json(estructuras);

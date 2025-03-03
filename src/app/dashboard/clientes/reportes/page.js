@@ -226,17 +226,13 @@ export default function ReportesPage() {
             <SelectValue placeholder="Selecciona una empresa" />
           </SelectTrigger>
           <SelectContent>
-            {empresas.map((empresa) => {
-              const empresaId = empresa.id || empresa.idEmpresa || empresa.empresaId;
-              const itemValue = empresaId ? empresaId.toString() : `empresa-${Math.random()}`;
-              return (
-                <SelectItem 
-                  key={itemValue} 
-                  value={itemValue}>
-                  {empresa.Nombre_Emp || 'Empresa sin nombre'}
-                </SelectItem>
-              );
-            })}
+            {empresas.map((empresa) => (
+              <SelectItem 
+                key={empresa.Id_Empresa} 
+                value={empresa.Id_Empresa.toString()}>
+                {empresa.Nombre_Emp}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -268,27 +264,23 @@ export default function ReportesPage() {
                   <TableCaption>Lista de sucursales</TableCaption>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead>Nombre</TableHead>
-                      <TableHead>Dirección</TableHead>
-                      <TableHead>Teléfono</TableHead>
-                      <TableHead>Municipio</TableHead>
+                      <TableCell>Nombre</TableCell>
+                      <TableCell>Estado</TableCell>
+                      <TableCell>Municipio</TableCell>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {sucursales.length > 0 ? (
                       sucursales.map((sucursal) => (
-                        <TableRow key={sucursal.id}>
-                          <TableCell>{sucursal.id}</TableCell>
-                          <TableCell>{sucursal.nombre}</TableCell>
-                          <TableCell>{sucursal.direccion}</TableCell>
-                          <TableCell>{sucursal.telefono}</TableCell>
-                          <TableCell>{sucursal.municipio?.nombre || 'N/A'}</TableCell>
+                        <TableRow key={sucursal.Id_Sucursal}>
+                          <TableCell>{sucursal.Nombre_Suc}</TableCell>
+                          <TableCell>{sucursal.Estado_Suc}</TableCell>
+                          <TableCell>{sucursal.municipio ? sucursal.municipio.Nombre_Mun : 'N/A'}</TableCell>
                         </TableRow>
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={5} className="text-center">
+                        <TableCell colSpan={4} className="text-center">
                           {selectedEmpresa ? "No hay sucursales para esta empresa" : "Selecciona una empresa para ver sus sucursales"}
                         </TableCell>
                       </TableRow>
@@ -337,20 +329,18 @@ export default function ReportesPage() {
                   <TableCaption>Lista de estructuras</TableCaption>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead>Nombre</TableHead>
-                      <TableHead>Descripción</TableHead>
-                      <TableHead>Nivel</TableHead>
+                      <TableCell>Fecha de Creación</TableCell>
+                      <TableCell>Resolución</TableCell>
+                      <TableCell>Estado</TableCell>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {estructuras.length > 0 ? (
                       estructuras.map((estructura) => (
-                        <TableRow key={estructura.id}>
-                          <TableCell>{estructura.id}</TableCell>
-                          <TableCell>{estructura.nombre}</TableCell>
-                          <TableCell>{estructura.descripcion}</TableCell>
-                          <TableCell>{estructura.nivel}</TableCell>
+                        <TableRow key={estructura.Id_Estructura}>
+                          <TableCell>{estructura.Fecha_Creacion_Est ? new Date(estructura.Fecha_Creacion_Est).toLocaleDateString() : 'N/A'}</TableCell>
+                          <TableCell>{estructura.Resolucion_Est || 'N/A'}</TableCell>
+                          <TableCell>{estructura.Estado_Est || 'N/A'}</TableCell>
                         </TableRow>
                       ))
                     ) : (
@@ -404,29 +394,25 @@ export default function ReportesPage() {
                   <TableCaption>Lista de empleados</TableCaption>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead>Nombre</TableHead>
-                      <TableHead>Apellido</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Teléfono</TableHead>
-                      <TableHead>Cargo</TableHead>
+                      <TableCell>Nombre</TableCell>
+                      <TableCell>CI</TableCell>
+                      <TableCell>Cargo</TableCell>
+                      <TableCell>Sucursal</TableCell>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {empleados.length > 0 ? (
                       empleados.map((empleado) => (
-                        <TableRow key={empleado.id}>
-                          <TableCell>{empleado.id}</TableCell>
-                          <TableCell>{empleado.nombre}</TableCell>
-                          <TableCell>{empleado.apellido}</TableCell>
-                          <TableCell>{empleado.email}</TableCell>
-                          <TableCell>{empleado.telefono}</TableCell>
-                          <TableCell>{empleado.cargo?.nombre || 'N/A'}</TableCell>
+                        <TableRow key={empleado.Id_Empleado}>
+                          <TableCell>{empleado.Nombre_Emp} {empleado.Paterno_Emp} {empleado.Materno_Emp}</TableCell>
+                          <TableCell>{empleado.CI_Emp}</TableCell>
+                          <TableCell>{empleado.cargo ? empleado.cargo.Nombre_Car : 'N/A'}</TableCell>
+                          <TableCell>{empleado.sucursal.Nombre_Suc}</TableCell>
                         </TableRow>
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center">
+                        <TableCell colSpan={4} className="text-center">
                           {selectedEmpresa ? "No hay empleados para esta empresa" : "Selecciona una empresa para ver sus empleados"}
                         </TableCell>
                       </TableRow>
@@ -472,18 +458,13 @@ export default function ReportesPage() {
                     <SelectValue placeholder="Selecciona una sucursal" />
                   </SelectTrigger>
                   <SelectContent>
-                    {sucursales.map((sucursal) => {
-                      const sucursalId = sucursal.id || sucursal.idSucursal || sucursal.sucursalId;
-                      const itemValue = sucursalId ? sucursalId.toString() : `sucursal-${Math.random()}`;
-                      
-                      return (
-                        <SelectItem 
-                          key={itemValue} 
-                          value={itemValue}>
-                          {sucursal.nombre || 'Sucursal sin nombre'}
-                        </SelectItem>
-                      );
-                    })}
+                    {sucursales.map((sucursal) => (
+                      <SelectItem 
+                        key={sucursal.Id_Sucursal} 
+                        value={sucursal.Id_Sucursal.toString()}>
+                        {sucursal.Nombre_Suc}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -497,31 +478,25 @@ export default function ReportesPage() {
                   <TableCaption>Lista de empleados por sucursal</TableCaption>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead>Nombre</TableHead>
-                      <TableHead>Apellido</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Teléfono</TableHead>
-                      <TableHead>Cargo</TableHead>
-                      <TableHead>Sucursal</TableHead>
+                      <TableCell>Nombre</TableCell>
+                      <TableCell>CI</TableCell>
+                      <TableCell>Cargo</TableCell>
+                      <TableCell>Sucursal</TableCell>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {empleados.length > 0 && selectedSucursal ? (
                       empleados.map((empleado) => (
-                        <TableRow key={empleado.id}>
-                          <TableCell>{empleado.id}</TableCell>
-                          <TableCell>{empleado.nombre}</TableCell>
-                          <TableCell>{empleado.apellido}</TableCell>
-                          <TableCell>{empleado.email}</TableCell>
-                          <TableCell>{empleado.telefono}</TableCell>
-                          <TableCell>{empleado.cargo?.nombre || 'N/A'}</TableCell>
-                          <TableCell>{empleado.sucursal?.nombre || 'N/A'}</TableCell>
+                        <TableRow key={empleado.Id_Empleado}>
+                          <TableCell>{empleado.Nombre_Emp} {empleado.Paterno_Emp} {empleado.Materno_Emp}</TableCell>
+                          <TableCell>{empleado.CI_Emp}</TableCell>
+                          <TableCell>{empleado.cargo ? empleado.cargo.Nombre_Car : 'N/A'}</TableCell>
+                          <TableCell>{empleado.sucursal.Nombre_Suc}</TableCell>
                         </TableRow>
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={7} className="text-center">
+                        <TableCell colSpan={4} className="text-center">
                           {!selectedEmpresa 
                             ? "Selecciona una empresa primero" 
                             : !selectedSucursal 

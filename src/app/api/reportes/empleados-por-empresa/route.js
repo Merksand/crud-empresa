@@ -10,44 +10,33 @@ export async function GET(request) {
       return NextResponse.json({ error: 'ID de empresa no proporcionado' }, { status: 400 });
     }
 
-    // Obtener los empleados para la empresa seleccionada
+    // Consulta corregida con los nombres exactos de las columnas según la BD
     const [empleados] = await pool.query(`
-      SELECT 
-    e.Id_Empleado AS id, 
-    e.Nombre_Emp AS nombre, 
-    e.Paterno_Emp AS apellido, 
-    e.CI_Emp AS email,   
-    e.Direccion_Emp AS telefono, 
-    
-    c.Id_Cargo AS cargoId, 
-    c.Nombre_Car AS cargoNombre,
-    
-    s.Id_Sucursal AS sucursalId, 
-    s.Nombre_Suc AS sucursalNombre
-
-FROM TbEmpleado e
-JOIN TbEmpresaSucursal es ON e.Id_Municipio_Emp = es.Id_Sucursal_ES
-JOIN TbSucursal s ON es.Id_Sucursal_ES = s.Id_Sucursal
-LEFT JOIN TbEmpleadoCargo ec ON e.Id_Empleado = ec.Id_Empleado_EC
-LEFT JOIN TbCargo c ON ec.Id_Cargo_EC = c.Id_Cargo
-
-WHERE es.Id_Empresa_ES = ?
+      SELECT e.Id_Empleado, e.Nombre_Emp, e.Paterno_Emp, e.Materno_Emp, e.CI_Emp, 
+             c.Id_Cargo, c.Nombre_Car as cargoNombre,
+             s.Id_Sucursal, s.Nombre_Suc as sucursalNombre
+      FROM TbEmpleado e
+      JOIN TbSucursal s ON e.Id_Municipio_Emp = s.Id_Municipio_Suc
+      JOIN TbEmpresaSucursal es ON s.Id_Sucursal = es.Id_Sucursal_ES
+      LEFT JOIN TbEmpleadoCargo ec ON e.Id_Empleado = ec.Id_Empleado_EC
+      LEFT JOIN TbCargo c ON ec.Id_Cargo_EC = c.Id_Cargo
+      WHERE es.Id_Empresa_ES = ?
     `, [empresaId]);
 
-    // Formatear los datos para incluir los objetos cargo y sucursal
+    // Formatear los datos para la respuesta
     const empleadosFormateados = empleados.map(e => ({
-      id: e.id,
-      nombre: e.nombre,
-      apellido: e.apellido,
-      email: e.email,
-      telefono: e.telefono,
-      cargo: e.cargoId ? {
-        id: e.cargoId,
-        nombre: e.cargoNombre
+      Id_Empleado: e.Id_Empleado,
+      Nombre_Emp: e.Nombre_Emp,
+      Paterno_Emp: e.Paterno_Emp,
+      Materno_Emp: e.Materno_Emp,
+      CI_Emp: e.CI_Emp,
+      cargo: e.Id_Cargo ? {
+        Id_Cargo: e.Id_Cargo,
+        Nombre_Car: e.cargoNombre
       } : null,
       sucursal: {
-        id: e.sucursalId,
-        nombre: e.sucursalNombre
+        Id_Sucursal: e.Id_Sucursal,
+        Nombre_Suc: e.sucursalNombre
       }
     }));
 

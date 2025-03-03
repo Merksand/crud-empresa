@@ -13,35 +13,29 @@ export async function GET(request) {
       );
     }
 
-    // Obtener las sucursales para la empresa seleccionada
+    // Consulta corregida con los nombres exactos de las columnas según la BD
     const [sucursales] = await pool.query(
       `
-   SELECT 
-    s.Id_Sucursal AS id, 
-    s.Nombre_Suc AS nombre, 
-    
-    m.Id_Municipio AS municipioId, 
-    m.Nombre_Mun AS municipioNombre
-
-FROM TbSucursal s
-JOIN TbEmpresaSucursal es ON s.Id_Sucursal = es.Id_Sucursal_ES
-LEFT JOIN TbMunicipio m ON s.Id_Municipio_Suc = m.Id_Municipio
-WHERE es.Id_Empresa_ES = ?
+   SELECT s.Id_Sucursal, s.Nombre_Suc, s.Estado_Suc, 
+          m.Id_Municipio, m.Nombre_Mun as municipioNombre
+   FROM TbSucursal s
+   JOIN TbEmpresaSucursal es ON s.Id_Sucursal = es.Id_Sucursal_ES
+   LEFT JOIN TbMunicipio m ON s.Id_Municipio_Suc = m.Id_Municipio
+   WHERE es.Id_Empresa_ES = ?
 
     `,
       [empresaId]
     );
 
-    // Formatear los datos para incluir el objeto municipio
+    // Formatear los datos para la respuesta
     const sucursalesFormateadas = sucursales.map((s) => ({
-      id: s.id,
-      nombre: s.nombre,
-      direccion: s.direccion,
-      telefono: s.telefono,
-      municipio: s.municipioId
+      Id_Sucursal: s.Id_Sucursal,
+      Nombre_Suc: s.Nombre_Suc,
+      Estado_Suc: s.Estado_Suc,
+      municipio: s.Id_Municipio
         ? {
-            id: s.municipioId,
-            nombre: s.municipioNombre,
+            Id_Municipio: s.Id_Municipio,
+            Nombre_Mun: s.municipioNombre,
           }
         : null,
     }));
