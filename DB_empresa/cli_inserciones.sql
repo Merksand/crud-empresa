@@ -1,4 +1,3 @@
--- Seleccionamos la ACse de datos
 USE empresa;
 
 INSERT INTO TbPais (Nombre_Pai, Moneda_Pai, Idioma_Pai, Latitud_Pai, Longitud_Pai, Regimen_Impositivo_Pai, IVA_Pai, Estado_Dep) 

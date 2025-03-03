@@ -251,13 +251,3 @@ CREATE TABLE TbInv_OrdenesCompra (
 
 
 
-
-
-
-Entrada,
-Salida,
-Transferencia,
-Devolución,
-Ajuste positivo,
-Ajuste negativo,
-Baja
