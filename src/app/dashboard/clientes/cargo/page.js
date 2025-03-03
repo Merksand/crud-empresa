@@ -26,14 +26,25 @@ export default function cargo() {
       setLoading(true);
       const response = await fetch('/api/cargo');
       const data = await response.json();
-      setcargo(data);
+  
+      console.log("Datos recibidos de la API:", data); // 👀 Para depurar
+  
+      // Verificar si data es un array antes de actualizar el estado
+      if (Array.isArray(data)) {
+        setcargo(data);
+      } else {
+        console.error("Error: La API no devolvió un array", data);
+        setcargo([]); // Previene errores
+      }
     } catch (error) {
       console.error('Error al cargar cargo:', error);
       showNotification('Error al cargar los cargo', 'error');
+      setcargo([]); // Asegurar que `cargo` nunca sea undefined
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleDelete = async (cargo) => {
     setDeleteModal({ show: true, cargo });
@@ -98,61 +109,44 @@ export default function cargo() {
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
+            
             <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
-              {loading ? (
-                <tr>
-                  <td colSpan="7" className="px-6 py-4 text-center">
-                    <div className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-                      <span className="ml-2">Cargando...</span>
-                    </div>
-                  </td>
-                </tr>
-              ) : cargo.length === 0 ? (
-                <tr>
-                  <td colSpan="7" className="px-6 py-4 text-center text-gray-500">
-                    No hay cargo registrados
-                  </td>
-                </tr>
-              ) : (
-                cargo.map((cargo) => {
-                  return (
-                    <tr key={cargo.Id_Cargo} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Nombre_Car}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Nivel_Car}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Sueldo_Car}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Sueldo_USD_Car}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{cargo.Resolucion_Car}</td>
-                      {/*<td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${cargo.Estado_Dep === 'Activo'
-                          ? 'bg-green-600'
-                          : 'bg-red-600'
-                          }`}>
-                          {cargo.Estado_Dep}
-                        </span>
-                      </td>*/}
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          onClick={() => {
-                            setCargoEditar(cargo);
-                            setIsModalOpen(true);
-                          }}
-                          className="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 mr-4"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => handleDelete(cargo)}
-                          className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
-                        >
-                          Eliminar
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
+  {loading ? (
+    <tr>
+      <td colSpan="7" className="px-6 py-4 text-center">
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+          <span className="ml-2">Cargando...</span>
+        </div>
+      </td>
+    </tr>
+  ) : Array.isArray(cargo) && cargo.length > 0 ? (  // ✅ Verificamos si cargo es un array
+    cargo.map((c) => (
+      <tr key={c.Id_Cargo} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+        <td className="px-6 py-4 whitespace-nowrap text-sm">{c.Nombre_Car}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm">{c.Nivel_Car}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm">{c.Sueldo_Car}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm">{c.Sueldo_USD_Car}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm">{c.Resolucion_Car}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <button onClick={() => { setCargoEditar(c); setIsModalOpen(true); }} className="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 mr-4">
+            Editar
+          </button>
+          <button onClick={() => handleDelete(c)} className="text-red-600 hover:text-red-900 dark:hover:text-red-400">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="7" className="px-6 py-4 text-center text-gray-500">
+        No hay cargos registrados
+      </td>
+    </tr>
+  )}
+</tbody>
+
           </table>
         </div>
       </div>
