@@ -220,7 +220,8 @@ async function generarPDF(tipo, datos, nombreEmpresa, nombreSucursal = '') {
       }
 
       // Agregar título
-      doc.font('Helvetica');
+      // doc.font('Helvetica');
+      doc.font('Courier')
       doc.fontSize(16);
       doc.text(titulo, {
         align: 'center'
