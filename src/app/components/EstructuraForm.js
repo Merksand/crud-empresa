@@ -8,17 +8,17 @@ export default function EstructuraForm({ estructura, onSubmit, onClose }) {
     Estado_Est: "Activo",
   });
 
-  const [empresas, setEmpresas] = useState([]);  
+  const [empresas, setEmpresas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Cargar lista de empresas
   useEffect(() => {
     const loadEmpresas = async () => {
       try {
-        const response = await fetch("/api/empresas");  
+        const response = await fetch("/api/empresas");
         if (!response.ok) throw new Error("Error al cargar empresas");
         const data = await response.json();
-        console.log("estructura form data", data);
         setEmpresas(data);
       } catch (err) {
         setError(err.message);
@@ -30,24 +30,17 @@ export default function EstructuraForm({ estructura, onSubmit, onClose }) {
     loadEmpresas();
   }, []);
 
+  // Sincronizar `formData` cuando `estructura` cambia
   useEffect(() => {
-    if (estructura) {
-      setFormData({
-        Id_Empresa: estructura?.Id_Empresa || "",  
-        Fecha_Creacion_Est: estructura?.Fecha_Creacion_Est?.split("T")[0] || "",
-        Resolucion_Est: estructura?.Resolucion_Est || "",
-        Estado_Est: estructura?.Estado_Est || "Activo",
-      });
-    } else {
-      setFormData({
-        Id_Empresa: "",
-        Fecha_Creacion_Est: "",
-        Resolucion_Est: "",
-        Estado_Est: "Activo",
-      });
-    }
+    setFormData({
+      Id_Empresa: estructura?.Id_Empresa || "",
+      Fecha_Creacion_Est: estructura?.Fecha_Creacion_Est?.split("T")[0] || "",
+      Resolucion_Est: estructura?.Resolucion_Est || "",
+      Estado_Est: estructura?.Estado_Est || "Activo",
+    });
   }, [estructura]);
 
+  // Manejo de cambios en inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -56,21 +49,18 @@ export default function EstructuraForm({ estructura, onSubmit, onClose }) {
     }));
   };
 
+  // Enviar formulario
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
   };
 
-  if (loading) {
-    return <p>Cargando empresas...</p>;
-  }
+  if (loading) return <p>Cargando empresas...</p>;
+  if (error) return <p className="text-red-500">Error: {error}</p>;
 
-  if (error) {
-    return <p className="text-red-500">Error: {error}</p>;
-  }
-console.log(formData)
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Selección de Empresa */}
       <div>
         <label className="block text-sm font-medium mb-1">Empresa</label>
         <select
@@ -89,46 +79,33 @@ console.log(formData)
         </select>
       </div>
 
+      {/* Fecha de Creación */}
       <div>
-        <label className="block text-sm font-medium mb-1">
-          Fecha de Creación
-        </label>
+        <label className="block text-sm font-medium mb-1">Fecha de Creación</label>
         <input
           type="date"
           name="Fecha_Creacion_Est"
-          value={formData.Fecha_Creacion_Est || ""}
+          value={formData.Fecha_Creacion_Est}
           onChange={handleChange}
           className="w-full p-2 border rounded-lg dark:bg-gray-700"
           required
         />
       </div>
 
+      {/* Resolución */}
       <div>
         <label className="block text-sm font-medium mb-1">Resolución</label>
         <input
           type="text"
           name="Resolucion_Est"
-          value={formData.Resolucion_Est || ""}
+          value={formData.Resolucion_Est}
           onChange={handleChange}
           className="w-full p-2 border rounded-lg dark:bg-gray-700"
           required
         />
       </div>
 
-   { /*  <div>
-        <label className="block text-sm font-medium mb-1">Estado</label>
-        <select
-          name="Estado_Est"
-          value={formData.Estado_Est || ""}
-          onChange={handleChange}
-          className="w-full p-2 border rounded-lg dark:bg-gray-700"
-          required
-        >
-          <option value="Activo">Activo</option>
-          <option value="Inactivo">Inactivo</option>
-        </select>
-      </div>
-    */}
+      {/* Botones */}
       <div className="flex justify-end gap-2 mt-6">
         <button
           type="button"
